@@ -61,17 +61,21 @@ lineHeightRatio =
     baseLineHeight / baseFontSize
 
 
-typeScale =
-    Array.fromList
-        [ 0.833, 1, 1.2, 1.44, 1.728, 2.074 ]
-
-
 rhythm n =
     Css.px <| n * baseLineHeight
 
 
 
 -- Font weights
+
+
+typeScale n =
+    let
+        scale =
+            Array.fromList
+                [ 0.833, 1, 1.2, 1.44, 1.728, 2.074 ]
+    in
+        Array.get n scale |> Maybe.withDefault 1
 
 
 lighter =
@@ -88,6 +92,78 @@ bold =
 
 heavy =
     600
+
+
+mobileBaseSize =
+    16
+
+
+mobileH1Size =
+    mobileBaseSize * (typeScale 5)
+
+
+mobileH2Size =
+    mobileBaseSize * (typeScale 4)
+
+
+mobileH3Size =
+    mobileBaseSize * (typeScale 3)
+
+
+mobileH4Size =
+    mobileBaseSize * (typeScale 2)
+
+
+mobileMilliSize =
+    mobileBaseSize * (typeScale 0)
+
+
+tabletBaseSize =
+    19
+
+
+tabletH1Size =
+    tabletBaseSize * (typeScale 5)
+
+
+tabletH2Size =
+    tabletBaseSize * (typeScale 4)
+
+
+tabletH3Size =
+    tabletBaseSize * (typeScale 3)
+
+
+tabletH4Size =
+    tabletBaseSize * (typeScale 2)
+
+
+tabletMilliSize =
+    tabletBaseSize * (typeScale 0)
+
+
+desktopBaseSize =
+    19
+
+
+desktopH1Size =
+    desktopBaseSize * (typeScale 5)
+
+
+desktopH2Size =
+    desktopBaseSize * (typeScale 4)
+
+
+desktopH3Size =
+    desktopBaseSize * (typeScale 3)
+
+
+desktopH4Size =
+    desktopBaseSize * (typeScale 2)
+
+
+desktopMilliSize =
+    desktopBaseSize * (typeScale 0)
 
 
 
