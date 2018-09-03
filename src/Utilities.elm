@@ -71,6 +71,26 @@ rhythm n =
 
 
 
+-- Font weights
+
+
+lighter =
+    250
+
+
+normal =
+    300
+
+
+bold =
+    500
+
+
+heavy =
+    600
+
+
+
 -- Reset
 
 
