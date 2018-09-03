@@ -1,8 +1,31 @@
 module Utilities exposing (..)
 
 import Array exposing (Array)
-import Css exposing (..)
+import Css
 import Css.Foreign
+
+
+-- Responsive Values
+
+
+screenXs =
+    Css.px 480
+
+
+screenSm =
+    Css.px 840
+
+
+screenMd =
+    Css.px 960
+
+
+screenLg =
+    Css.px 1280
+
+
+
+-- Vertical Rhythm
 
 
 baseFontSize =
@@ -44,91 +67,84 @@ typeScale =
 
 
 rhythm n =
-    px <| n * baseLineHeight
+    Css.px <| n * baseLineHeight
 
 
 
 -- Reset
 
 
-{-| No margin or padding.
+reset : List Css.Foreign.Snippet
+reset =
+    [ -- No margin or padding.
+      Css.Foreign.each
+        [ Css.Foreign.blockquote
+        , Css.Foreign.caption
+        , Css.Foreign.dd
+        , Css.Foreign.dl
+        , Css.Foreign.fieldset
+        , Css.Foreign.form
+        , Css.Foreign.h1
+        , Css.Foreign.h2
+        , Css.Foreign.h3
+        , Css.Foreign.h4
+        , Css.Foreign.h5
+        , Css.Foreign.h6
+        , Css.Foreign.hr
+        , Css.Foreign.legend
+        , Css.Foreign.ol
+        , Css.Foreign.p
+        , Css.Foreign.pre
+        , Css.Foreign.table
+        , Css.Foreign.td
+        , Css.Foreign.th
+        , Css.Foreign.ul
+        ]
+        [ Css.margin Css.zero
+        , Css.padding Css.zero
+        ]
 
-Default on:
+    -- Remove underlines from potentially troublesome elements.
+    , Css.Foreign.each
+        [ Css.Foreign.a
+        , Css.Foreign.typeSelector "ins"
+        , Css.Foreign.typeSelector "u"
+        ]
+        [ Css.textDecoration Css.none ]
 
-blockquote, caption, dd, dl, fieldset, form, h1, h2, h3, h4, h5, h6, hr, legend,
-ol, p, pre, table, td, th, ul
+    -- Apply faux underline via `border-bottom`.
+    , Css.Foreign.typeSelector "ins"
+        [ Css.borderBottom2 (Css.px 1) Css.solid ]
 
--}
-noMarginOrPadding =
-    [ margin <| px 0
-    , padding <| px 0
+    -- So that `alt` text is visually offset if images dont load.
+    , Css.Foreign.img
+        [ Css.fontStyle Css.italic ]
+
+    -- Remove borders from fieldset
+    , Css.Foreign.fieldset
+        [ Css.border2 (Css.px 0) Css.none ]
+
+    -- Give form elements some cursor interactions...
+    , Css.Foreign.each
+        [ Css.Foreign.button
+        , Css.Foreign.typeSelector "input:button"
+        , Css.Foreign.label
+        , Css.Foreign.option
+        , Css.Foreign.select
+        ]
+        [ Css.cursor Css.pointer ]
+
+    -- Default cursor and box style for text inputs. }
+    , Css.Foreign.each
+        [ Css.Foreign.typeSelector ".text-input:active"
+        , Css.Foreign.typeSelector ".text-input:focus"
+        , Css.Foreign.typeSelector "textarea:active"
+        , Css.Foreign.typeSelector "textarea:focus"
+        ]
+        [ Css.cursor Css.text_
+        , Css.outline Css.none
+        ]
     ]
-
-
-{-| Remove underlines from potentially troublesome elements.
-
-Default on:
-
-a, ins, u
-
--}
-noDecoration =
-    textDecoration none
-
-
-{-| Apply faux underline via `border-bottom`.
-
-Default on:
-
-ins
-
--}
-fauxUnderline =
-    borderBottom2 (px 1) solid
-
-
-{-| So that `alt` text is visually offset if images dont load.
-
-Default on:
-
-img
-
--}
-italicAltText =
-    fontStyle italic
-
-
-{-| Remove borders from fieldset
-
-Default on:
-
-fieldset
-
--}
-borderless =
-    border2 (px 0) none
-
-
-{-| Give form elements some cursor interactions...
-
-Default on:
-
-button, input:button, label, option, select
-
--}
-defaultCursor =
-    cursor pointer
-
-
-{-| Default cursor and box style for text inputs. }
-
-Default on:
-
-.text-input:active, .text-input:focus, textarea:active, textarea:focus
-
--}
-defaultTextInput =
-    [ cursor text_, outline none ]
 
 
 normalize : List Css.Foreign.Snippet
@@ -434,58 +450,44 @@ normalize =
 
 
 
--- Responsive Values
-
-
-screenXs =
-    px 480
-
-
-screenSm =
-    px 840
-
-
-screenMd =
-    px 960
-
-
-screenLg =
-    px 1280
-
-
-
 -- Base Spacing
 
 
-{-| Single direction margins.
+baseSpacing : List Css.Foreign.Snippet
+baseSpacing =
+    [ -- Single direction margins.
+      Css.Foreign.each
+        [ Css.Foreign.blockquote
+        , Css.Foreign.dl
+        , Css.Foreign.fieldset
+        , Css.Foreign.ol
+        , Css.Foreign.p
+        , Css.Foreign.pre
+        , Css.Foreign.table
+        , Css.Foreign.ul
+        , Css.Foreign.hr
+        ]
+        [ Css.margin3 (Css.px 0) (Css.px 0) (rhythm 1)
+        ]
 
-Use this for:
+    -- No margins on headings, the line spacing of the heading is sufficient.
+    , Css.Foreign.each
+        [ Css.Foreign.h1
+        , Css.Foreign.h2
+        , Css.Foreign.h3
+        , Css.Foreign.h4
+        , Css.Foreign.h5
+        , Css.Foreign.h6
+        ]
+        [ Css.margin3 (Css.px 0) (Css.px 0) (rhythm 0) ]
 
-address, blockquote, dl, fieldset, figure, ol, p, pre, table, ul, hr
-
--}
-singleDirectionMargin =
-    margin3 (px 0) (px 0) (rhythm 1)
-
-
-{-| No margins on headings, the line spacing of the heading is sufficient.
-
-Use this for:
-
-h1, h2, h3, h4, h5, h6
-
--}
-noMargin =
-    margin3 (px 0) (px 0) (rhythm 0)
-
-
-{-| Consistent indenting for lists.
-
-Use this for:
-
-dd, ol, ul
-
--}
-listMargin =
-    --     margin-left: pem(2 * $base-spacing-unit);
-    margin2 (px <| 2 * baseSpacingUnit) (px <| 2 * baseSpacingUnit)
+    -- Consistent indenting for lists.
+    , Css.Foreign.each
+        [ Css.Foreign.dd
+        , Css.Foreign.ol
+        , Css.Foreign.ul
+        ]
+        [ --     margin-left: pem(2 * $base-spacing-unit);
+          Css.margin2 (Css.px <| 2 * baseSpacingUnit) (Css.px <| 2 * baseSpacingUnit)
+        ]
+    ]
