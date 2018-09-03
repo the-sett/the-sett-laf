@@ -1,0 +1,124 @@
+/*------------------------------------*\
+    $COLORS
+\*------------------------------------*/
+
+// Initial colour setup
+$color__blue--lightest: #E8f0F6;
+$color__blue--lighter: #d9effc;
+$color__blue--light: #226eaa;
+$color__blue--base: #1A5380;
+$color__blue--dark: #173163;
+$color__blue--darker: #011b30;
+
+$color__grey--lighter: #f8f8f8;
+$color__grey--light: #ebebeb;
+$color__grey--pale: #e3e3e3;
+$color__grey--base: #b3b3b3;
+$color__grey--dark: #727272;
+$color__grey--darker: #333333;
+$color__grey--darkest: #111111;
+
+$color__raspberry--light: #bc4274;
+$color__raspberry--base: #8d3257;
+$color__raspberry--dark: #622f6d;
+
+$color__green--base: #487f33;
+
+$color__red--base: #d32205;
+
+$color__white: #ffffff;
+$color__black: #000000;
+
+//used in notifications
+$color__gold: #FFb644;
+
+$color__background--black: $color__grey--darker;
+$color__background--dark: $color__grey--dark;
+$color__background--grey: #F5F5F5;
+$color__background--white: #ffffff;
+$color__background--blue: $color__blue--light;
+
+$color__brand--primary: $color__grey--darker;
+
+$color__error: $color__red--base;
+
+$color__placeholder: $color__grey--dark;
+
+
+
+// Quarks
+// copy
+$color__body: $color__grey--darker;
+$color__body--h1: $color__grey--darker;
+$color__body--h2: $color__grey--darker;
+$color__body--h3: $color__grey--darker;
+
+// copy - links
+$color__link--primary: $color__blue--light;
+$color__link--hover: $color__blue--dark;
+$color__link--active: $color__blue--dark;
+$color__link--visited: $color__raspberry--dark;
+$color__link--focus: $color__blue--dark;
+
+// notifications
+$notification__background--normal: $color__grey--darker;
+$notification__foreground--normal: $color__white;
+$notification__background--strong: $color__gold;
+$notification__foreground--strong: $color__body;
+
+// Buttons
+$btn__background--disabled: $color__grey--lighter;
+$btn__background--live: $color__blue--lightest;
+$btn__background--visited: $color__blue--dark;
+$btn__background--hover: $color__blue--lightest;
+$btn__background--active: $color__blue--darker;
+
+$btn__background__black: $color__grey--darker;
+$btn__background__black--live: $color__grey--lighter;
+$btn__background__black--visited: $color__blue--dark;
+$btn__background__black--hover: $color__grey--dark;
+$btn__background__black--active: $color__grey--base;
+
+$btn__primary: $color__blue--light;
+$btn__primary--hover: $color__blue--base;
+$btn__primary--active: $color__blue--base;
+$btn__primary--visited: $color__blue--light;
+$btn__primary--focus: $color__blue--base;
+
+$btn__secondary: $color__blue--dark;
+$btn__secondary--hover: $color__blue--darker;
+$btn__secondary--active: $color__blue--darker;
+$btn__secondary--visited: $color__blue--dark;
+$btn__secondary--focus: $color__blue--darker;
+
+$btn__external: $color__blue--light;
+$btn__external--hover: $color__blue--base;
+$btn__external--active: $color__blue--base;
+$btn__external--visited: $color__blue--light;
+$btn__external--focus: $color__blue--base;
+
+$btn__text--base: $color__body;
+$btn__text--disabled: $color__body;
+$btn__text--live: $color__body;
+$btn__text--visited: $color__white;
+$btn__text--hover: $color__body;
+$btn__text--active: $color__white;
+$btn__border--hover: $color__blue--light;
+
+//Borders
+$color__border--darker: $color__grey--darker;
+$color__border--dark: $color__grey--dark;
+$color__border--base: $color__grey--base;
+$color__border--light: $color__grey--light;
+$color__border--lighter: $color__grey--lighter;
+
+// molecules
+$color__footer--background: $color__grey--lighter;
+$header-bg-color: $color__grey--lighter;
+$header-border-color: $color__grey--light;
+
+// Home page intro
+$home-page-into-link: #0157a1;
+
+//Table components
+$table-text-color: #222;

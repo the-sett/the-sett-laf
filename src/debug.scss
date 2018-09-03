@@ -1,0 +1,41 @@
+@import "compass/typography";
+@import "utilities/defaults";
+
+h1, h2, h3, h4, p,
+dialog,
+div, nav,
+footer {
+    background-position: left top;
+    background-image: linear-gradient(00deg, blue 0px, transparent 1px), linear-gradient(90deg, blue 0px, transparent 1px), linear-gradient(180deg, blue 0px, transparent 1px), linear-gradient(270deg, blue 0px, transparent 1px);
+}
+
+table,
+td,
+th {
+    background-image: linear-gradient(0deg, grey 0px, transparent 1px), linear-gradient(90deg, grey 0px, transparent 1px), linear-gradient(180deg, grey 0px, transparent 1px), linear-gradient(270deg, grey 0px, transparent 1px);
+}
+
+canvas,
+object,
+span {
+    background-image: linear-gradient(0deg, red 0px, transparent 1px), linear-gradient(90deg, red 0px, transparent 1px), linear-gradient(180deg, red 0px, transparent 1px), linear-gradient(270deg, red 0px, transparent 1px);
+}
+
+li {
+    background-image: linear-gradient(0deg, green 0px, transparent 1px), linear-gradient(90deg, green 0px, transparent 1px), linear-gradient(180deg, green 0px, transparent 1px), linear-gradient(270deg, green 0px, transparent 1px);
+}
+
+div,
+footer,
+header,
+paper-listbox, {
+    background-color: transparent !important;
+}
+
+dialog,
+body {
+    background-image: linear-gradient(to bottom, hsla(200, 100%, 50%, .3) 1px, transparent 1px);
+    background-position: left -1px;
+    background-repeat: repeat;
+    background-size: rhythm(1) rhythm(1);
+}

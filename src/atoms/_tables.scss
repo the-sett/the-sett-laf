@@ -1,0 +1,53 @@
+.mdl-data-table {
+    width: 100%;
+    @include adjust-font-size-to($mobile-milli-size, 1);
+}
+
+th {
+    @include adjust-font-size-to($mobile-milli-size, 1);
+    padding-top: 0 !important;
+    padding-bottom: 12px !important;
+    height: rhythm(2) !important;
+}
+
+td,
+tr {
+    @include adjust-font-size-to($mobile-milli-size, 1);
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    height: rhythm(2) !important;
+}
+
+td .mdl-button {
+    margin-top: 5px;
+    margin-bottom: 6px;
+}
+
+.data-table__apron {
+    background-color: $color__grey--light;
+    padding-bottom: rhythm(0.5);
+    margin-bottom: rhythm(1);
+    position: relative;
+}
+
+.data-table__apron .control-bar {
+  margin-top: rhythm(0.5);
+}
+
+.data-table__apron table {
+    margin-bottom: 0;
+}
+
+.data-table__fab-button {
+    position: absolute;
+    right: 20px;
+    bottom: 12px;
+}
+
+.data-table__active-row {
+    background-color: $color__white;
+}
+
+.data-table__inactive-row {
+    background-color: $color__grey--light;
+}

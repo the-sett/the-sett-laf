@@ -1,0 +1,31 @@
+.thesett-footer {
+    background-color: #fafafa;
+    position: relative;
+}
+.thesett-footer .mdl-mega-footer--bottom-section {
+    position: relative;
+}
+.thesett-footer .mdl-mega-footer--bottom-section a {
+    margin-right: 2em;
+}
+.thesett-footer .mdl-mega-footer--middle-section::after {
+    border-bottom: none;
+}
+.thesett-footer .mdl-mega-footer--right-section a .material-icons {
+    position: relative;
+    top: 6px;
+}
+.thesett-footer .mdl-mega-footer--top-section::after {
+    border-bottom: none;
+}
+.thesett-footer a:hover {
+    color: #8bc34a;
+}
+.thesett-footer .mdl-mega-footer--bottom-section {
+    display: none;
+}
+@include media-tablet {
+    .thesett-footer .mdl-mega-footer--bottom-section {
+        display: inline;
+    }
+}

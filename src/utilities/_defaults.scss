@@ -1,0 +1,49 @@
+/* Set up the rhythm. */
+$base-font-size: 16px;
+$base-line-height: 24px;
+$rhythm-unit: "px";
+$default-rhythm-border-width: 1px;
+$from-context: "px";
+$base-spacing-unit: ($base-line-height - 12);
+$half-spacing-unit: $base-spacing-unit / 2;
+$quarter-spacing-unit: $base-spacing-unit / 4;
+$line-height-ratio: $base-line-height / $base-font-size; // Minor third scale.
+$type-scale: ( -1: 0.833, 0: 1, 1: 1.2, 2: 1.44, 3: 1.728, 4: 2.074 );
+@function type-scale($level) {
+     @return map-get($type-scale, $level);
+}
+// Line height scale.
+$line-height: ( -1: $base-line-height, 0: $base-line-height, 1: $base-line-height * 2, 2: $base-line-height * 3 );
+@function line-height($level) {
+     @return map-get($line-height, $level);
+}
+// Device sizing.
+$mobile-base-size: 16px;
+$mobile-h1-size: $mobile-base-size * type-scale(4);
+$mobile-h2-size: $mobile-base-size * type-scale(3);
+$mobile-h3-size: $mobile-base-size * type-scale(2);
+$mobile-h4-size: $mobile-base-size * type-scale(1);
+$mobile-milli-size: $mobile-base-size * type-scale(-1);
+$tablet-base-size: 19px;
+$tablet-h1-size: $tablet-base-size * type-scale(4);
+$tablet-h2-size: $tablet-base-size * type-scale(3);
+$tablet-h3-size: $tablet-base-size * type-scale(2);
+$tablet-h4-size: $tablet-base-size * type-scale(1);
+$tablet-milli-size: $tablet-base-size * type-scale(-1);
+$desktop-base-size: 19px;
+$desktop-h1-size: $desktop-base-size * type-scale(4);
+$desktop-h2-size: $desktop-base-size * type-scale(3);
+$desktop-h3-size: $desktop-base-size * type-scale(2);
+$desktop-h4-size: $desktop-base-size * type-scale(1);
+$desktop-milli-size: $desktop-base-size * type-scale(-1); // Set up the type setting rhythm.
+@include establish-baseline;
+
+html {
+    @include adjust-leading-to(4);
+}
+// Default font.
+$base-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$base-color: #252525;
+$base-ui-color: #EEEEEE;
+$color__text: #777777;
+$color__text--reverse: #888888;

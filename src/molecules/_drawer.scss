@@ -1,0 +1,24 @@
+.thesett-drawer {
+    border-right: none;
+}
+.thesett-drawer .mdl-layout-title {
+    background: #6ab344;
+    height: 160px;
+    position: relative;
+}
+.thesett-drawer .mdl-navigation__link.mdl-navigation__link {
+    color: #757575;
+    font-size: 14px;
+}
+.thesett-drawer .thesett-logo-image {
+    bottom: 16px;
+    position: absolute;
+}
+.thesett-drawer span.mdl-navigation__link.mdl-navigation__link {
+    color: #8bc34a;
+}
+.thesett-drawer-separator {
+    background-color: #dcdcdc;
+    height: 1px;
+    margin: 8px 0;
+}

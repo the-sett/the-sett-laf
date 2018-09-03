@@ -1,0 +1,14 @@
+.mdl-textfield {
+    // padding-top: 0px;
+    // padding-bottom: 0px;
+    //height: rhythm(3);
+    line-height: rhythm(1);
+    padding-top: 19px;
+}
+.mdl-textfield__input {
+  @include adjust-font-size-to($mobile-base-size, 1);
+}
+
+.mdl-textfield__label {
+  @include adjust-font-size-to($mobile-base-size, 1);
+}

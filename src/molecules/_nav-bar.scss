@@ -1,0 +1,20 @@
+.mdl-navigation__link {
+    background-color: transparent!important;
+    border-bottom: 4px solid transparent;
+    display: inline-block;
+}
+
+.mdl-navigation__link:hover {
+    border-bottom: 4px solid #8bc34a;
+}
+
+.mdl-navigation__link {
+    color: $color__grey--dark!important;
+    font-weight: 550;
+    line-height: line-height(1) !important;
+    font-size: $mobile-milli-size !important;
+    @include media-tablet {
+        line-height: line-height(1) !important;
+        font-size: $tablet-milli-size !important;
+    }
+}

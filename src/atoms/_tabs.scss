@@ -1,0 +1,10 @@
+.mdl-layout__tab {
+  color: $color__black;
+}
+
+// This is to compensate for globally setting @include vendor(box-sizing, border-box)
+// in the CSS reset, which would otherwise make the calculation of the tab bar
+// width come out wrong.
+.mdl-layout__tab-bar {
+  width: calc(100% - 56px);
+}

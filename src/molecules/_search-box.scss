@@ -1,0 +1,27 @@
+/* WebViews in iOS 9 break the "~" operator, and WebViews in OS X 10.10 break
+ consecutive "+" operators in some cases. Therefore, we need to use both
+ here to cover all the bases. */
+.thesett-search-box.is-focused + .thesett-navigation-container + .thesett-mobile-title,
+.thesett.thesett-search-box.is-focused ~ .thesett-mobile-title {
+    opacity: 0;
+}
+.thesett-search-box.is-focused {
+    width: calc(100% - 48px);
+}
+.thesett-search-box .mdl-textfield__expandable-holder {
+    width: 100%;
+}
+@include media-tablet {
+    .thesett-search-box {
+        margin-left: 16px;
+        margin-right: 16px;
+        order: 2;
+    }
+    .thesett-search-box .mdl-textfield__input {
+        color: rgba(0,0,0,0.87);
+    }
+    .thesett-search-box.is-focused + .thesett-navigation-container {
+        opacity: 0;
+        width: 100px;
+    }
+}

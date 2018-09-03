@@ -1,0 +1,56 @@
+/*------------------------------------*\
+    $FONT-STACK
+\*------------------------------------*/
+
+/**
+ * Font weights
+ */
+$lighter: 250;
+$normal: 300;
+$bold: 500;
+$heavy: 600;
+
+/**
+ * Default text font-family and font weights
+ */
+
+$font__default: Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+%font__body {
+  font-family: $font__default;
+  font-style: normal;
+  font-weight: normal;
+}
+
+%font__text--text {
+  font-family: $font__default;
+  font-style: normal;
+  font-weight: normal;
+}
+
+%font__text--bold {
+  font-family: $font__default;
+  font-style: normal;
+  font-weight: bold;
+}
+
+%font__text--ultra {
+  font-family: $font__default;
+  font-style: normal;
+  font-weight: 900;
+}
+
+%font__icon--gizmo {
+  font-style: normal;
+  font-family: "SSGizmo";
+  white-space: nowrap;
+  text-decoration: none;
+  -webkit-font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga=1";
+  -moz-font-feature-settings: "liga";
+  -ms-font-feature-settings: "liga" 1;
+  -o-font-feature-settings: "liga";
+  font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}

@@ -1,0 +1,44 @@
+.layout-fixed-width--one-card {
+    padding: 0 !important;
+    margin: 0 auto;
+    max-width: 400px;
+}
+@include media-tablet {
+    .layout-fixed-width {
+        padding: 0 !important;
+        margin: 0 auto;
+        max-width: ($tablet-width * 0.85);
+    }
+
+    .layout-fixed-width--one-card {
+        padding: 0 !important;
+        margin: 0 auto;
+        max-width: 400px;
+    }
+}
+@include media-desktop {
+    .layout-fixed-width {
+        padding: 0 !important;
+        margin: 0 auto;
+        max-width: ($desktop-width * 0.85);
+    }
+
+    .layout-fixed-width--one-card {
+        padding: 0 !important;
+        margin: 0 auto;
+        max-width: 400px;
+    }
+}
+@include media-hd {
+    .layout-fixed-width {
+        padding: 0 !important;
+        margin: 0 auto;
+        max-width: ($hd-width * 0.85);
+    }
+
+    .layout-fixed-width--one-card {
+        padding: 0 !important;
+        margin: 0 auto;
+        max-width: 400px;
+    }
+}

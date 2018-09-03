@@ -1,0 +1,22 @@
+a {
+    padding-top: 6px !important;
+}
+
+.mdl-button {
+    line-height: rhythm(1);
+    height: rhythm(1.5);
+    margin-bottom: rhythm(0.25);
+    margin-top: rhythm(0.25);
+}
+
+.mdl-button--fab {
+    width: rhythm(2) !important;
+    min-width: rhythm(2);
+    height: rhythm(2) !important;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.mdl-button--warn {
+  color: $color__red--base;
+}

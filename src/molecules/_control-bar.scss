@@ -1,0 +1,70 @@
+.control-bar {
+    width: 100%;
+    min-height: rhythm(2);
+    height: rhythm(2);
+    background-color: transparent;
+    overflow: visible;
+
+    .control-bar__row:after,
+    .control-bar__row:before {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .control-bar__row {
+        overflow: visible;
+    }
+
+    [class*='control-bar__left-'] {
+        float: left;
+        min-height: rhythm(2);
+        padding-left: 6px;
+        padding-right: 6px;
+        overflow: visible;
+    }
+
+    .control-bar__left-0 {}
+
+    .control-bar__left-1 {
+        width: 16.66%;
+    }
+
+    .control-bar__left-2 {
+        width: 33.33%;
+    }
+
+    .control-bar__left-3 {
+        width: 50%;
+    }
+
+    [class*='control-bar__right-'] {
+        float: right;
+        min-height: rhythm(2);
+        padding-left: 6px;
+        padding-right: 6px;
+        overflow: visible;
+    }
+
+    .control-bar__right-0 {}
+
+    .control-bar__right-1 {
+        width: 16.66%;
+    }
+
+    .control-bar__right-2 {
+        width: 33.33%;
+    }
+
+    .control-bar__right-3 {
+        width: 50%;
+    }
+
+    .mdl-chip {
+        margin: rhythm(0.5) 0;
+    }
+
+    p {
+        margin: rhythm(0.5) 0;
+    }
+}

@@ -1,0 +1,110 @@
+/*------------------------------------*\
+    $RESET
+\*------------------------------------*/
+/**
+ * As per: csswizardry.com/2011/10/reset-restarted
+ */
+* {
+    &,
+    &:after,
+    &:before {
+        @include vendor(box-sizing, border-box);
+        -webkit-font-smoothing: antialiased;
+    }
+}
+/**
+ * The usual...
+ */
+blockquote,
+caption,
+dd,
+dl,
+fieldset,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+legend,
+ol,
+p,
+pre,
+table,
+td,
+th,
+ul {
+    margin: 0;
+    padding: 0;
+}
+/**
+ * Give a help cursor to elements that give extra info on `:hover`.
+ */
+abbr[title],
+dfn[title] {
+    cursor: help;
+}
+
+abbr[title] {
+    text-decoration: none;
+    border: none;
+}
+/**
+ * Remove underlines from potentially troublesome elements.
+ */
+a,
+ins,
+u {
+    text-decoration: none;
+}
+/**
+ * Apply faux underline via `border-bottom`.
+ */
+ins {
+    border-bottom: 1px solid;
+}
+/**
+ * So that `alt` text is visually offset if images dont load.
+ */
+img {
+    font-style: italic;
+}
+/**
+ * Remove borders from fieldset
+ */
+fieldset {
+    border: none;
+}
+/**
+ * Give form elements some cursor interactions...
+ */
+button,
+input:button,
+label,
+option,
+select,
+textarea {
+    cursor: pointer;
+}
+
+.text-input:active,
+.text-input:focus,
+textarea:active,
+textarea:focus {
+    cursor: text;
+    outline: none;
+}
+
+.text-muted {
+    color: #2B2B2B;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:active,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover {
+    -webkit-transition: "color 9999s ease-out, background-color 9999s ease-out";
+    -webkit-transition-delay: 9999s;
+}

@@ -1,0 +1,12 @@
+paper-listbox {
+  padding-top: rhythm(0.5) - 2px;
+  padding-bottom: rhythm(0.5) - 2px;
+  margin-bottom: rhythm(1);
+  border-top-width: 2px;
+  border-top-color: $color__grey--dark;
+  border-top-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-bottom-color: $color__grey--dark;
+  width: 300px;
+}
