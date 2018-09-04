@@ -587,3 +587,11 @@ baseSpacing =
           Css.margin2 (Css.px <| 2 * baseSpacingUnit) (Css.px <| 2 * baseSpacingUnit)
         ]
     ]
+
+
+
+-- Colors
+
+
+greyDark =
+    Css.hex "727272"
