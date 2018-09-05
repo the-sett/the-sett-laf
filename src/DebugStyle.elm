@@ -64,8 +64,8 @@ debug =
         , Css.Foreign.body
         ]
         [ Css.property "background-image" "linear-gradient(to bottom, hsla(200, 100%, 50%, .3) 1px, transparent 1px)"
-        , Css.property "background-position" "left -1px"
-        , Css.property "background-repeat" "repeat"
+        , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
+        , Css.backgroundRepeat Css.repeat
         , Css.backgroundSize2 (Utilities.rhythm 1) (Utilities.rhythm 1)
         ]
     ]
