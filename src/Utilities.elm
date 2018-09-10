@@ -2,6 +2,7 @@ module Utilities exposing (..)
 
 import Array exposing (Array)
 import Css
+import Css.Media
 import Css.Foreign
 
 
@@ -164,6 +165,53 @@ desktopH4Size =
 
 desktopMilliSize =
     desktopBaseSize * (typeScale 0)
+
+
+
+-- Mixins
+
+
+adjustFontSizeTo pxval lines =
+    -- Just a dummy value to get the type right for now.
+    Css.fontWeight Css.bold
+
+
+pem pxval base =
+    pxval / base |> Css.em
+
+
+mediaMinWidth : Css.Px -> List Css.Style -> Css.Style
+mediaMinWidth width styles =
+    Css.Media.withMedia
+        [ Css.Media.all [ Css.Media.minWidth width ] ]
+        styles
+
+
+mediaPhone : List Css.Style -> Css.Style
+mediaPhone =
+    mediaMinWidth screenXs
+
+
+mediaTablet : List Css.Style -> Css.Style
+mediaTablet =
+    mediaMinWidth screenSm
+
+
+mediaDesktop : List Css.Style -> Css.Style
+mediaDesktop =
+    mediaMinWidth screenMd
+
+
+mediaHd : List Css.Style -> Css.Style
+mediaHd =
+    mediaMinWidth screenLg
+
+
+media2x : List Css.Style -> Css.Style
+media2x styles =
+    Css.Media.withMediaQuery
+        [ "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dppx)" ]
+        styles
 
 
 
