@@ -631,8 +631,7 @@ baseSpacing =
         , Css.Foreign.ol
         , Css.Foreign.ul
         ]
-        [ --     margin-left: pem(2 * $base-spacing-unit);
-          Css.margin2 (Css.px <| 2 * baseSpacingUnit) (Css.px <| 2 * baseSpacingUnit)
+        [ Css.margin2 (pem (2 * baseSpacingUnit) baseFontSize) (Css.px <| 2 * baseSpacingUnit)
         ]
     ]
 
