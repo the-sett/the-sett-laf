@@ -62,6 +62,7 @@ lineHeightRatio =
     baseLineHeight / baseFontSize
 
 
+rhythm : Float -> Css.Px
 rhythm n =
     Css.px <| n * baseLineHeight
 
@@ -171,9 +172,16 @@ desktopMilliSize =
 -- Mixins
 
 
-adjustFontSizeTo pxval lines =
-    -- Just a dummy value to get the type right for now.
-    Css.fontWeight Css.bold
+adjustFontSizeTo : Float -> Int -> Css.Style
+adjustFontSizeTo pxVal lines =
+    let
+        numLines =
+            ceiling (pxVal / baseLineHeight)
+    in
+        Css.batch
+            [ Css.fontSize (Css.px pxVal)
+            , Css.lineHeight (rhythm (toFloat numLines))
+            ]
 
 
 pem pxval base =
