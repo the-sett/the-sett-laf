@@ -160,7 +160,7 @@ typography : Devices -> TypeScale -> List Css.Foreign.Snippet
 typography { mobile, tablet, desktop, desktopWide } typeScale =
     let
         minWidthDevices =
-            [ tablet, desktop, desktopWide ]
+            [ desktopWide, desktop, tablet ]
 
         fontSizeLevel level minLines deviceProps =
             mediaMinWidth deviceProps
