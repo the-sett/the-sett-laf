@@ -27,39 +27,16 @@ screenLg =
 
 
 -- Vertical Rhythm
-
-
-baseFontSize =
-    15
+-- baseFontSize =
+--     15
 
 
 baseLineHeight =
     24
 
 
-rhythmUnit =
-    "px"
-
-
-defaultRhythmBorderWidth =
-    1
-
-
 baseSpacingUnit =
     baseLineHeight - 12
-
-
-halfSpacingUnit =
-    baseSpacingUnit // 2
-
-
-quarterSpacingUnit =
-    baseSpacingUnit // 4
-
-
-lineHeightRatio =
-    -- Minor third scale
-    baseLineHeight / baseFontSize
 
 
 rhythm : Float -> Css.Px
@@ -69,9 +46,32 @@ rhythm n =
 
 
 -- Font weights
+--
+--
+-- lighter =
+--     250
+--
+--
+-- normal =
+--     300
+--
+--
+-- bold =
+--     500
+--
+--
+-- heavy =
+--     600
+--
+--
 
 
-typeScale n =
+type alias TypeScale =
+    Int -> Float
+
+
+minorThird : TypeScale
+minorThird n =
     let
         scale =
             Array.fromList
@@ -80,95 +80,133 @@ typeScale n =
         Array.get n scale |> Maybe.withDefault 1
 
 
-lighter =
-    250
+type FontSizeLevel
+    = FontSizeLevel Int
 
 
-normal =
-    300
+milli =
+    FontSizeLevel 0
 
 
-bold =
-    500
+base =
+    FontSizeLevel 1
 
 
-heavy =
-    600
+h1 =
+    FontSizeLevel 5
 
 
-mobileBaseSize =
-    16
+h2 =
+    FontSizeLevel 4
 
 
-mobileH1Size =
-    mobileBaseSize * (typeScale 5)
+h3 =
+    FontSizeLevel 3
 
 
-mobileH2Size =
-    mobileBaseSize * (typeScale 4)
+h4 =
+    FontSizeLevel 2
 
 
-mobileH3Size =
-    mobileBaseSize * (typeScale 3)
+type Device
+    = BaseSize Float
 
 
-mobileH4Size =
-    mobileBaseSize * (typeScale 2)
+mobile =
+    BaseSize 14.0
 
 
-mobileMilliSize =
-    mobileBaseSize * (typeScale 0)
+tablet =
+    BaseSize 15.0
 
 
-tabletBaseSize =
-    19
+desktop =
+    BaseSize 16.0
 
 
-tabletH1Size =
-    tabletBaseSize * (typeScale 5)
+fontSize : TypeScale -> Device -> FontSizeLevel -> Float
+fontSize typeScale (BaseSize baseSize) (FontSizeLevel level) =
+    (typeScale level) * baseSize
 
 
-tabletH2Size =
-    tabletBaseSize * (typeScale 4)
-
-
-tabletH3Size =
-    tabletBaseSize * (typeScale 3)
-
-
-tabletH4Size =
-    tabletBaseSize * (typeScale 2)
-
-
-tabletMilliSize =
-    tabletBaseSize * (typeScale 0)
-
-
-desktopBaseSize =
-    19
-
-
-desktopH1Size =
-    desktopBaseSize * (typeScale 5)
-
-
-desktopH2Size =
-    desktopBaseSize * (typeScale 4)
-
-
-desktopH3Size =
-    desktopBaseSize * (typeScale 3)
-
-
-desktopH4Size =
-    desktopBaseSize * (typeScale 2)
-
-
-desktopMilliSize =
-    desktopBaseSize * (typeScale 0)
+cssFontSize : TypeScale -> Device -> FontSizeLevel -> Css.Style
+cssFontSize typeScale device level =
+    fontSize typeScale device level
+        |> Css.px
+        |> Css.fontSize
 
 
 
+-- mobileMilliSize =
+--     mobileBaseSize * (typeScale 0)
+--
+--
+-- mobileBaseSize =
+--     16
+--
+--
+-- mobileH1Size =
+--     mobileBaseSize * (typeScale 5)
+--
+--
+-- mobileH2Size =
+--     mobileBaseSize * (typeScale 4)
+--
+--
+-- mobileH3Size =
+--     mobileBaseSize * (typeScale 3)
+--
+--
+-- mobileH4Size =
+--     mobileBaseSize * (typeScale 2)
+--
+--
+-- tabletMilliSize =
+--     tabletBaseSize * (typeScale 0)
+--
+--
+-- tabletBaseSize =
+--     19
+--
+--
+-- tabletH1Size =
+--     tabletBaseSize * (typeScale 5)
+--
+--
+-- tabletH2Size =
+--     tabletBaseSize * (typeScale 4)
+--
+--
+-- tabletH3Size =
+--     tabletBaseSize * (typeScale 3)
+--
+--
+-- tabletH4Size =
+--     tabletBaseSize * (typeScale 2)
+--
+--
+-- desktopBaseSize =
+--     19
+--
+--
+-- desktopH1Size =
+--     desktopBaseSize * (typeScale 5)
+--
+--
+-- desktopH2Size =
+--     desktopBaseSize * (typeScale 4)
+--
+--
+-- desktopH3Size =
+--     desktopBaseSize * (typeScale 3)
+--
+--
+-- desktopH4Size =
+--     desktopBaseSize * (typeScale 2)
+--
+--
+-- desktopMilliSize =
+--     desktopBaseSize * (typeScale 0)
 -- Mixins
 
 
@@ -634,13 +672,13 @@ baseSpacing =
         [ Css.margin3 (Css.px 0) (Css.px 0) (rhythm 0) ]
 
     -- Consistent indenting for lists.
-    , Css.Foreign.each
-        [ Css.Foreign.dd
-        , Css.Foreign.ol
-        , Css.Foreign.ul
-        ]
-        [ Css.margin2 (pem (2 * baseSpacingUnit) baseFontSize) (Css.px <| 2 * baseSpacingUnit)
-        ]
+    -- , Css.Foreign.each
+    --     [ Css.Foreign.dd
+    --     , Css.Foreign.ol
+    --     , Css.Foreign.ul
+    --     ]
+    --     [ Css.margin2 (pem (2 * baseSpacingUnit) baseFontSize) (Css.px <| 2 * baseSpacingUnit)
+    --     ]
     ]
 
 
@@ -657,11 +695,12 @@ baseSpacing =
 --   ]
 
 
-typography =
+typography : TypeScale -> List Css.Foreign.Snippet
+typography typeScale =
     [ -- Base font
       Css.Foreign.each
         [ Css.Foreign.html ]
-        [ Css.fontSize (Css.px baseFontSize)
+        [ cssFontSize typeScale mobile base
         , Css.lineHeight (Css.px baseLineHeight)
         , Css.fontFamilies [ "Roboto" ]
         , Css.fontWeight <| Css.int 400
@@ -674,7 +713,7 @@ typography =
         , Css.Foreign.h4
         , Css.Foreign.h5
         ]
-        [ Css.fontSize (Css.px mobileBaseSize)
+        [ cssFontSize typeScale mobile base
         , Css.color greyDark |> Css.important
         , Css.fontWeight <| Css.int 500
         ]
@@ -687,27 +726,27 @@ typography =
         , Css.textRendering Css.optimizeLegibility
         ]
     , Css.Foreign.h1
-        [ adjustFontSizeTo mobileH1Size 3
+        [ adjustFontSizeTo (fontSize typeScale mobile h1) 3
         , mediaTablet
-            [ adjustFontSizeTo tabletH1Size 3
+            [ adjustFontSizeTo (fontSize typeScale tablet h1) 3
             ]
         ]
     , Css.Foreign.h2
-        [ adjustFontSizeTo mobileH2Size 2
+        [ adjustFontSizeTo (fontSize typeScale mobile h2) 2
         , mediaTablet
-            [ adjustFontSizeTo tabletH2Size 2
+            [ adjustFontSizeTo (fontSize typeScale tablet h2) 2
             ]
         ]
     , Css.Foreign.h3
-        [ adjustFontSizeTo mobileH3Size 2
+        [ adjustFontSizeTo (fontSize typeScale mobile h3) 2
         , mediaTablet
-            [ adjustFontSizeTo tabletH3Size 2
+            [ adjustFontSizeTo (fontSize typeScale tablet h3) 2
             ]
         ]
     , Css.Foreign.h4
-        [ adjustFontSizeTo mobileH4Size 2
+        [ adjustFontSizeTo (fontSize typeScale mobile h4) 2
         , mediaTablet
-            [ adjustFontSizeTo tabletH4Size 2
+            [ adjustFontSizeTo (fontSize typeScale tablet h4) 2
             ]
         ]
     ]

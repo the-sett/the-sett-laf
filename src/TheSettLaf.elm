@@ -40,4 +40,4 @@ snippets =
     Utilities.reset
         ++ Utilities.normalize
         ++ Utilities.baseSpacing
-        ++ Utilities.typography
+        ++ (Utilities.typography Utilities.minorThird)
