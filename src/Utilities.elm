@@ -109,29 +109,46 @@ h4 =
 
 
 type Device
-    = BaseSize Float
+    = Mobile
+    | Tablet
+    | Desktop
 
 
+type alias DeviceProps =
+    { device : Device
+    , baseFontSize : Float
+    }
+
+
+mobile : DeviceProps
 mobile =
-    BaseSize 14.0
+    { device = Mobile
+    , baseFontSize = 14.0
+    }
 
 
+tablet : DeviceProps
 tablet =
-    BaseSize 15.0
+    { device = Tablet
+    , baseFontSize = 15.0
+    }
 
 
+desktop : DeviceProps
 desktop =
-    BaseSize 16.0
+    { device = Desktop
+    , baseFontSize = 16.0
+    }
 
 
-fontSize : TypeScale -> Device -> FontSizeLevel -> Float
-fontSize typeScale (BaseSize baseSize) (FontSizeLevel level) =
-    (typeScale level) * baseSize
+fontSize : TypeScale -> DeviceProps -> FontSizeLevel -> Float
+fontSize typeScale { baseFontSize } (FontSizeLevel level) =
+    (typeScale level) * baseFontSize
 
 
-cssFontSize : TypeScale -> Device -> FontSizeLevel -> Css.Style
-cssFontSize typeScale device level =
-    fontSize typeScale device level
+cssFontSize : TypeScale -> DeviceProps -> FontSizeLevel -> Css.Style
+cssFontSize typeScale deviceProps level =
+    fontSize typeScale deviceProps level
         |> Css.px
         |> Css.fontSize
 
