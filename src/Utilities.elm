@@ -30,7 +30,7 @@ screenLg =
 
 
 baseFontSize =
-    16
+    15
 
 
 baseLineHeight =
@@ -640,6 +640,75 @@ baseSpacing =
         , Css.Foreign.ul
         ]
         [ Css.margin2 (pem (2 * baseSpacingUnit) baseFontSize) (Css.px <| 2 * baseSpacingUnit)
+        ]
+    ]
+
+
+
+-- Typography and Vertical Rhythm
+--
+-- This doesn't work, as google does some magic with the css request and builds the font-face sections.
+--
+-- Css.Foreign.selector "@font-face"
+--   [ Css.property "font-family" "default"
+--   , Css.property "font-style" "normal"
+--   , Css.property "font-weight" "400"
+--   , Css.property "src" "url(https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext)"
+--   ]
+
+
+typography =
+    [ -- Base font
+      Css.Foreign.each
+        [ Css.Foreign.html ]
+        [ Css.fontSize (Css.px baseFontSize)
+        , Css.lineHeight (Css.px baseLineHeight)
+        , Css.fontFamilies [ "Roboto" ]
+        , Css.fontWeight <| Css.int 400
+        , Css.textRendering Css.optimizeLegibility
+        ]
+    , Css.Foreign.each
+        [ Css.Foreign.h1
+        , Css.Foreign.h2
+        , Css.Foreign.h3
+        , Css.Foreign.h4
+        , Css.Foreign.h5
+        ]
+        [ Css.fontSize (Css.px mobileBaseSize)
+        , Css.color greyDark |> Css.important
+        , Css.fontWeight <| Css.int 500
+        ]
+    , Css.Foreign.each
+        [ Css.Foreign.h1
+        , Css.Foreign.h2
+        , Css.Foreign.h3
+        ]
+        [ Css.fontWeight Css.bold
+        , Css.textRendering Css.optimizeLegibility
+        ]
+    , Css.Foreign.h1
+        [ adjustFontSizeTo mobileH1Size 3
+        , mediaTablet
+            [ adjustFontSizeTo tabletH1Size 3
+            ]
+        ]
+    , Css.Foreign.h2
+        [ adjustFontSizeTo mobileH2Size 2
+        , mediaTablet
+            [ adjustFontSizeTo tabletH2Size 2
+            ]
+        ]
+    , Css.Foreign.h3
+        [ adjustFontSizeTo mobileH3Size 2
+        , mediaTablet
+            [ adjustFontSizeTo tabletH3Size 2
+            ]
+        ]
+    , Css.Foreign.h4
+        [ adjustFontSizeTo mobileH4Size 2
+        , mediaTablet
+            [ adjustFontSizeTo tabletH4Size 2
+            ]
         ]
     ]
 

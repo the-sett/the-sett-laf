@@ -9,7 +9,8 @@ import Typography
 
 main =
     Html.div []
-        [ TheSettLaf.style |> Html.Styled.toUnstyled
+        [ TheSettLaf.fonts
+        , TheSettLaf.style |> Html.Styled.toUnstyled
         , DebugStyle.style |> Html.Styled.toUnstyled
         , Typography.view
         ]
