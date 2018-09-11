@@ -6,31 +6,6 @@ import Css.Media
 import Css.Foreign
 
 
--- Responsive Values
-
-
-screenXs =
-    Css.px 480
-
-
-screenSm =
-    Css.px 840
-
-
-screenMd =
-    Css.px 960
-
-
-screenLg =
-    Css.px 1280
-
-
-
--- Vertical Rhythm
--- baseFontSize =
---     15
-
-
 baseLineHeight =
     24
 
@@ -112,11 +87,13 @@ type Device
     = Mobile
     | Tablet
     | Desktop
+    | DesktopWide
 
 
 type alias DeviceProps =
     { device : Device
     , baseFontSize : Float
+    , breakWidth : Float
     }
 
 
@@ -124,6 +101,7 @@ mobile : DeviceProps
 mobile =
     { device = Mobile
     , baseFontSize = 14.0
+    , breakWidth = 480
     }
 
 
@@ -131,6 +109,7 @@ tablet : DeviceProps
 tablet =
     { device = Tablet
     , baseFontSize = 15.0
+    , breakWidth = 840
     }
 
 
@@ -138,6 +117,15 @@ desktop : DeviceProps
 desktop =
     { device = Desktop
     , baseFontSize = 16.0
+    , breakWidth = 960
+    }
+
+
+desktopWide : DeviceProps
+desktopWide =
+    { device = DesktopWide
+    , baseFontSize = 16.0
+    , breakWidth = 1280
     }
 
 
@@ -174,31 +162,11 @@ pem pxval base =
     pxval / base |> Css.em
 
 
-mediaMinWidth : Css.Px -> List Css.Style -> Css.Style
-mediaMinWidth width styles =
+mediaMinWidth : DeviceProps -> List Css.Style -> Css.Style
+mediaMinWidth { breakWidth } styles =
     Css.Media.withMedia
-        [ Css.Media.all [ Css.Media.minWidth width ] ]
+        [ Css.Media.all [ Css.Media.minWidth <| Css.px breakWidth ] ]
         styles
-
-
-mediaPhone : List Css.Style -> Css.Style
-mediaPhone =
-    mediaMinWidth screenXs
-
-
-mediaTablet : List Css.Style -> Css.Style
-mediaTablet =
-    mediaMinWidth screenSm
-
-
-mediaDesktop : List Css.Style -> Css.Style
-mediaDesktop =
-    mediaMinWidth screenMd
-
-
-mediaHd : List Css.Style -> Css.Style
-mediaHd =
-    mediaMinWidth screenLg
 
 
 media2x : List Css.Style -> Css.Style
@@ -206,6 +174,76 @@ media2x styles =
     Css.Media.withMediaQuery
         [ "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dppx)" ]
         styles
+
+
+
+-- Typography and Vertical Rhythm
+--
+-- This doesn't work, as google does some magic with the css request and builds the font-face sections.
+--
+-- Css.Foreign.selector "@font-face"
+--   [ Css.property "font-family" "default"
+--   , Css.property "font-style" "normal"
+--   , Css.property "font-weight" "400"
+--   , Css.property "src" "url(https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext)"
+--   ]
+
+
+typography : TypeScale -> List Css.Foreign.Snippet
+typography typeScale =
+    [ -- Base font
+      Css.Foreign.each
+        [ Css.Foreign.html ]
+        [ cssFontSize typeScale mobile base
+        , Css.lineHeight (Css.px baseLineHeight)
+        , Css.fontFamilies [ "Roboto" ]
+        , Css.fontWeight <| Css.int 400
+        , Css.textRendering Css.optimizeLegibility
+        ]
+    , Css.Foreign.each
+        [ Css.Foreign.h1
+        , Css.Foreign.h2
+        , Css.Foreign.h3
+        , Css.Foreign.h4
+        , Css.Foreign.h5
+        ]
+        [ cssFontSize typeScale mobile base
+        , Css.color greyDark |> Css.important
+        , Css.fontWeight <| Css.int 500
+        ]
+    , Css.Foreign.each
+        [ Css.Foreign.h1
+        , Css.Foreign.h2
+        , Css.Foreign.h3
+        ]
+        [ Css.fontWeight Css.bold
+        , Css.textRendering Css.optimizeLegibility
+        ]
+    , Css.Foreign.h1
+        [ adjustFontSizeTo (fontSize typeScale mobile h1) 3
+        , mediaMinWidth tablet
+            [ adjustFontSizeTo (fontSize typeScale tablet h1) 3
+            ]
+        ]
+    , Css.Foreign.h2
+        [ adjustFontSizeTo (fontSize typeScale mobile h2) 2
+        , mediaMinWidth tablet
+            [ adjustFontSizeTo (fontSize typeScale tablet h2) 2
+            ]
+        ]
+    , Css.Foreign.h3
+        [ adjustFontSizeTo (fontSize typeScale mobile h3) 2
+        , mediaMinWidth tablet
+            [ adjustFontSizeTo (fontSize typeScale tablet h3) 2
+            ]
+        ]
+    , Css.Foreign.h4
+        [ adjustFontSizeTo (fontSize typeScale mobile h4) 2
+        , mediaMinWidth tablet
+            [ adjustFontSizeTo (fontSize typeScale tablet h4) 2
+            ]
+        ]
+    ]
 
 
 
@@ -618,76 +656,6 @@ baseSpacing =
       --     ]
       --     [ Css.margin2 (pem (2 * baseSpacingUnit) baseFontSize) (Css.px <| 2 * baseSpacingUnit)
       --     ]
-    ]
-
-
-
--- Typography and Vertical Rhythm
---
--- This doesn't work, as google does some magic with the css request and builds the font-face sections.
---
--- Css.Foreign.selector "@font-face"
---   [ Css.property "font-family" "default"
---   , Css.property "font-style" "normal"
---   , Css.property "font-weight" "400"
---   , Css.property "src" "url(https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext)"
---   ]
-
-
-typography : TypeScale -> List Css.Foreign.Snippet
-typography typeScale =
-    [ -- Base font
-      Css.Foreign.each
-        [ Css.Foreign.html ]
-        [ cssFontSize typeScale mobile base
-        , Css.lineHeight (Css.px baseLineHeight)
-        , Css.fontFamilies [ "Roboto" ]
-        , Css.fontWeight <| Css.int 400
-        , Css.textRendering Css.optimizeLegibility
-        ]
-    , Css.Foreign.each
-        [ Css.Foreign.h1
-        , Css.Foreign.h2
-        , Css.Foreign.h3
-        , Css.Foreign.h4
-        , Css.Foreign.h5
-        ]
-        [ cssFontSize typeScale mobile base
-        , Css.color greyDark |> Css.important
-        , Css.fontWeight <| Css.int 500
-        ]
-    , Css.Foreign.each
-        [ Css.Foreign.h1
-        , Css.Foreign.h2
-        , Css.Foreign.h3
-        ]
-        [ Css.fontWeight Css.bold
-        , Css.textRendering Css.optimizeLegibility
-        ]
-    , Css.Foreign.h1
-        [ adjustFontSizeTo (fontSize typeScale mobile h1) 3
-        , mediaTablet
-            [ adjustFontSizeTo (fontSize typeScale tablet h1) 3
-            ]
-        ]
-    , Css.Foreign.h2
-        [ adjustFontSizeTo (fontSize typeScale mobile h2) 2
-        , mediaTablet
-            [ adjustFontSizeTo (fontSize typeScale tablet h2) 2
-            ]
-        ]
-    , Css.Foreign.h3
-        [ adjustFontSizeTo (fontSize typeScale mobile h3) 2
-        , mediaTablet
-            [ adjustFontSizeTo (fontSize typeScale tablet h3) 2
-            ]
-        ]
-    , Css.Foreign.h4
-        [ adjustFontSizeTo (fontSize typeScale mobile h4) 2
-        , mediaTablet
-            [ adjustFontSizeTo (fontSize typeScale tablet h4) 2
-            ]
-        ]
     ]
 
 
