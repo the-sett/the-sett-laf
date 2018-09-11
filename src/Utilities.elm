@@ -97,35 +97,11 @@ type alias DeviceProps =
     }
 
 
-mobile : DeviceProps
-mobile =
-    { device = Mobile
-    , baseFontSize = 14.0
-    , breakWidth = 480
-    }
-
-
-tablet : DeviceProps
-tablet =
-    { device = Tablet
-    , baseFontSize = 15.0
-    , breakWidth = 840
-    }
-
-
-desktop : DeviceProps
-desktop =
-    { device = Desktop
-    , baseFontSize = 16.0
-    , breakWidth = 960
-    }
-
-
-desktopWide : DeviceProps
-desktopWide =
-    { device = DesktopWide
-    , baseFontSize = 16.0
-    , breakWidth = 1280
+type alias Devices =
+    { mobile : DeviceProps
+    , tablet : DeviceProps
+    , desktop : DeviceProps
+    , desktopWide : DeviceProps
     }
 
 
@@ -178,72 +154,76 @@ media2x styles =
 
 
 -- Typography and Vertical Rhythm
---
--- This doesn't work, as google does some magic with the css request and builds the font-face sections.
---
--- Css.Foreign.selector "@font-face"
---   [ Css.property "font-family" "default"
---   , Css.property "font-style" "normal"
---   , Css.property "font-weight" "400"
---   , Css.property "src" "url(https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext)"
---   ]
 
 
-typography : TypeScale -> List Css.Foreign.Snippet
-typography typeScale =
-    [ -- Base font
-      Css.Foreign.each
-        [ Css.Foreign.html ]
-        [ cssFontSize typeScale mobile base
-        , Css.lineHeight (Css.px baseLineHeight)
-        , Css.fontFamilies [ "Roboto" ]
-        , Css.fontWeight <| Css.int 400
-        , Css.textRendering Css.optimizeLegibility
-        ]
-    , Css.Foreign.each
-        [ Css.Foreign.h1
+typography : Devices -> TypeScale -> List Css.Foreign.Snippet
+typography { mobile, tablet, desktop, desktopWide } typeScale =
+    let
+        minWidthDevices =
+            [ tablet, desktop, desktopWide ]
+
+        fontSizeLevel level minLines deviceProps =
+            mediaMinWidth deviceProps
+                [ adjustFontSizeTo (fontSize typeScale deviceProps level) minLines
+                ]
+    in
+        [ -- Base font
+          Css.Foreign.each
+            [ Css.Foreign.html ]
+            [ cssFontSize typeScale mobile base
+            , Css.lineHeight (Css.px baseLineHeight)
+            , Css.fontFamilies [ "Roboto" ]
+            , Css.fontWeight <| Css.int 400
+            , Css.textRendering Css.optimizeLegibility
+            ]
+        , Css.Foreign.each
+            [ Css.Foreign.h1
+            , Css.Foreign.h2
+            , Css.Foreign.h3
+            , Css.Foreign.h4
+            , Css.Foreign.h5
+            ]
+            [ cssFontSize typeScale mobile base
+            , Css.color greyDark |> Css.important
+            , Css.fontWeight <| Css.int 500
+            ]
+        , Css.Foreign.each
+            [ Css.Foreign.h1
+            , Css.Foreign.h2
+            , Css.Foreign.h3
+            ]
+            [ Css.fontWeight Css.bold
+            , Css.textRendering Css.optimizeLegibility
+            ]
+        , Css.Foreign.h1
+            ((adjustFontSizeTo (fontSize typeScale mobile h1) 3)
+                :: (List.map
+                        (fontSizeLevel h1 3)
+                        minWidthDevices
+                   )
+            )
         , Css.Foreign.h2
+            ((adjustFontSizeTo (fontSize typeScale mobile h2) 2)
+                :: (List.map
+                        (fontSizeLevel h2 2)
+                        minWidthDevices
+                   )
+            )
         , Css.Foreign.h3
+            ((adjustFontSizeTo (fontSize typeScale mobile h3) 2)
+                :: (List.map
+                        (fontSizeLevel h3 2)
+                        minWidthDevices
+                   )
+            )
         , Css.Foreign.h4
-        , Css.Foreign.h5
+            ((adjustFontSizeTo (fontSize typeScale mobile h4) 2)
+                :: (List.map
+                        (fontSizeLevel h4 2)
+                        minWidthDevices
+                   )
+            )
         ]
-        [ cssFontSize typeScale mobile base
-        , Css.color greyDark |> Css.important
-        , Css.fontWeight <| Css.int 500
-        ]
-    , Css.Foreign.each
-        [ Css.Foreign.h1
-        , Css.Foreign.h2
-        , Css.Foreign.h3
-        ]
-        [ Css.fontWeight Css.bold
-        , Css.textRendering Css.optimizeLegibility
-        ]
-    , Css.Foreign.h1
-        [ adjustFontSizeTo (fontSize typeScale mobile h1) 3
-        , mediaMinWidth tablet
-            [ adjustFontSizeTo (fontSize typeScale tablet h1) 3
-            ]
-        ]
-    , Css.Foreign.h2
-        [ adjustFontSizeTo (fontSize typeScale mobile h2) 2
-        , mediaMinWidth tablet
-            [ adjustFontSizeTo (fontSize typeScale tablet h2) 2
-            ]
-        ]
-    , Css.Foreign.h3
-        [ adjustFontSizeTo (fontSize typeScale mobile h3) 2
-        , mediaMinWidth tablet
-            [ adjustFontSizeTo (fontSize typeScale tablet h3) 2
-            ]
-        ]
-    , Css.Foreign.h4
-        [ adjustFontSizeTo (fontSize typeScale mobile h4) 2
-        , mediaMinWidth tablet
-            [ adjustFontSizeTo (fontSize typeScale tablet h4) 2
-            ]
-        ]
-    ]
 
 
 

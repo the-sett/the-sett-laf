@@ -12,7 +12,39 @@ import DebugStyle
 import Html
 import Html.Attributes
 import Html.Styled exposing (Html)
-import Utilities
+import Utilities exposing (DeviceProps, Device(..))
+
+
+mobile : DeviceProps
+mobile =
+    { device = Mobile
+    , baseFontSize = 14.0
+    , breakWidth = 480
+    }
+
+
+tablet : DeviceProps
+tablet =
+    { device = Tablet
+    , baseFontSize = 15.0
+    , breakWidth = 840
+    }
+
+
+desktop : DeviceProps
+desktop =
+    { device = Desktop
+    , baseFontSize = 16.0
+    , breakWidth = 960
+    }
+
+
+desktopWide : DeviceProps
+desktopWide =
+    { device = DesktopWide
+    , baseFontSize = 17.0
+    , breakWidth = 1280
+    }
 
 
 {-| Links for loading fonts.
@@ -40,4 +72,11 @@ snippets =
     Utilities.reset
         ++ Utilities.normalize
         ++ Utilities.baseSpacing
-        ++ (Utilities.typography Utilities.minorThird)
+        ++ (Utilities.typography
+                { mobile = mobile
+                , tablet = tablet
+                , desktop = desktop
+                , desktopWide = desktopWide
+                }
+                Utilities.minorThird
+           )
