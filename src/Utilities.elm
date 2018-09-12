@@ -19,40 +19,53 @@ rhythm n =
     Css.px <| n * baseLineHeight
 
 
-
--- Font weights
---
---
--- lighter =
---     250
---
---
--- normal =
---     300
---
---
--- bold =
---     500
---
---
--- heavy =
---     600
---
---
-
-
 type alias TypeScale =
     Int -> Float
 
 
+typeScale : Float -> TypeScale
+typeScale ratio n =
+    ratio ^ (toFloat (n - 1))
+
+
+minorSecond : TypeScale
+minorSecond =
+    typeScale 1.067
+
+
+majorSecond : TypeScale
+majorSecond =
+    typeScale 1.125
+
+
 minorThird : TypeScale
-minorThird n =
-    let
-        scale =
-            Array.fromList
-                [ 0.833, 1, 1.2, 1.44, 1.728, 2.074 ]
-    in
-        Array.get n scale |> Maybe.withDefault 1
+minorThird =
+    typeScale 1.2
+
+
+majorThird : TypeScale
+majorThird =
+    typeScale 1.25
+
+
+perfectFourth : TypeScale
+perfectFourth =
+    typeScale 1.333
+
+
+augmentedFourth : TypeScale
+augmentedFourth =
+    typeScale 1.414
+
+
+perfectFifth : TypeScale
+perfectFifth =
+    typeScale 1.5
+
+
+goldenRatio : TypeScale
+goldenRatio =
+    typeScale 1.618
 
 
 type FontSizeLevel
@@ -117,10 +130,6 @@ cssFontSize typeScale deviceProps level =
         |> Css.fontSize
 
 
-
--- Mixins
-
-
 adjustFontSizeTo : Float -> Int -> Css.Style
 adjustFontSizeTo pxVal lines =
     let
@@ -148,7 +157,7 @@ mediaMinWidth { breakWidth } styles =
 media2x : List Css.Style -> Css.Style
 media2x styles =
     Css.Media.withMediaQuery
-        [ "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dppx)" ]
+        [ "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)" ]
         styles
 
 
