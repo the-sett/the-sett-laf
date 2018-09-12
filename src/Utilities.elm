@@ -160,9 +160,14 @@ media2x styles =
 -- Vertical rhythm.
 
 
+lineHeight : DeviceProps -> Float
+lineHeight deviceProps =
+    deviceProps.baseLineHeight
+
+
 rhythm : DeviceProps -> Float -> Css.Px
 rhythm deviceProps n =
-    Css.px <| n * deviceProps.baseLineHeight
+    Css.px <| n * (lineHeight deviceProps)
 
 
 
@@ -188,7 +193,7 @@ fontSizeMixin typeScale deviceProps (FontSizeLevel sizeLevel) =
 
         numLines =
             max sizeLevel.minLines
-                (ceiling (pxVal / deviceProps.baseLineHeight))
+                (ceiling (pxVal / (lineHeight deviceProps)))
     in
         Css.batch
             [ Css.fontSize (Css.px pxVal)
@@ -753,7 +758,7 @@ baseSpacing deviceProps =
         , Css.Foreign.ol
         , Css.Foreign.ul
         ]
-        [ Css.margin2 (Css.px <| deviceProps.baseLineHeight) (Css.px <| deviceProps.baseLineHeight)
+        [ Css.margin2 (rhythm deviceProps 1) (rhythm deviceProps 1)
         ]
     ]
 
