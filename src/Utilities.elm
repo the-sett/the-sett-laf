@@ -21,6 +21,7 @@ type alias DeviceProps =
     , baseFontSize : Float
     , breakWidth : Float
     , baseLineHeight : Float
+    , lineHeightRatio : Float
     }
 
 
@@ -162,7 +163,9 @@ media2x styles =
 
 lineHeight : DeviceProps -> Float
 lineHeight deviceProps =
-    deviceProps.baseLineHeight
+    max
+        deviceProps.baseLineHeight
+        (deviceProps.lineHeightRatio * deviceProps.baseFontSize)
 
 
 rhythm : DeviceProps -> Float -> Css.Px

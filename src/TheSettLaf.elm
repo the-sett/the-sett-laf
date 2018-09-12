@@ -21,6 +21,7 @@ mobile =
     , baseFontSize = 14.0
     , breakWidth = 480
     , baseLineHeight = 24
+    , lineHeightRatio = 1.5
     }
 
 
@@ -30,6 +31,7 @@ tablet =
     , baseFontSize = 15.0
     , breakWidth = 768
     , baseLineHeight = 24
+    , lineHeightRatio = 1.5
     }
 
 
@@ -39,6 +41,7 @@ desktop =
     , baseFontSize = 16.0
     , breakWidth = 992
     , baseLineHeight = 24
+    , lineHeightRatio = 1.5
     }
 
 
@@ -48,6 +51,7 @@ desktopWide =
     , baseFontSize = 17.0
     , breakWidth = 1200
     , baseLineHeight = 24
+    , lineHeightRatio = 1.5
     }
 
 
