@@ -78,4 +78,4 @@ fonts =
 -}
 style : Devices -> Html msg
 style devices =
-    Css.Foreign.global <| Utilities.styleSheet devices
+    Css.Foreign.global <| Utilities.styleSheet Utilities.minorThird devices

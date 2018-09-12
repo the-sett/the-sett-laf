@@ -23,12 +23,12 @@ import Css.Foreign
 
 {-| The global CSS.
 -}
-styleSheet : Devices -> List Css.Foreign.Snippet
-styleSheet devices =
+styleSheet : TypeScale -> Devices -> List Css.Foreign.Snippet
+styleSheet typeScale devices =
     reset
         ++ normalize
         ++ (baseSpacing devices.mobile)
-        ++ (typography devices minorThird)
+        ++ (typography devices typeScale)
 
 
 
