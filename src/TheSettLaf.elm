@@ -27,7 +27,7 @@ tablet : DeviceProps
 tablet =
     { device = Tablet
     , baseFontSize = 15.0
-    , breakWidth = 840
+    , breakWidth = 768
     }
 
 
@@ -35,7 +35,7 @@ desktop : DeviceProps
 desktop =
     { device = Desktop
     , baseFontSize = 16.0
-    , breakWidth = 960
+    , breakWidth = 992
     }
 
 
@@ -43,7 +43,7 @@ desktopWide : DeviceProps
 desktopWide =
     { device = DesktopWide
     , baseFontSize = 17.0
-    , breakWidth = 1280
+    , breakWidth = 1200
     }
 
 
