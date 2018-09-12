@@ -1,4 +1,4 @@
-module TheSettLaf exposing (snippets, style, fonts, devices)
+module TheSettLaf exposing (style, fonts, devices)
 
 {-| The Sett Look and Feel
 
@@ -78,14 +78,4 @@ fonts =
 -}
 style : Devices -> Html msg
 style devices =
-    Css.Foreign.global <| snippets devices
-
-
-{-| The global CSS.
--}
-snippets : Devices -> List Css.Foreign.Snippet
-snippets devices =
-    Utilities.reset
-        ++ Utilities.normalize
-        ++ (Utilities.baseSpacing devices.mobile)
-        ++ (Utilities.typography devices Utilities.minorThird)
+    Css.Foreign.global <| Utilities.styleSheet devices

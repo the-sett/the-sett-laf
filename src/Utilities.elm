@@ -1,9 +1,35 @@
-module Utilities exposing (..)
+module Utilities
+    exposing
+        ( Device(..)
+        , Devices
+        , DeviceProps
+        , TypeScale
+        , minorSecond
+        , majorSecond
+        , minorThird
+        , majorThird
+        , perfectFourth
+        , augmentedFourth
+        , perfectFifth
+        , rhythm
+        , styleSheet
+        )
 
 import Array exposing (Array)
 import Css
 import Css.Media
 import Css.Foreign
+
+
+{-| The global CSS.
+-}
+styleSheet : Devices -> List Css.Foreign.Snippet
+styleSheet devices =
+    reset
+        ++ normalize
+        ++ (baseSpacing devices.mobile)
+        ++ (typography devices minorThird)
+
 
 
 -- Devices and their properties.
