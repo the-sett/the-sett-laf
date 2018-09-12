@@ -3,20 +3,20 @@ module DebugStyle exposing (debug, style)
 import Css
 import Css.Foreign
 import Html.Styled exposing (Html)
-import Utilities
+import Utilities exposing (DeviceProps)
 
 
 {-| The CSS as an HTML <style> element.
 -}
-style : Html msg
-style =
-    Css.Foreign.global debug
+style : DeviceProps -> Html msg
+style deviceProps =
+    Css.Foreign.global <| debug deviceProps
 
 
 {-| The debug CSS.
 -}
-debug : List Css.Foreign.Snippet
-debug =
+debug : DeviceProps -> List Css.Foreign.Snippet
+debug deviceProps =
     [ Css.Foreign.each
         [ Css.Foreign.h1
         , Css.Foreign.h2
@@ -66,6 +66,6 @@ debug =
         [ Css.property "background-image" "linear-gradient(to bottom, hsla(200, 100%, 50%, .3) 1px, transparent 1px)"
         , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
         , Css.backgroundRepeat Css.repeat
-        , Css.backgroundSize2 (Utilities.rhythm 1) (Utilities.rhythm 1)
+        , Css.backgroundSize2 (Utilities.rhythm deviceProps 1) (Utilities.rhythm deviceProps 1)
         ]
     ]

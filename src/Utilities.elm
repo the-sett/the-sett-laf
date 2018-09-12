@@ -6,17 +6,7 @@ import Css.Media
 import Css.Foreign
 
 
-baseLineHeight =
-    24
-
-
-baseSpacingUnit =
-    baseLineHeight - 12
-
-
-rhythm : Float -> Css.Px
-rhythm n =
-    Css.px <| n * baseLineHeight
+-- Type Scales.
 
 
 type alias TypeScale =
@@ -96,6 +86,10 @@ h4 =
     FontSizeLevel 2
 
 
+
+-- Devices and their properties.
+
+
 type Device
     = Mobile
     | Tablet
@@ -107,6 +101,7 @@ type alias DeviceProps =
     { device : Device
     , baseFontSize : Float
     , breakWidth : Float
+    , baseLineHeight : Float
     }
 
 
@@ -118,33 +113,8 @@ type alias Devices =
     }
 
 
-fontSize : TypeScale -> DeviceProps -> FontSizeLevel -> Float
-fontSize typeScale { baseFontSize } (FontSizeLevel level) =
-    (typeScale level) * baseFontSize
 
-
-cssFontSize : TypeScale -> DeviceProps -> FontSizeLevel -> Css.Style
-cssFontSize typeScale deviceProps level =
-    fontSize typeScale deviceProps level
-        |> Css.px
-        |> Css.fontSize
-
-
-adjustFontSizeTo : Float -> Int -> Css.Style
-adjustFontSizeTo pxVal lines =
-    let
-        numLines =
-            max lines
-                (ceiling (pxVal / baseLineHeight))
-    in
-        Css.batch
-            [ Css.fontSize (Css.px pxVal)
-            , Css.lineHeight (rhythm (toFloat numLines))
-            ]
-
-
-pem pxval base =
-    pxval / base |> Css.em
+-- Media break points.
 
 
 mediaMinWidth : DeviceProps -> List Css.Style -> Css.Style
@@ -162,7 +132,41 @@ media2x styles =
 
 
 
--- Typography and Vertical Rhythm
+-- Vertical rhythm functions.
+
+
+rhythm : DeviceProps -> Float -> Css.Px
+rhythm deviceProps n =
+    Css.px <| n * deviceProps.baseLineHeight
+
+
+fontSize : TypeScale -> DeviceProps -> FontSizeLevel -> Float
+fontSize typeScale { baseFontSize } (FontSizeLevel level) =
+    (typeScale level) * baseFontSize
+
+
+cssFontSize : TypeScale -> DeviceProps -> FontSizeLevel -> Css.Style
+cssFontSize typeScale deviceProps level =
+    fontSize typeScale deviceProps level
+        |> Css.px
+        |> Css.fontSize
+
+
+adjustFontSizeTo : DeviceProps -> Float -> Int -> Css.Style
+adjustFontSizeTo deviceProps pxVal lines =
+    let
+        numLines =
+            max lines
+                (ceiling (pxVal / deviceProps.baseLineHeight))
+    in
+        Css.batch
+            [ Css.fontSize (Css.px pxVal)
+            , Css.lineHeight (rhythm deviceProps (toFloat numLines))
+            ]
+
+
+
+-- Responsive typography to fit all devices.
 
 
 typography : Devices -> TypeScale -> List Css.Foreign.Snippet
@@ -173,14 +177,14 @@ typography { mobile, tablet, desktop, desktopWide } typeScale =
 
         fontSizeLevel level minLines deviceProps =
             mediaMinWidth deviceProps
-                [ adjustFontSizeTo (fontSize typeScale deviceProps level) minLines
+                [ adjustFontSizeTo deviceProps (fontSize typeScale deviceProps level) minLines
                 ]
     in
         [ -- Base font
           Css.Foreign.each
             [ Css.Foreign.html ]
             ([ cssFontSize typeScale mobile base
-             , Css.lineHeight (Css.px baseLineHeight)
+             , Css.lineHeight (Css.px mobile.baseLineHeight)
              , Css.fontFamilies [ "Roboto" ]
              , Css.fontWeight <| Css.int 400
              , Css.textRendering Css.optimizeLegibility
@@ -210,28 +214,28 @@ typography { mobile, tablet, desktop, desktopWide } typeScale =
             , Css.textRendering Css.optimizeLegibility
             ]
         , Css.Foreign.h1
-            ((adjustFontSizeTo (fontSize typeScale mobile h1) 3)
+            ((adjustFontSizeTo mobile (fontSize typeScale mobile h1) 3)
                 :: (List.map
                         (fontSizeLevel h1 3)
                         minWidthDevices
                    )
             )
         , Css.Foreign.h2
-            ((adjustFontSizeTo (fontSize typeScale mobile h2) 2)
+            ((adjustFontSizeTo mobile (fontSize typeScale mobile h2) 2)
                 :: (List.map
                         (fontSizeLevel h2 2)
                         minWidthDevices
                    )
             )
         , Css.Foreign.h3
-            ((adjustFontSizeTo (fontSize typeScale mobile h3) 2)
+            ((adjustFontSizeTo mobile (fontSize typeScale mobile h3) 2)
                 :: (List.map
                         (fontSizeLevel h3 2)
                         minWidthDevices
                    )
             )
         , Css.Foreign.h4
-            ((adjustFontSizeTo (fontSize typeScale mobile h4) 2)
+            ((adjustFontSizeTo mobile (fontSize typeScale mobile h4) 2)
                 :: (List.map
                         (fontSizeLevel h4 2)
                         minWidthDevices
@@ -701,8 +705,8 @@ normalize =
 -- Base Spacing
 
 
-baseSpacing : List Css.Foreign.Snippet
-baseSpacing =
+baseSpacing : DeviceProps -> List Css.Foreign.Snippet
+baseSpacing deviceProps =
     [ -- Single direction margins.
       Css.Foreign.each
         [ Css.Foreign.blockquote
@@ -715,7 +719,7 @@ baseSpacing =
         , Css.Foreign.ul
         , Css.Foreign.hr
         ]
-        [ Css.margin3 (Css.px 0) (Css.px 0) (rhythm 1)
+        [ Css.margin3 (Css.px 0) (Css.px 0) (rhythm deviceProps 1)
         ]
 
     -- No margins on headings, the line spacing of the heading is sufficient.
@@ -727,16 +731,16 @@ baseSpacing =
         , Css.Foreign.h5
         , Css.Foreign.h6
         ]
-        [ Css.margin3 (Css.px 0) (Css.px 0) (rhythm 0) ]
+        [ Css.margin3 (Css.px 0) (Css.px 0) (rhythm deviceProps 0) ]
 
     -- Consistent indenting for lists.
-    -- , Css.Foreign.each
-    --     [ Css.Foreign.dd
-    --     , Css.Foreign.ol
-    --     , Css.Foreign.ul
-    --     ]
-    --     [ Css.margin2 (pem (2 * baseSpacingUnit) baseFontSize) (Css.px <| 2 * baseSpacingUnit)
-    --     ]
+    , Css.Foreign.each
+        [ Css.Foreign.dd
+        , Css.Foreign.ol
+        , Css.Foreign.ul
+        ]
+        [ Css.margin2 (Css.px <| deviceProps.baseLineHeight) (Css.px <| deviceProps.baseLineHeight)
+        ]
     ]
 
 

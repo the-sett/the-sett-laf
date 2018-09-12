@@ -10,7 +10,7 @@ import Typography
 main =
     Html.div []
         [ TheSettLaf.fonts
-        , TheSettLaf.style |> Html.Styled.toUnstyled
-        , DebugStyle.style |> Html.Styled.toUnstyled
+        , TheSettLaf.style TheSettLaf.devices |> Html.Styled.toUnstyled
+        , DebugStyle.style (.mobile TheSettLaf.devices) |> Html.Styled.toUnstyled
         , Typography.view
         ]

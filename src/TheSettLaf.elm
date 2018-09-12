@@ -1,4 +1,4 @@
-module TheSettLaf exposing (snippets, style, fonts)
+module TheSettLaf exposing (snippets, style, fonts, devices)
 
 {-| The Sett Look and Feel
 
@@ -12,7 +12,7 @@ import DebugStyle
 import Html
 import Html.Attributes
 import Html.Styled exposing (Html)
-import Utilities exposing (DeviceProps, Device(..))
+import Utilities exposing (DeviceProps, Device(..), Devices)
 
 
 mobile : DeviceProps
@@ -20,6 +20,7 @@ mobile =
     { device = Mobile
     , baseFontSize = 14.0
     , breakWidth = 480
+    , baseLineHeight = 24
     }
 
 
@@ -28,6 +29,7 @@ tablet =
     { device = Tablet
     , baseFontSize = 15.0
     , breakWidth = 768
+    , baseLineHeight = 24
     }
 
 
@@ -36,6 +38,7 @@ desktop =
     { device = Desktop
     , baseFontSize = 16.0
     , breakWidth = 992
+    , baseLineHeight = 24
     }
 
 
@@ -44,6 +47,15 @@ desktopWide =
     { device = DesktopWide
     , baseFontSize = 17.0
     , breakWidth = 1200
+    , baseLineHeight = 24
+    }
+
+
+devices =
+    { mobile = mobile
+    , tablet = tablet
+    , desktop = desktop
+    , desktopWide = desktopWide
     }
 
 
@@ -60,23 +72,16 @@ fonts =
 
 {-| The CSS as an HTML <style> element.
 -}
-style : Html msg
-style =
-    Css.Foreign.global snippets
+style : Devices -> Html msg
+style devices =
+    Css.Foreign.global <| snippets devices
 
 
 {-| The global CSS.
 -}
-snippets : List Css.Foreign.Snippet
-snippets =
+snippets : Devices -> List Css.Foreign.Snippet
+snippets devices =
     Utilities.reset
         ++ Utilities.normalize
-        ++ Utilities.baseSpacing
-        ++ (Utilities.typography
-                { mobile = mobile
-                , tablet = tablet
-                , desktop = desktop
-                , desktopWide = desktopWide
-                }
-                Utilities.minorThird
-           )
+        ++ (Utilities.baseSpacing devices.mobile)
+        ++ (Utilities.typography devices Utilities.minorThird)
