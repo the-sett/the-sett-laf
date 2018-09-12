@@ -42,7 +42,17 @@ type Device
     | DesktopWide
 
 
+
+-- What the user needs to supply
+-- type alias DeviceProps =
+--     { baseFontSize : Float
+--     , breakWidth : Float
+--     , minLineHeight : Float
+--     }
+
+
 type alias DeviceProps =
+    -- This is really the internal model
     { device : Device
     , baseFontSize : Float
     , breakWidth : Float
