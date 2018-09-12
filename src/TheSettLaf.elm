@@ -20,7 +20,7 @@ mobile =
     { device = Mobile
     , baseFontSize = 14.0
     , breakWidth = 480
-    , baseLineHeight = 24
+    , baseLineHeight = 21
     , lineHeightRatio = 1.5
     }
 
@@ -30,7 +30,7 @@ tablet =
     { device = Tablet
     , baseFontSize = 15.0
     , breakWidth = 768
-    , baseLineHeight = 24
+    , baseLineHeight = 22
     , lineHeightRatio = 1.5
     }
 
