@@ -221,13 +221,15 @@ typography { mobile, tablet, desktop, desktopWide } typeScale =
         mediaStylesForFontLevel fontSizeLevel =
             ((List.map (\mixin -> mixin []) (fontMixins fontSizeLevel)) |> List.concat)
     in
-        [ -- Base font
+        [ -- Base font.
           Css.Foreign.each
             [ Css.Foreign.html ]
             [ Css.fontFamilies [ "Roboto", "Helvetica" ]
             , Css.fontWeight <| Css.int 400
             , Css.textRendering Css.optimizeLegibility
             ]
+
+        -- Headings are grey and at least medium.
         , Css.Foreign.each
             [ Css.Foreign.h1
             , Css.Foreign.h2
@@ -238,12 +240,16 @@ typography { mobile, tablet, desktop, desktopWide } typeScale =
             [ Css.color greyDark |> Css.important
             , Css.fontWeight <| Css.int 500
             ]
+
+        -- Biggest headings are bold.
         , Css.Foreign.each
             [ Css.Foreign.h1
             , Css.Foreign.h2
             , Css.Foreign.h3
             ]
             [ Css.fontWeight Css.bold ]
+
+        -- Media queries to set all font sizes accross all devices.
         , Css.Foreign.html <| mediaStylesForFontLevel base
         , Css.Foreign.h1 <| mediaStylesForFontLevel h1
         , Css.Foreign.h2 <| mediaStylesForFontLevel h2
