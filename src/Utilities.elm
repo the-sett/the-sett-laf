@@ -6,6 +6,33 @@ import Css.Media
 import Css.Foreign
 
 
+-- Devices and their properties.
+
+
+type Device
+    = Mobile
+    | Tablet
+    | Desktop
+    | DesktopWide
+
+
+type alias DeviceProps =
+    { device : Device
+    , baseFontSize : Float
+    , breakWidth : Float
+    , baseLineHeight : Float
+    }
+
+
+type alias Devices =
+    { mobile : DeviceProps
+    , tablet : DeviceProps
+    , desktop : DeviceProps
+    , desktopWide : DeviceProps
+    }
+
+
+
 -- Type Scales.
 
 
@@ -59,69 +86,67 @@ goldenRatio =
 
 
 type FontSizeLevel
-    = FontSizeLevel Int
+    = FontSizeLevel
+        { level : Int
+        , minLines : Int
+        }
 
 
 milli =
-    FontSizeLevel 0
+    FontSizeLevel
+        { level = 0
+        , minLines = 1
+        }
 
 
 base =
-    FontSizeLevel 1
+    FontSizeLevel
+        { level = 1
+        , minLines = 1
+        }
 
 
 h1 =
-    FontSizeLevel 5
+    FontSizeLevel
+        { level = 5
+        , minLines = 3
+        }
 
 
 h2 =
-    FontSizeLevel 4
+    FontSizeLevel
+        { level = 4
+        , minLines = 2
+        }
 
 
 h3 =
-    FontSizeLevel 3
+    FontSizeLevel
+        { level = 3
+        , minLines = 2
+        }
 
 
 h4 =
-    FontSizeLevel 2
+    FontSizeLevel
+        { level = 2
+        , minLines = 2
+        }
 
 
-
--- Devices and their properties.
-
-
-type Device
-    = Mobile
-    | Tablet
-    | Desktop
-    | DesktopWide
-
-
-type alias DeviceProps =
-    { device : Device
-    , baseFontSize : Float
-    , breakWidth : Float
-    , baseLineHeight : Float
-    }
-
-
-type alias Devices =
-    { mobile : DeviceProps
-    , tablet : DeviceProps
-    , desktop : DeviceProps
-    , desktopWide : DeviceProps
-    }
+fontSizePx : TypeScale -> DeviceProps -> FontSizeLevel -> Float
+fontSizePx typeScale { baseFontSize } (FontSizeLevel sizeLevel) =
+    (typeScale sizeLevel.level) * baseFontSize
 
 
 
 -- Media break points.
 
 
-mediaMinWidth : DeviceProps -> List Css.Style -> Css.Style
-mediaMinWidth { breakWidth } styles =
-    Css.Media.withMedia
-        [ Css.Media.all [ Css.Media.minWidth <| Css.px breakWidth ] ]
-        styles
+mediaMinWidthMixin : DeviceProps -> Mixin
+mediaMinWidthMixin { breakWidth } =
+    Css.Media.withMedia [ Css.Media.all [ Css.Media.minWidth <| Css.px breakWidth ] ]
+        >> List.singleton
 
 
 media2x : List Css.Style -> Css.Style
@@ -132,7 +157,7 @@ media2x styles =
 
 
 
--- Vertical rhythm functions.
+-- Vertical rhythm.
 
 
 rhythm : DeviceProps -> Float -> Css.Px
@@ -140,29 +165,36 @@ rhythm deviceProps n =
     Css.px <| n * deviceProps.baseLineHeight
 
 
-fontSize : TypeScale -> DeviceProps -> FontSizeLevel -> Float
-fontSize typeScale { baseFontSize } (FontSizeLevel level) =
-    (typeScale level) * baseFontSize
+
+-- Mixins
 
 
-cssFontSize : TypeScale -> DeviceProps -> FontSizeLevel -> Css.Style
-cssFontSize typeScale deviceProps level =
-    fontSize typeScale deviceProps level
-        |> Css.px
-        |> Css.fontSize
+{-| A mixin is a function that adds styles into a list of styles.
+-}
+type alias Mixin =
+    List Css.Style -> List Css.Style
 
 
-adjustFontSizeTo : DeviceProps -> Float -> Int -> Css.Style
-adjustFontSizeTo deviceProps pxVal lines =
+styleAsMixin : Css.Style -> Mixin
+styleAsMixin style styles =
+    style :: styles
+
+
+fontSizeMixin : TypeScale -> DeviceProps -> FontSizeLevel -> Mixin
+fontSizeMixin typeScale deviceProps (FontSizeLevel sizeLevel) =
     let
+        pxVal =
+            fontSizePx typeScale deviceProps (FontSizeLevel sizeLevel)
+
         numLines =
-            max lines
+            max sizeLevel.minLines
                 (ceiling (pxVal / deviceProps.baseLineHeight))
     in
         Css.batch
             [ Css.fontSize (Css.px pxVal)
             , Css.lineHeight (rhythm deviceProps (toFloat numLines))
             ]
+            |> styleAsMixin
 
 
 
@@ -175,25 +207,27 @@ typography { mobile, tablet, desktop, desktopWide } typeScale =
         minWidthDevices =
             [ desktopWide, desktop, tablet ]
 
-        fontSizeLevel level minLines deviceProps =
-            mediaMinWidth deviceProps
-                [ adjustFontSizeTo deviceProps (fontSize typeScale deviceProps level) minLines
-                ]
+        fontSizeMediaMixin fontSizeLevel deviceProps =
+            fontSizeMixin typeScale deviceProps fontSizeLevel
+                >> (mediaMinWidthMixin deviceProps)
+
+        mediaMixins fontSizeLevel =
+            List.map (fontSizeMediaMixin fontSizeLevel) minWidthDevices
+
+        fontMixins fontSizeLevel =
+            (fontSizeMixin typeScale mobile fontSizeLevel)
+                :: (mediaMixins fontSizeLevel)
+
+        mediaStylesForFontLevel fontSizeLevel =
+            ((List.map (\mixin -> mixin []) (fontMixins fontSizeLevel)) |> List.concat)
     in
         [ -- Base font
           Css.Foreign.each
             [ Css.Foreign.html ]
-            ([ cssFontSize typeScale mobile base
-             , Css.lineHeight (Css.px mobile.baseLineHeight)
-             , Css.fontFamilies [ "Roboto" ]
-             , Css.fontWeight <| Css.int 400
-             , Css.textRendering Css.optimizeLegibility
-             ]
-                ++ (List.map
-                        (fontSizeLevel base 1)
-                        minWidthDevices
-                   )
-            )
+            [ Css.fontFamilies [ "Roboto", "Helvetica" ]
+            , Css.fontWeight <| Css.int 400
+            , Css.textRendering Css.optimizeLegibility
+            ]
         , Css.Foreign.each
             [ Css.Foreign.h1
             , Css.Foreign.h2
@@ -201,8 +235,7 @@ typography { mobile, tablet, desktop, desktopWide } typeScale =
             , Css.Foreign.h4
             , Css.Foreign.h5
             ]
-            [ cssFontSize typeScale mobile base
-            , Css.color greyDark |> Css.important
+            [ Css.color greyDark |> Css.important
             , Css.fontWeight <| Css.int 500
             ]
         , Css.Foreign.each
@@ -210,37 +243,12 @@ typography { mobile, tablet, desktop, desktopWide } typeScale =
             , Css.Foreign.h2
             , Css.Foreign.h3
             ]
-            [ Css.fontWeight Css.bold
-            , Css.textRendering Css.optimizeLegibility
-            ]
-        , Css.Foreign.h1
-            ((adjustFontSizeTo mobile (fontSize typeScale mobile h1) 3)
-                :: (List.map
-                        (fontSizeLevel h1 3)
-                        minWidthDevices
-                   )
-            )
-        , Css.Foreign.h2
-            ((adjustFontSizeTo mobile (fontSize typeScale mobile h2) 2)
-                :: (List.map
-                        (fontSizeLevel h2 2)
-                        minWidthDevices
-                   )
-            )
-        , Css.Foreign.h3
-            ((adjustFontSizeTo mobile (fontSize typeScale mobile h3) 2)
-                :: (List.map
-                        (fontSizeLevel h3 2)
-                        minWidthDevices
-                   )
-            )
-        , Css.Foreign.h4
-            ((adjustFontSizeTo mobile (fontSize typeScale mobile h4) 2)
-                :: (List.map
-                        (fontSizeLevel h4 2)
-                        minWidthDevices
-                   )
-            )
+            [ Css.fontWeight Css.bold ]
+        , Css.Foreign.html <| mediaStylesForFontLevel base
+        , Css.Foreign.h1 <| mediaStylesForFontLevel h1
+        , Css.Foreign.h2 <| mediaStylesForFontLevel h2
+        , Css.Foreign.h3 <| mediaStylesForFontLevel h3
+        , Css.Foreign.h4 <| mediaStylesForFontLevel h4
         ]
 
 
