@@ -43,7 +43,8 @@ update msg model =
 view model =
     let
         innerView =
-            [ TheSettLaf.fonts
+            [ TheSettLaf.responsive
+            , TheSettLaf.fonts
             , TheSettLaf.style TheSettLaf.devices |> Html.Styled.toUnstyled
             , debugControl model
             , Typography.view

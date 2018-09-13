@@ -86,7 +86,7 @@ type alias TypeScale =
 
 typeScale : Float -> TypeScale
 typeScale ratio n =
-    ratio ^ (toFloat (n - 1))
+    (ratio ^ (toFloat (n - 1)))
 
 
 minorSecond : TypeScale
@@ -180,7 +180,9 @@ h4 =
 
 fontSizePx : TypeScale -> DeviceProps -> FontSizeLevel -> Float
 fontSizePx typeScale { baseFontSize } (FontSizeLevel sizeLevel) =
-    (typeScale sizeLevel.level) * baseFontSize
+    ((typeScale sizeLevel.level) * baseFontSize)
+        |> floor
+        |> toFloat
 
 
 
@@ -228,7 +230,7 @@ mapMixins mixins styles =
 media2x : List Css.Style -> Css.Style
 media2x styles =
     Css.Media.withMediaQuery
-        [ "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)" ]
+        [ "(-webkit-min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx)" ]
         styles
 
 

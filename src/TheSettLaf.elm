@@ -1,4 +1,4 @@
-module TheSettLaf exposing (style, fonts, devices)
+module TheSettLaf exposing (style, fonts, responsive, devices)
 
 {-| The Sett Look and Feel
 
@@ -70,6 +70,15 @@ fonts =
     Html.node "link"
         [ Html.Attributes.href "https://fonts.googleapis.com/css?family=Nobile:300,400,500,700"
         , Html.Attributes.rel "stylesheet"
+        ]
+        []
+
+
+responsive : Html.Html msg
+responsive =
+    Html.node "meta"
+        [ Html.Attributes.name "viewport"
+        , Html.Attributes.content "width=device-width, initial-scale=1"
         ]
         []
 
