@@ -298,7 +298,7 @@ typography devices typeScale =
         [ -- Base font.
           Css.Foreign.each
             [ Css.Foreign.html ]
-            [ Css.fontFamilies [ "Roboto", "Helvetica" ]
+            [ Css.fontFamilies [ "Nobile", "Helvetica" ]
             , Css.fontWeight <| Css.int 400
             , Css.textRendering Css.optimizeLegibility
             ]

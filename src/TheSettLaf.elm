@@ -21,7 +21,7 @@ mobile =
     , baseFontSize = 14.0
     , breakWidth = 480
     , baseLineHeight = 21
-    , lineHeightRatio = 1.5
+    , lineHeightRatio = 1.6
     }
 
 
@@ -31,7 +31,7 @@ tablet =
     , baseFontSize = 15.0
     , breakWidth = 768
     , baseLineHeight = 22
-    , lineHeightRatio = 1.5
+    , lineHeightRatio = 1.6
     }
 
 
@@ -41,7 +41,7 @@ desktop =
     , baseFontSize = 16.0
     , breakWidth = 992
     , baseLineHeight = 24
-    , lineHeightRatio = 1.5
+    , lineHeightRatio = 1.6
     }
 
 
@@ -51,7 +51,7 @@ desktopWide =
     , baseFontSize = 17.0
     , breakWidth = 1200
     , baseLineHeight = 24
-    , lineHeightRatio = 1.5
+    , lineHeightRatio = 1.6
     }
 
 
@@ -68,7 +68,7 @@ devices =
 fonts : Html.Html msg
 fonts =
     Html.node "link"
-        [ Html.Attributes.href "https://fonts.googleapis.com/css?family=Roboto:400,300,500|Roboto+Mono|Roboto+Condensed:400,700&subset=latin,latin-ext"
+        [ Html.Attributes.href "https://fonts.googleapis.com/css?family=Nobile:300,400,500,700"
         , Html.Attributes.rel "stylesheet"
         ]
         []
