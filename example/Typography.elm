@@ -4,7 +4,7 @@ import Html exposing (..)
 import Html.Attributes exposing (title, class)
 
 
-view : Html Never
+view : Html msg
 view =
     div [ class "layout-fixed-width" ]
         [ h1 []
