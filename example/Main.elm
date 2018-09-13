@@ -11,6 +11,6 @@ main =
     Html.div []
         [ TheSettLaf.fonts
         , TheSettLaf.style TheSettLaf.devices |> Html.Styled.toUnstyled
-        , DebugStyle.style (.mobile TheSettLaf.devices) |> Html.Styled.toUnstyled
+        , DebugStyle.style TheSettLaf.devices |> Html.Styled.toUnstyled
         , Typography.view
         ]

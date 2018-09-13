@@ -1,8 +1,10 @@
 module Utilities
     exposing
-        ( Device(..)
+        ( -- Devices
+          Device(..)
         , Devices
         , DeviceProps
+          -- Type scales
         , TypeScale
         , minorSecond
         , majorSecond
@@ -13,6 +15,11 @@ module Utilities
         , perfectFifth
         , rhythm
         , styleSheet
+          -- Mixins
+        , Mixin
+        , mapMixins
+        , mediaMixins
+        , styleAsMixin
         )
 
 import Array exposing (Array)
@@ -27,7 +34,7 @@ styleSheet : TypeScale -> Devices -> List Css.Foreign.Snippet
 styleSheet typeScale devices =
     reset
         ++ normalize
-        ++ (baseSpacing devices.mobile)
+        ++ (baseSpacing devices)
         ++ (typography devices typeScale)
 
 
@@ -177,23 +184,6 @@ fontSizePx typeScale { baseFontSize } (FontSizeLevel sizeLevel) =
 
 
 
--- Media break points.
-
-
-mediaMinWidthMixin : DeviceProps -> Mixin
-mediaMinWidthMixin { breakWidth } =
-    Css.Media.withMedia [ Css.Media.all [ Css.Media.minWidth <| Css.px breakWidth ] ]
-        >> List.singleton
-
-
-media2x : List Css.Style -> Css.Style
-media2x styles =
-    Css.Media.withMediaQuery
-        [ "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)" ]
-        styles
-
-
-
 -- Vertical rhythm.
 
 
@@ -202,6 +192,8 @@ lineHeight deviceProps =
     max
         deviceProps.baseLineHeight
         (deviceProps.lineHeightRatio * deviceProps.baseFontSize)
+        |> floor
+        |> toFloat
 
 
 rhythm : DeviceProps -> Float -> Css.Px
@@ -224,12 +216,60 @@ styleAsMixin style styles =
     style :: styles
 
 
+mapMixins : List Mixin -> List Css.Style -> List Css.Style
 mapMixins mixins styles =
     ((List.map (\mixin -> mixin styles) mixins) |> List.concat)
 
 
-fontSizeMixin : TypeScale -> DeviceProps -> FontSizeLevel -> Mixin
-fontSizeMixin typeScale deviceProps (FontSizeLevel sizeLevel) =
+
+-- Media break points.
+
+
+media2x : List Css.Style -> Css.Style
+media2x styles =
+    Css.Media.withMediaQuery
+        [ "(-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx)" ]
+        styles
+
+
+mediaMinWidthMixin : DeviceProps -> Mixin
+mediaMinWidthMixin { breakWidth } =
+    Css.Media.withMedia [ Css.Media.all [ Css.Media.minWidth <| Css.px breakWidth ] ]
+        >> List.singleton
+
+
+{-| Given a set of devices, and a function to build mixins from the device properties,
+creates a list of mixins, one for each device type.
+
+The smallest (mobile) device is applied without a media query, and the larger
+sizes are successively applied with media queries on their break widths.
+
+In this way, a mixin that is dependant on device properties can be applied accross
+all device. Use `mapMixins` to apply the list of mixins over a list of base styles.
+
+-}
+mediaMixins : Devices -> (DeviceProps -> Mixin) -> List Mixin
+mediaMixins { mobile, tablet, desktop, desktopWide } deviceMixin =
+    let
+        minWidthDevices =
+            [ desktopWide, desktop, tablet ]
+
+        minWidthMixin deviceMixin deviceProps =
+            deviceMixin deviceProps
+                >> (mediaMinWidthMixin deviceProps)
+
+        minWidthMixins deviceMixin =
+            List.map (minWidthMixin deviceMixin) minWidthDevices
+
+        allMixins deviceMixin =
+            (deviceMixin mobile)
+                :: (minWidthMixins deviceMixin)
+    in
+        allMixins deviceMixin
+
+
+fontSizeMixin : TypeScale -> FontSizeLevel -> DeviceProps -> Mixin
+fontSizeMixin typeScale (FontSizeLevel sizeLevel) deviceProps =
     let
         pxVal =
             fontSizePx typeScale deviceProps (FontSizeLevel sizeLevel)
@@ -250,21 +290,10 @@ fontSizeMixin typeScale deviceProps (FontSizeLevel sizeLevel) =
 
 
 typography : Devices -> TypeScale -> List Css.Foreign.Snippet
-typography { mobile, tablet, desktop, desktopWide } typeScale =
+typography devices typeScale =
     let
-        minWidthDevices =
-            [ desktopWide, desktop, tablet ]
-
-        fontSizeMediaMixin fontSizeLevel deviceProps =
-            fontSizeMixin typeScale deviceProps fontSizeLevel
-                >> (mediaMinWidthMixin deviceProps)
-
-        mediaMixins fontSizeLevel =
-            List.map (fontSizeMediaMixin fontSizeLevel) minWidthDevices
-
-        fontMixins fontSizeLevel =
-            (fontSizeMixin typeScale mobile fontSizeLevel)
-                :: (mediaMixins fontSizeLevel)
+        fontMediaStyles fontSizeLevel =
+            mapMixins (mediaMixins devices (fontSizeMixin typeScale fontSizeLevel)) []
     in
         [ -- Base font.
           Css.Foreign.each
@@ -273,7 +302,8 @@ typography { mobile, tablet, desktop, desktopWide } typeScale =
             , Css.fontWeight <| Css.int 400
             , Css.textRendering Css.optimizeLegibility
             ]
-          -- Headings are grey and at least medium.
+
+        -- Headings are grey and at least medium.
         , Css.Foreign.each
             [ Css.Foreign.h1
             , Css.Foreign.h2
@@ -284,19 +314,77 @@ typography { mobile, tablet, desktop, desktopWide } typeScale =
             [ Css.color greyDark |> Css.important
             , Css.fontWeight <| Css.int 500
             ]
-          -- Biggest headings are bold.
+
+        -- Biggest headings are bold.
         , Css.Foreign.each
             [ Css.Foreign.h1
             , Css.Foreign.h2
             , Css.Foreign.h3
             ]
             [ Css.fontWeight Css.bold ]
-          -- Media queries to set all font sizes accross all devices.
-        , Css.Foreign.html <| mapMixins (fontMixins base) []
-        , Css.Foreign.h1 <| mapMixins (fontMixins h1) []
-        , Css.Foreign.h2 <| mapMixins (fontMixins h2) []
-        , Css.Foreign.h3 <| mapMixins (fontMixins h3) []
-        , Css.Foreign.h4 <| mapMixins (fontMixins h4) []
+
+        -- Media queries to set all font sizes accross all devices.
+        , Css.Foreign.html <| fontMediaStyles base
+        , Css.Foreign.h1 <| fontMediaStyles h1
+        , Css.Foreign.h2 <| fontMediaStyles h2
+        , Css.Foreign.h3 <| fontMediaStyles h3
+        , Css.Foreign.h4 <| fontMediaStyles h4
+        ]
+
+
+
+-- Responsive Spacing
+
+
+baseSpacing : Devices -> List Css.Foreign.Snippet
+baseSpacing devices =
+    let
+        marginBelowMixin deviceProps =
+            Css.margin3 (Css.px 0) (Css.px 0) (rhythm deviceProps 1)
+                |> styleAsMixin
+
+        marginSidesMixin deviceProps =
+            Css.margin2 (rhythm deviceProps 1) (rhythm deviceProps 1)
+                |> styleAsMixin
+    in
+        [ -- No margins on headings, the line spacing of the heading is sufficient.
+          Css.Foreign.each
+            [ Css.Foreign.h1
+            , Css.Foreign.h2
+            , Css.Foreign.h3
+            , Css.Foreign.h4
+            , Css.Foreign.h5
+            , Css.Foreign.h6
+            ]
+            [ Css.margin3 (Css.px 0) (Css.px 0) (Css.px 0) ]
+
+        -- Single direction margins.
+        , Css.Foreign.each
+            [ Css.Foreign.blockquote
+            , Css.Foreign.dl
+            , Css.Foreign.fieldset
+            , Css.Foreign.ol
+            , Css.Foreign.p
+            , Css.Foreign.pre
+            , Css.Foreign.table
+            , Css.Foreign.ul
+            , Css.Foreign.hr
+            ]
+            (mapMixins
+                (mediaMixins devices marginBelowMixin)
+                []
+            )
+
+        -- Consistent indenting for lists.
+        , Css.Foreign.each
+            [ Css.Foreign.dd
+            , Css.Foreign.ol
+            , Css.Foreign.ul
+            ]
+            (mapMixins
+                (mediaMixins devices marginSidesMixin)
+                []
+            )
         ]
 
 
@@ -333,23 +421,28 @@ reset =
         [ Css.margin Css.zero
         , Css.padding Css.zero
         ]
-      -- Remove underlines from potentially troublesome elements.
+
+    -- Remove underlines from potentially troublesome elements.
     , Css.Foreign.each
         [ Css.Foreign.a
         , Css.Foreign.typeSelector "ins"
         , Css.Foreign.typeSelector "u"
         ]
         [ Css.textDecoration Css.none ]
-      -- Apply faux underline via `border-bottom`.
+
+    -- Apply faux underline via `border-bottom`.
     , Css.Foreign.typeSelector "ins"
         [ Css.borderBottom2 (Css.px 1) Css.solid ]
-      -- So that `alt` text is visually offset if images dont load.
+
+    -- So that `alt` text is visually offset if images dont load.
     , Css.Foreign.img
         [ Css.fontStyle Css.italic ]
-      -- Remove borders from fieldset
+
+    -- Remove borders from fieldset
     , Css.Foreign.fieldset
         [ Css.border2 (Css.px 0) Css.none ]
-      -- Give form elements some cursor interactions...
+
+    -- Give form elements some cursor interactions...
     , Css.Foreign.each
         [ Css.Foreign.button
         , Css.Foreign.typeSelector "input:button"
@@ -358,7 +451,8 @@ reset =
         , Css.Foreign.select
         ]
         [ Css.cursor Css.pointer ]
-      -- Default cursor and box style for text inputs. }
+
+    -- Default cursor and box style for text inputs. }
     , Css.Foreign.each
         [ Css.Foreign.typeSelector ".text-input:active"
         , Css.Foreign.typeSelector ".text-input:focus"
@@ -377,16 +471,21 @@ normalize =
     -- 2. Prevent adjustments of font size after orientation changes in IE on Windows Phone and in iOS.
     [ Css.Foreign.html
         [ Css.lineHeight (Css.num 1.15)
-          -- 1
+
+        -- 1
         , Css.property "-ms-text-size-adjust" "100%"
-          -- 2
+
+        -- 2
         , Css.property "-webkit-text-size-adjust" "100%"
-          -- 2
+
+        -- 2
         ]
-      --Remove the margin in all browsers (opinionated).
+
+    --Remove the margin in all browsers (opinionated).
     , Css.Foreign.body
         [ Css.margin Css.zero ]
-      --Add the correct display in IE 9-.
+
+    --Add the correct display in IE 9-.
     , Css.Foreign.each
         [ Css.Foreign.article
         , Css.Foreign.typeSelector "aside"
@@ -396,95 +495,122 @@ normalize =
         , Css.Foreign.section
         ]
         [ Css.display Css.block ]
-      -- Correct the font size and margin on `h1` elements within `section` and `article` contexts in Chrome, Firefox, and Safari.
+
+    -- Correct the font size and margin on `h1` elements within `section` and `article` contexts in Chrome, Firefox, and Safari.
     , Css.Foreign.h1
         [ Css.fontSize (Css.em 2)
         , Css.margin2 (Css.em 0.67) Css.zero
         ]
-      --Add the correct display in IE 9-.
-      -- 1. Add the correct display in IE.
+
+    --Add the correct display in IE 9-.
+    -- 1. Add the correct display in IE.
     , Css.Foreign.each
         [ Css.Foreign.typeSelector "figcaption"
         , Css.Foreign.typeSelector "figure"
         , Css.Foreign.main_
-          -- 1
+
+        -- 1
         ]
         [ Css.display Css.block ]
-      --Add the correct margin in IE 8.
+
+    --Add the correct margin in IE 8.
     , Css.Foreign.typeSelector "figure"
         [ Css.margin2 (Css.em 1) (Css.px 40) ]
-      -- 1. Add the correct box sizing in Firefox.
-      -- 2. Show the overflow in Edge and IE.
+
+    -- 1. Add the correct box sizing in Firefox.
+    -- 2. Show the overflow in Edge and IE.
     , Css.Foreign.hr
         [ Css.boxSizing Css.contentBox
-          -- 1
+
+        -- 1
         , Css.height Css.zero
-          -- 1
+
+        -- 1
         , Css.overflow Css.visible
-          -- 2
+
+        -- 2
         ]
-      -- 1. Correct the inheritance and scaling of font size in all browsers.
-      -- 2. Correct the odd `em` font sizing in all browsers.
+
+    -- 1. Correct the inheritance and scaling of font size in all browsers.
+    -- 2. Correct the odd `em` font sizing in all browsers.
     , Css.Foreign.pre
         [ Css.fontFamilies [ "monospace", "monospace" ]
-          -- 1
+
+        -- 1
         , Css.fontSize (Css.em 1)
-          -- 2
+
+        -- 2
         ]
-      -- 1. Remove the gray background on active links in IE 10.
-      -- 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
+
+    -- 1. Remove the gray background on active links in IE 10.
+    -- 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
     , Css.Foreign.a
         [ Css.backgroundColor Css.transparent
-          -- 1
+
+        -- 1
         , Css.property "-webkit-text-decoration-skip" "objects"
-          -- 2
+
+        -- 2
         ]
-      -- 1. Remove the bottom border in Chrome 57- and Firefox 39-.
-      -- 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+
+    -- 1. Remove the bottom border in Chrome 57- and Firefox 39-.
+    -- 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
     , Css.Foreign.typeSelector "abbr[title]"
         [ Css.property "border-bottom" "none"
-          -- 1
+
+        -- 1
         , Css.textDecoration Css.underline
-          -- 2
+
+        -- 2
         , Css.textDecoration2 Css.underline Css.dotted
-          -- 2
+
+        -- 2
         ]
-      -- Prevent the duplicate application of `bolder` by the next rule in Safari 6.
+
+    -- Prevent the duplicate application of `bolder` by the next rule in Safari 6.
     , Css.Foreign.each
         [ Css.Foreign.typeSelector "b"
         , Css.Foreign.strong
         ]
         [ Css.fontWeight Css.inherit ]
-      -- Add the correct font weight in Chrome, Edge, and Safari.
+
+    -- Add the correct font weight in Chrome, Edge, and Safari.
     , Css.Foreign.each
         [ Css.Foreign.typeSelector "b"
         , Css.Foreign.strong
         ]
         [ Css.fontWeight Css.bolder ]
-      -- 1. Correct the inheritance and scaling of font size in all browsers.
-      -- 2. Correct the odd `em` font sizing in all browsers.
+
+    -- 1. Correct the inheritance and scaling of font size in all browsers.
+    -- 2. Correct the odd `em` font sizing in all browsers.
     , Css.Foreign.each
         [ Css.Foreign.code
         , Css.Foreign.typeSelector "kbd"
         , Css.Foreign.typeSelector "samp"
         ]
         [ Css.fontFamilies [ "monospace", "monospace" ]
-          -- 1
+
+        -- 1
         , Css.fontSize (Css.em 1)
-          -- 2
+
+        -- 2
         ]
-      -- Add the correct font style in Android 4.3-.
+
+    -- Add the correct font style in Android 4.3-.
     , Css.Foreign.typeSelector "dfn"
         [ Css.fontStyle Css.italic ]
-      -- Add the correct background and color in IE 9-.
+
+    -- Add the correct background and color in IE 9-.
     , Css.Foreign.typeSelector "mark"
         [ Css.backgroundColor (Css.hex "ff0")
         , Css.color (Css.hex "000")
         ]
-      -- Add the correct font size in all browsers.
+
+    -- Add the correct font size in all browsers.
     , Css.Foreign.small
         [ Css.fontSize (Css.pct 80) ]
-      -- Prevent `sub` and `sup` elements from affecting the line height in all browsers.
+
+    -- Prevent `sub` and `sup` elements from affecting the line height in all browsers.
     , Css.Foreign.each
         [ Css.Foreign.typeSelector "sub"
         , Css.Foreign.typeSelector "sup"
@@ -498,25 +624,30 @@ normalize =
         [ Css.bottom (Css.em -0.25) ]
     , Css.Foreign.typeSelector "sup"
         [ Css.top (Css.em -0.5) ]
-      -- Add the correct display in IE 9-.
+
+    -- Add the correct display in IE 9-.
     , Css.Foreign.each
         [ Css.Foreign.audio
         , Css.Foreign.video
         ]
         [ Css.display Css.inlineBlock ]
-      -- Add the correct display in iOS 4-7.
+
+    -- Add the correct display in iOS 4-7.
     , Css.Foreign.typeSelector "audio:not([controls])"
         [ Css.display Css.none
         , Css.height Css.zero
         ]
-      -- Remove the border on images inside links in IE 10-.
+
+    -- Remove the border on images inside links in IE 10-.
     , Css.Foreign.img
         [ Css.borderStyle Css.none ]
-      -- Hide the overflow in IE.
+
+    -- Hide the overflow in IE.
     , Css.Foreign.typeSelector "svg:not(:root)"
         [ Css.overflow Css.hidden ]
-      -- 1. Change the font styles in all browsers (opinionated).
-      -- 2. Remove the margin in Firefox and Safari.
+
+    -- 1. Change the font styles in all browsers (opinionated).
+    -- 2. Remove the margin in Firefox and Safari.
     , Css.Foreign.each
         [ Css.Foreign.button
         , Css.Foreign.input
@@ -525,43 +656,55 @@ normalize =
         , Css.Foreign.textarea
         ]
         [ Css.fontFamily Css.sansSerif
-          -- 1
+
+        -- 1
         , Css.fontSize (Css.pct 100)
-          -- 1
+
+        -- 1
         , Css.lineHeight (Css.num 1.15)
-          -- 1
+
+        -- 1
         , Css.margin Css.zero
-          -- 2
+
+        -- 2
         ]
-      -- Show the overflow in IE.
-      -- 1. Show the overflow in Edge.
+
+    -- Show the overflow in IE.
+    -- 1. Show the overflow in Edge.
     , Css.Foreign.each
         [ Css.Foreign.button
         , Css.Foreign.input
-          -- 1
+
+        -- 1
         ]
         [ Css.overflow Css.visible ]
-      -- Remove the inheritance of text transform in Edge, Firefox, and IE.
-      -- 1. Remove the inheritance of text transform in Firefox.
+
+    -- Remove the inheritance of text transform in Edge, Firefox, and IE.
+    -- 1. Remove the inheritance of text transform in Firefox.
     , Css.Foreign.each
         [ Css.Foreign.button
         , Css.Foreign.select
-          -- 1
+
+        -- 1
         ]
         [ Css.property "text-transform" "none" ]
-      -- 1. Prevent a WebKit bug where (2) destroys native `audio` and `video` controls in Android 4.
-      -- 2. Correct the inability to style clickable types in iOS and Safari.
+
+    -- 1. Prevent a WebKit bug where (2) destroys native `audio` and `video` controls in Android 4.
+    -- 2. Correct the inability to style clickable types in iOS and Safari.
     , Css.Foreign.each
         [ Css.Foreign.button
         , Css.Foreign.typeSelector "html [type=\"button\"]"
-          -- 1
+
+        -- 1
         , Css.Foreign.typeSelector "[type=\"reset\"]"
         , Css.Foreign.typeSelector "[type=\"submit\"]"
         ]
         [ Css.property "-webkit-appearance" "button"
-          -- 2
+
+        -- 2
         ]
-      -- Remove the inner border and padding in Firefox.
+
+    -- Remove the inner border and padding in Firefox.
     , Css.Foreign.each
         [ Css.Foreign.typeSelector "button::-moz-focus-inner"
         , Css.Foreign.typeSelector "[type=\"button\"]::-moz-focus-inner"
@@ -571,7 +714,8 @@ normalize =
         [ Css.borderStyle Css.none
         , Css.padding Css.zero
         ]
-      -- Restore the focus styles unset by the previous rule.
+
+    -- Restore the focus styles unset by the previous rule.
     , Css.Foreign.each
         [ Css.Foreign.typeSelector "button:-moz-focusring"
         , Css.Foreign.typeSelector "[type=\"button\"]:-moz-focusring"
@@ -579,137 +723,125 @@ normalize =
         , Css.Foreign.typeSelector "[type=\"submit\"]:-moz-focusring"
         ]
         [ Css.property "outline" "1px dotted ButtonText" ]
-      -- Correct the padding in Firefox.
+
+    -- Correct the padding in Firefox.
     , Css.Foreign.fieldset
         [ Css.padding3 (Css.em 0.35) (Css.em 0.75) (Css.em 0.625) ]
-      -- 1. Correct the text wrapping in Edge and IE.
-      -- 2. Correct the color inheritance from `fieldset` elements in IE.
-      -- 3. Remove the padding so developers are not caught out when they zero out `fieldset` elements in all browsers.
+
+    -- 1. Correct the text wrapping in Edge and IE.
+    -- 2. Correct the color inheritance from `fieldset` elements in IE.
+    -- 3. Remove the padding so developers are not caught out when they zero out `fieldset` elements in all browsers.
     , Css.Foreign.legend
         [ Css.boxSizing Css.borderBox
-          -- 1
+
+        -- 1
         , Css.color Css.inherit
-          -- 2
+
+        -- 2
         , Css.display Css.table
-          -- 1
+
+        -- 1
         , Css.maxWidth (Css.pct 100)
-          -- 1
+
+        -- 1
         , Css.padding Css.zero
-          -- 3
+
+        -- 3
         , Css.property "white-space" "normal"
-          -- 1
+
+        -- 1
         ]
-      -- 1. Add the correct display in IE 9-.
-      -- 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
+
+    -- 1. Add the correct display in IE 9-.
+    -- 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
     , Css.Foreign.progress
         [ Css.display Css.inlineBlock
-          -- 1
+
+        -- 1
         , Css.verticalAlign Css.baseline
-          -- 2
+
+        -- 2
         ]
-      -- Remove the default vertical scrollbar in IE.
+
+    -- Remove the default vertical scrollbar in IE.
     , Css.Foreign.textarea
         [ Css.overflow Css.auto ]
-      -- 1. Add the correct box sizing in IE 10-.
-      -- 2. Remove the padding in IE 10-.
+
+    -- 1. Add the correct box sizing in IE 10-.
+    -- 2. Remove the padding in IE 10-.
     , Css.Foreign.each
         [ Css.Foreign.typeSelector "[type=\"checkbox\"]"
         , Css.Foreign.typeSelector "[type=\"radio\"]"
         ]
         [ Css.boxSizing Css.borderBox
-          -- 1
+
+        -- 1
         , Css.padding Css.zero
-          -- 2
+
+        -- 2
         ]
-      -- Correct the cursor style of increment and decrement buttons in Chrome.
+
+    -- Correct the cursor style of increment and decrement buttons in Chrome.
     , Css.Foreign.each
         [ Css.Foreign.typeSelector "[type=\"number\"]::-webkit-inner-spin-button"
         , Css.Foreign.typeSelector "[type=\"number\"]::-webkit-outer-spin-button"
         ]
         [ Css.height Css.auto ]
-      -- 1. Correct the odd appearance in Chrome and Safari.
-      -- 2. Correct the outline style in Safari.
+
+    -- 1. Correct the odd appearance in Chrome and Safari.
+    -- 2. Correct the outline style in Safari.
     , Css.Foreign.typeSelector "[type=\"search\"]"
         [ Css.property "-webkit-appearance" "textfield"
-          -- 1
+
+        -- 1
         , Css.outlineOffset (Css.px -2)
-          -- 2
+
+        -- 2
         ]
-      -- Remove the inner padding and cancel buttons in Chrome and Safari on macOS.
+
+    -- Remove the inner padding and cancel buttons in Chrome and Safari on macOS.
     , Css.Foreign.each
         [ Css.Foreign.typeSelector "[type=\"search\"]::-webkit-search-cancel-button"
         , Css.Foreign.typeSelector "[type=\"search\"]::-webkit-search-decoration"
         ]
         [ Css.property "-webkit-appearance" "none" ]
-      -- 1. Correct the inability to style clickable types in iOS and Safari.
-      -- 2. Change font properties to `inherit` in Safari.
+
+    -- 1. Correct the inability to style clickable types in iOS and Safari.
+    -- 2. Change font properties to `inherit` in Safari.
     , Css.Foreign.typeSelector "::-webkit-file-upload-button"
         [ Css.property "-webkit-appearance" "button"
-          -- 1
+
+        -- 1
         , Css.property "font" "inherit"
-          -- 2
+
+        -- 2
         ]
-      -- Add the correct display in IE 9-.
-      -- 1. Add the correct display in Edge, IE, and Firefox.
+
+    -- Add the correct display in IE 9-.
+    -- 1. Add the correct display in Edge, IE, and Firefox.
     , Css.Foreign.each
         [ Css.Foreign.typeSelector "details"
-          -- 1
+
+        -- 1
         , Css.Foreign.typeSelector "menu"
         ]
         [ Css.display Css.block ]
-      -- Add the correct display in all browsers.
+
+    -- Add the correct display in all browsers.
     , Css.Foreign.typeSelector "summary"
         [ Css.display Css.listItem ]
-      -- Add the correct display in IE 9-.
+
+    -- Add the correct display in IE 9-.
     , Css.Foreign.canvas
         [ Css.display Css.inlineBlock ]
-      -- Add the correct display in IE.
+
+    -- Add the correct display in IE.
     , Css.Foreign.typeSelector "template"
         [ Css.display Css.none ]
-      -- Add the correct display in IE 10-.
+
+    -- Add the correct display in IE 10-.
     , Css.Foreign.typeSelector "[hidden]"
         [ Css.display Css.none ]
-    ]
-
-
-
--- Base Spacing
-
-
-baseSpacing : DeviceProps -> List Css.Foreign.Snippet
-baseSpacing deviceProps =
-    [ -- Single direction margins.
-      Css.Foreign.each
-        [ Css.Foreign.blockquote
-        , Css.Foreign.dl
-        , Css.Foreign.fieldset
-        , Css.Foreign.ol
-        , Css.Foreign.p
-        , Css.Foreign.pre
-        , Css.Foreign.table
-        , Css.Foreign.ul
-        , Css.Foreign.hr
-        ]
-        [ Css.margin3 (Css.px 0) (Css.px 0) (rhythm deviceProps 1)
-        ]
-      -- No margins on headings, the line spacing of the heading is sufficient.
-    , Css.Foreign.each
-        [ Css.Foreign.h1
-        , Css.Foreign.h2
-        , Css.Foreign.h3
-        , Css.Foreign.h4
-        , Css.Foreign.h5
-        , Css.Foreign.h6
-        ]
-        [ Css.margin3 (Css.px 0) (Css.px 0) (rhythm deviceProps 0) ]
-      -- Consistent indenting for lists.
-    , Css.Foreign.each
-        [ Css.Foreign.dd
-        , Css.Foreign.ol
-        , Css.Foreign.ul
-        ]
-        [ Css.margin2 (rhythm deviceProps 1) (rhythm deviceProps 1)
-        ]
     ]
 
 

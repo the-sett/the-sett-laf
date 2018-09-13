@@ -3,20 +3,25 @@ module DebugStyle exposing (debug, style)
 import Css
 import Css.Foreign
 import Html.Styled exposing (Html)
-import Utilities exposing (DeviceProps)
+import Utilities exposing (DeviceProps, Devices, Mixin, mapMixins, mediaMixins, styleAsMixin)
 
 
 {-| The CSS as an HTML <style> element.
 -}
-style : DeviceProps -> Html msg
-style deviceProps =
-    Css.Foreign.global <| debug deviceProps
+style : Devices -> Html msg
+style devices =
+    Css.Foreign.global <| debug devices
+
+
+bgRhythmMixin deviceProps =
+    Css.backgroundSize2 (Utilities.rhythm deviceProps 1) (Utilities.rhythm deviceProps 1)
+        |> styleAsMixin
 
 
 {-| The debug CSS.
 -}
-debug : DeviceProps -> List Css.Foreign.Snippet
-debug deviceProps =
+debug : Devices -> List Css.Foreign.Snippet
+debug devices =
     [ Css.Foreign.each
         [ Css.Foreign.h1
         , Css.Foreign.h2
@@ -63,11 +68,13 @@ debug deviceProps =
         [ Css.Foreign.typeSelector "dialog"
         , Css.Foreign.body
         ]
-        [ Css.property "background-image" (lines "hsla(200, 100%, 50%, .3)")
-        , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
-        , Css.backgroundRepeat Css.repeat
-        , Css.backgroundSize2 (Utilities.rhythm deviceProps 1) (Utilities.rhythm deviceProps 1)
-        ]
+        (mapMixins
+            (mediaMixins devices bgRhythmMixin)
+            [ Css.property "background-image" (lines "hsla(200, 100%, 50%, .3)")
+            , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
+            , Css.backgroundRepeat Css.repeat
+            ]
+        )
     ]
 
 
