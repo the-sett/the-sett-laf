@@ -7,9 +7,7 @@ import Html.Attributes exposing (title, class)
 view : Html Never
 view =
     div [ class "layout-fixed-width" ]
-        [ h2 []
-            [ text "Typography" ]
-        , h1 []
+        [ h1 []
             [ text "Heading 1" ]
         , h2 []
             [ text "Heading 2" ]
