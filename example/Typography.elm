@@ -8,7 +8,9 @@ import Responsive exposing (Devices)
 
 view : Devices -> Html msg
 view devices =
-    (styled div [ wrapper devices ]) [ class "layout-fixed-width" ]
+    styled div
+        [ wrapper devices ]
+        []
         [ h1 []
             [ text "Heading 1" ]
         , h2 []
