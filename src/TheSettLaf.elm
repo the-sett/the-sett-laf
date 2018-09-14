@@ -12,6 +12,7 @@ import DebugStyle
 import Html
 import Html.Attributes
 import Html.Styled exposing (Html)
+import Reset exposing (reset)
 import Utilities exposing (DeviceProps, Device(..), Devices)
 
 
@@ -87,4 +88,6 @@ responsive =
 -}
 style : Devices -> Html msg
 style devices =
-    Css.Foreign.global <| Utilities.styleSheet Utilities.majorThird devices
+    Css.Foreign.global <|
+        reset
+            ++ (Utilities.styleSheet Utilities.majorThird devices)
