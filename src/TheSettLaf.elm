@@ -50,7 +50,7 @@ desktop =
     , breakWidth = 992
     , baseLineHeight = 24
     , lineHeightRatio = 1.6
-    , wrapperWidth = 1100
+    , wrapperWidth = 970
     }
 
 
@@ -61,7 +61,7 @@ desktopWide =
     , breakWidth = 1200
     , baseLineHeight = 24
     , lineHeightRatio = 1.6
-    , wrapperWidth = 1400
+    , wrapperWidth = 1170
     }
 
 
@@ -104,6 +104,9 @@ style devices =
 
 wrapper : Devices -> Css.Style
 wrapper devices =
-    Responsive.deviceStyle devices <|
+    [ Css.margin2 (Css.px 0) Css.auto
+    , Responsive.deviceStyle devices <|
         \deviceProps ->
             Css.maxWidth (Css.px deviceProps.wrapperWidth)
+    ]
+        |> Css.batch
