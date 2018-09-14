@@ -16,12 +16,9 @@ module Responsive
         , perfectFifth
           -- Vertical Rhythm
         , rhythm
-          -- Mixins
-        , Mixin
-        , mapMixins
-        , mediaMixins
-        , styleAsMixin
+          -- Device Dependant Styling
         , deviceStyle
+        , deviceStyles
         )
 
 import Array exposing (Array)
@@ -204,6 +201,22 @@ rhythm deviceProps n =
 
 
 
+-- Device Dependant Styling
+
+
+deviceStyle : Devices -> (DeviceProps -> Css.Style) -> Css.Style
+deviceStyle devices styleFn =
+    mapMixins (mediaMixins devices (styleFn >> styleAsMixin)) []
+        |> Css.batch
+
+
+deviceStyles : Devices -> (DeviceProps -> List Css.Style) -> Css.Style
+deviceStyles devices styleFn =
+    mapMixins (mediaMixins devices (styleFn >> stylesAsMixin)) []
+        |> Css.batch
+
+
+
 -- Mixins
 
 
@@ -216,6 +229,11 @@ type alias Mixin =
 styleAsMixin : Css.Style -> Mixin
 styleAsMixin style styles =
     style :: styles
+
+
+stylesAsMixin : List Css.Style -> Mixin
+stylesAsMixin style styles =
+    style ++ styles
 
 
 mapMixins : List Mixin -> List Css.Style -> List Css.Style
@@ -285,12 +303,6 @@ fontSizeMixin typeScale (FontSizeLevel sizeLevel) deviceProps =
             , Css.lineHeight (rhythm deviceProps (toFloat numLines))
             ]
             |> styleAsMixin
-
-
-deviceStyle : Devices -> (DeviceProps -> Css.Style) -> Css.Style
-deviceStyle devices styleFn =
-    mapMixins (mediaMixins devices (styleFn >> styleAsMixin)) []
-        |> Css.batch
 
 
 
