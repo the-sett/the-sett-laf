@@ -3,7 +3,7 @@ module DebugStyle exposing (debug, style)
 import Css
 import Css.Foreign
 import Html.Styled exposing (Html)
-import Responsive exposing (DeviceProps, Devices, Mixin, mapMixins, mediaMixins, styleAsMixin, rhythm)
+import Responsive exposing (DeviceProps, Devices, rhythm)
 
 
 {-| The CSS as an HTML <style> element.
