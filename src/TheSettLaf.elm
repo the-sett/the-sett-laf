@@ -15,9 +15,8 @@ module TheSettLaf
 
 import Css
 import Css.Foreign
-import Html
-import Html.Attributes
-import Html.Styled exposing (Html)
+import Html.Styled.Attributes exposing (href, rel, name, content)
+import Html.Styled exposing (Html, node)
 import Reset exposing (reset)
 import Responsive exposing (DeviceProps, Device(..), Devices, responsive, majorThird)
 
@@ -76,20 +75,20 @@ devices =
 
 {-| Links for loading fonts.
 -}
-fonts : Html.Html msg
+fonts : Html msg
 fonts =
-    Html.node "link"
-        [ Html.Attributes.href "https://fonts.googleapis.com/css?family=Nobile:300,400,500,700"
-        , Html.Attributes.rel "stylesheet"
+    node "link"
+        [ href "https://fonts.googleapis.com/css?family=Nobile:300,400,500,700"
+        , rel "stylesheet"
         ]
         []
 
 
-responsiveMeta : Html.Html msg
+responsiveMeta : Html msg
 responsiveMeta =
-    Html.node "meta"
-        [ Html.Attributes.name "viewport"
-        , Html.Attributes.content "width=device-width, initial-scale=1"
+    node "meta"
+        [ name "viewport"
+        , content "width=device-width, initial-scale=1"
         ]
         []
 

@@ -1,7 +1,7 @@
 module Typography exposing (view)
 
-import Html exposing (..)
-import Html.Attributes exposing (title, class)
+import Html.Styled exposing (..)
+import Html.Styled.Attributes exposing (title, class)
 
 
 view : Html msg
