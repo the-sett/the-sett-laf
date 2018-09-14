@@ -52,7 +52,7 @@ styledView model =
             , fonts
             , TheSettLaf.style devices
             , debugControl model
-            , Typography.view
+            , Typography.view devices
             ]
 
         debugStyle =

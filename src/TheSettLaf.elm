@@ -28,7 +28,7 @@ mobile =
     , breakWidth = 480
     , baseLineHeight = 21
     , lineHeightRatio = 1.6
-    , wrapperWidth = 480
+    , wrapperWidth = 768
     }
 
 
@@ -39,7 +39,7 @@ tablet =
     , breakWidth = 768
     , baseLineHeight = 22
     , lineHeightRatio = 1.6
-    , wrapperWidth = 768
+    , wrapperWidth = 992
     }
 
 
@@ -102,7 +102,8 @@ style devices =
             ++ (responsive majorThird devices)
 
 
-wrapper : DeviceProps -> Css.Style
-wrapper deviceProps =
-    [ Css.maxWidth (Css.px deviceProps.wrapperWidth) ]
-        |> Css.batch
+wrapper : Devices -> Css.Style
+wrapper devices =
+    Responsive.deviceStyle devices <|
+        \deviceProps ->
+            Css.maxWidth (Css.px deviceProps.wrapperWidth)
