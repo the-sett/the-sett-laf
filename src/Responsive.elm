@@ -1,7 +1,8 @@
 module Responsive
     exposing
-        ( -- Devices
-          Device(..)
+        ( responsive
+          -- Devices
+        , Device(..)
         , Devices
         , DeviceProps
           -- Type scales
@@ -13,8 +14,8 @@ module Responsive
         , perfectFourth
         , augmentedFourth
         , perfectFifth
+          -- Vertical Rhythm
         , rhythm
-        , styleSheet
           -- Mixins
         , Mixin
         , mapMixins
@@ -30,8 +31,8 @@ import Css.Foreign
 
 {-| The global CSS.
 -}
-styleSheet : TypeScale -> Devices -> List Css.Foreign.Snippet
-styleSheet typeScale devices =
+responsive : TypeScale -> Devices -> List Css.Foreign.Snippet
+responsive typeScale devices =
     (baseSpacing devices)
         ++ (typography devices typeScale)
 

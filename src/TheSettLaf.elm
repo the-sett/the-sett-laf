@@ -1,4 +1,4 @@
-module TheSettLaf exposing (style, fonts, responsive, devices)
+module TheSettLaf exposing (style, fonts, responsiveMeta, devices)
 
 {-| The Sett Look and Feel
 
@@ -12,7 +12,7 @@ import Html
 import Html.Attributes
 import Html.Styled exposing (Html)
 import Reset exposing (reset)
-import Responsive exposing (DeviceProps, Device(..), Devices)
+import Responsive exposing (DeviceProps, Device(..), Devices, responsive, majorThird)
 
 
 mobile : DeviceProps
@@ -74,8 +74,8 @@ fonts =
         []
 
 
-responsive : Html.Html msg
-responsive =
+responsiveMeta : Html.Html msg
+responsiveMeta =
     Html.node "meta"
         [ Html.Attributes.name "viewport"
         , Html.Attributes.content "width=device-width, initial-scale=1"
@@ -89,4 +89,4 @@ style : Devices -> Html msg
 style devices =
     Css.Foreign.global <|
         reset
-            ++ (Responsive.styleSheet Responsive.majorThird devices)
+            ++ (responsive majorThird devices)
