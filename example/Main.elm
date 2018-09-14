@@ -1,11 +1,11 @@
 module Main exposing (main)
 
 import DebugStyle
-import Header
 import Html exposing (program)
 import Html.Styled exposing (toUnstyled, div, input, text)
 import Html.Styled.Attributes exposing (type_, checked)
 import Html.Styled.Events exposing (onCheck)
+import Layout
 import TheSettLaf exposing (fonts, responsiveMeta, devices)
 import Typography
 
@@ -53,7 +53,7 @@ styledView model =
             , fonts
             , TheSettLaf.style devices
             , debugControl model
-            , Typography.view devices
+            , (Layout.layout <| Typography.view) devices
             ]
 
         debugStyle =

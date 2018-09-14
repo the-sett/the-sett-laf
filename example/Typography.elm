@@ -4,9 +4,10 @@ import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (title, class)
 import TheSettLaf exposing (wrapper)
 import Responsive exposing (Devices)
+import Structure exposing (Template)
 
 
-view : Devices -> Html msg
+view : Template msg
 view devices =
     styled div
         [ wrapper devices ]
