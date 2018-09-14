@@ -1,4 +1,4 @@
-module Utilities
+module Responsive
     exposing
         ( -- Devices
           Device(..)

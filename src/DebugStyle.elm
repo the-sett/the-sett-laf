@@ -3,7 +3,7 @@ module DebugStyle exposing (debug, style)
 import Css
 import Css.Foreign
 import Html.Styled exposing (Html)
-import Utilities exposing (DeviceProps, Devices, Mixin, mapMixins, mediaMixins, styleAsMixin)
+import Responsive exposing (DeviceProps, Devices, Mixin, mapMixins, mediaMixins, styleAsMixin, rhythm)
 
 
 {-| The CSS as an HTML <style> element.
@@ -14,7 +14,7 @@ style devices =
 
 
 bgRhythmMixin deviceProps =
-    Css.backgroundSize2 (Utilities.rhythm deviceProps 1) (Utilities.rhythm deviceProps 1)
+    Css.backgroundSize2 (rhythm deviceProps 1) (rhythm deviceProps 1)
         |> styleAsMixin
 
 
