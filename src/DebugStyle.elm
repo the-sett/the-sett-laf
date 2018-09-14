@@ -13,11 +13,6 @@ style devices =
     Css.Foreign.global <| debug devices
 
 
-bgRhythmMixin deviceProps =
-    Css.backgroundSize2 (rhythm deviceProps 1) (rhythm deviceProps 1)
-        |> styleAsMixin
-
-
 {-| The debug CSS.
 -}
 debug : Devices -> List Css.Foreign.Snippet
@@ -68,13 +63,12 @@ debug devices =
         [ Css.Foreign.typeSelector "dialog"
         , Css.Foreign.body
         ]
-        (mapMixins
-            (mediaMixins devices bgRhythmMixin)
-            [ Css.property "background-image" (lines "hsla(200, 100%, 50%, .3)")
-            , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
-            , Css.backgroundRepeat Css.repeat
-            ]
-        )
+        [ Css.property "background-image" (lines "hsla(200, 100%, 50%, .3)")
+        , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
+        , Css.backgroundRepeat Css.repeat
+        , Responsive.deviceStyle devices <|
+            \deviceProps -> Css.backgroundSize2 (rhythm deviceProps 1) (rhythm deviceProps 1)
+        ]
     ]
 
 

@@ -21,6 +21,7 @@ module Responsive
         , mapMixins
         , mediaMixins
         , styleAsMixin
+        , deviceStyle
         )
 
 import Array exposing (Array)
@@ -286,6 +287,12 @@ fontSizeMixin typeScale (FontSizeLevel sizeLevel) deviceProps =
             |> styleAsMixin
 
 
+deviceStyle : Devices -> (DeviceProps -> Css.Style) -> Css.Style
+deviceStyle devices styleFn =
+    mapMixins (mediaMixins devices (styleFn >> styleAsMixin)) []
+        |> Css.batch
+
+
 
 -- Responsive typography to fit all devices.
 
@@ -339,54 +346,43 @@ typography devices typeScale =
 
 baseSpacing : Devices -> List Css.Foreign.Snippet
 baseSpacing devices =
-    let
-        marginBelowMixin deviceProps =
-            Css.margin3 (Css.px 0) (Css.px 0) (rhythm deviceProps 1)
-                |> styleAsMixin
-
-        marginSidesMixin deviceProps =
-            Css.margin2 (rhythm deviceProps 1) (rhythm deviceProps 1)
-                |> styleAsMixin
-    in
-        [ -- No margins on headings, the line spacing of the heading is sufficient.
-          Css.Foreign.each
-            [ Css.Foreign.h1
-            , Css.Foreign.h2
-            , Css.Foreign.h3
-            , Css.Foreign.h4
-            , Css.Foreign.h5
-            , Css.Foreign.h6
-            ]
-            [ Css.margin3 (Css.px 0) (Css.px 0) (Css.px 0) ]
-
-        -- Single direction margins.
-        , Css.Foreign.each
-            [ Css.Foreign.blockquote
-            , Css.Foreign.dl
-            , Css.Foreign.fieldset
-            , Css.Foreign.ol
-            , Css.Foreign.p
-            , Css.Foreign.pre
-            , Css.Foreign.table
-            , Css.Foreign.ul
-            , Css.Foreign.hr
-            ]
-            (mapMixins
-                (mediaMixins devices marginBelowMixin)
-                []
-            )
-
-        -- Consistent indenting for lists.
-        , Css.Foreign.each
-            [ Css.Foreign.dd
-            , Css.Foreign.ol
-            , Css.Foreign.ul
-            ]
-            (mapMixins
-                (mediaMixins devices marginSidesMixin)
-                []
-            )
+    [ -- No margins on headings, the line spacing of the heading is sufficient.
+      Css.Foreign.each
+        [ Css.Foreign.h1
+        , Css.Foreign.h2
+        , Css.Foreign.h3
+        , Css.Foreign.h4
+        , Css.Foreign.h5
+        , Css.Foreign.h6
         ]
+        [ Css.margin3 (Css.px 0) (Css.px 0) (Css.px 0) ]
+
+    -- Single direction margins.
+    , Css.Foreign.each
+        [ Css.Foreign.blockquote
+        , Css.Foreign.dl
+        , Css.Foreign.fieldset
+        , Css.Foreign.ol
+        , Css.Foreign.p
+        , Css.Foreign.pre
+        , Css.Foreign.table
+        , Css.Foreign.ul
+        , Css.Foreign.hr
+        ]
+        [ deviceStyle devices <|
+            \deviceProps -> Css.margin3 (Css.px 0) (Css.px 0) (rhythm deviceProps 1)
+        ]
+
+    -- Consistent indenting for lists.
+    , Css.Foreign.each
+        [ Css.Foreign.dd
+        , Css.Foreign.ol
+        , Css.Foreign.ul
+        ]
+        [ deviceStyle devices <|
+            \deviceProps -> Css.margin2 (rhythm deviceProps 1) (rhythm deviceProps 1)
+        ]
+    ]
 
 
 
