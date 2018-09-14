@@ -6,6 +6,7 @@ import Html.Styled exposing (toUnstyled, div, input, text)
 import Html.Styled.Attributes exposing (type_, checked)
 import Html.Styled.Events exposing (onCheck)
 import Layout
+import State exposing (Model, Msg(..))
 import TheSettLaf exposing (fonts, responsiveMeta, devices)
 import Typography
 
@@ -17,14 +18,6 @@ main =
         , update = update
         , view = view
         }
-
-
-type alias Model =
-    Bool
-
-
-type Msg
-    = Toggle Bool
 
 
 init =
@@ -52,8 +45,7 @@ styledView model =
             [ responsiveMeta
             , fonts
             , TheSettLaf.style devices
-            , debugControl model
-            , (Layout.layout <| Typography.view) devices
+            , (Layout.layout <| Typography.view) devices model
             ]
 
         debugStyle =
@@ -65,15 +57,3 @@ styledView model =
 
             False ->
                 div [] innerView
-
-
-debugControl model =
-    div []
-        [ input
-            [ type_ "checkbox"
-            , checked model
-            , onCheck Toggle
-            ]
-            []
-        , text "debug"
-        ]

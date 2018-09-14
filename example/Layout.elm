@@ -1,27 +1,29 @@
 module Layout exposing (layout)
 
-import Html.Styled exposing (Html, styled, node, text, div, button, a, nav, body)
-import Html.Styled.Attributes exposing (attribute, class, href, id)
+import Html.Styled exposing (Html, styled, node, text, div, button, a, nav, body, input)
+import Html.Styled.Attributes exposing (attribute, class, href, id, type_, checked)
+import Html.Styled.Events exposing (onCheck)
 import Responsive exposing (Devices)
 import Structure exposing (Template, Layout)
+import State exposing (Model, Msg(..))
 import TheSettLaf exposing (wrapper)
 
 
-layout : Layout msg
-layout template devices =
-    pageBody template devices
+layout : Layout Msg Model
+layout template devices model =
+    pageBody template devices model
 
 
-pageBody : Template msg -> Devices -> Html msg
-pageBody template devices =
+pageBody : Template Msg Model -> Devices -> Model -> Html Msg
+pageBody template devices model =
     styled div
         [ wrapper devices ]
         []
-        [ topHeader devices, template devices, footer devices ]
+        [ topHeader devices model, template devices model, footer devices ]
 
 
-topHeader : Devices -> Html msg
-topHeader devices =
+topHeader : Devices -> Model -> Html Msg
+topHeader devices model =
     div []
         [ div []
             [ a [ href "/Main.elm" ]
@@ -34,9 +36,15 @@ topHeader devices =
                 ]
             , div []
                 [ text "spacer" ]
-            , a
-                [ href "/Main.elm" ]
-                [ text "Button" ]
+            , div []
+                [ input
+                    [ type_ "checkbox"
+                    , checked model
+                    , onCheck Toggle
+                    ]
+                    []
+                , text "debug"
+                ]
             ]
         ]
 

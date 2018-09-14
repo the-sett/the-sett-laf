@@ -7,8 +7,8 @@ import Responsive exposing (Devices)
 import Structure exposing (Template)
 
 
-view : Template msg
-view devices =
+view : Template msg model
+view devices model =
     styled div
         [ wrapper devices ]
         []

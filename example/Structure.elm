@@ -14,12 +14,12 @@ import Responsive exposing (Devices)
 {-| Defines the type of a template. A template takes a link builder, an editor and
 some content and produces Html.
 -}
-type alias Template msg =
-    Devices -> Html msg
+type alias Template msg model =
+    Devices -> model -> Html msg
 
 
 {-| Defines the type of a layout. A layout is a higher level template; it takes a
 template as input and produces a template as output.
 -}
-type alias Layout msg =
-    Template msg -> Template msg
+type alias Layout msg model =
+    Template msg model -> Template msg model
