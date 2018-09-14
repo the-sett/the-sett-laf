@@ -2,7 +2,7 @@ module Typography exposing (view)
 
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (title, class)
-import TheSettLaf exposing (devices, wrapper)
+import TheSettLaf exposing (wrapper)
 import Responsive exposing (Devices)
 
 

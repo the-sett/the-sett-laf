@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import DebugStyle
+import Header
 import Html exposing (program)
 import Html.Styled exposing (toUnstyled, div, input, text)
 import Html.Styled.Attributes exposing (type_, checked)
