@@ -1,4 +1,11 @@
-module TheSettLaf exposing (style, fonts, responsiveMeta, devices)
+module TheSettLaf
+    exposing
+        ( style
+        , fonts
+        , responsiveMeta
+        , devices
+        , wrapper
+        )
 
 {-| The Sett Look and Feel
 
@@ -22,6 +29,7 @@ mobile =
     , breakWidth = 480
     , baseLineHeight = 21
     , lineHeightRatio = 1.6
+    , wrapperWidth = 480
     }
 
 
@@ -32,6 +40,7 @@ tablet =
     , breakWidth = 768
     , baseLineHeight = 22
     , lineHeightRatio = 1.6
+    , wrapperWidth = 768
     }
 
 
@@ -42,6 +51,7 @@ desktop =
     , breakWidth = 992
     , baseLineHeight = 24
     , lineHeightRatio = 1.6
+    , wrapperWidth = 1100
     }
 
 
@@ -52,6 +62,7 @@ desktopWide =
     , breakWidth = 1200
     , baseLineHeight = 24
     , lineHeightRatio = 1.6
+    , wrapperWidth = 1400
     }
 
 
@@ -90,3 +101,9 @@ style devices =
     Css.Foreign.global <|
         reset
             ++ (responsive majorThird devices)
+
+
+wrapper : DeviceProps -> Css.Style
+wrapper deviceProps =
+    [ Css.maxWidth (Css.px deviceProps.wrapperWidth) ]
+        |> Css.batch

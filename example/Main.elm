@@ -1,11 +1,11 @@
 module Main exposing (main)
 
 import DebugStyle
-import Html
-import Html.Attributes
-import Html.Events
-import Html.Styled
-import TheSettLaf
+import Html exposing (program, div, input, text)
+import Html.Attributes exposing (type_, checked)
+import Html.Events exposing (onCheck)
+import Html.Styled exposing (toUnstyled)
+import TheSettLaf exposing (fonts, responsiveMeta, devices)
 import Typography
 
 
@@ -43,31 +43,31 @@ update msg model =
 view model =
     let
         innerView =
-            [ TheSettLaf.responsiveMeta
-            , TheSettLaf.fonts
-            , TheSettLaf.style TheSettLaf.devices |> Html.Styled.toUnstyled
+            [ responsiveMeta
+            , fonts
+            , TheSettLaf.style devices |> toUnstyled
             , debugControl model
             , Typography.view
             ]
 
         debugStyle =
-            DebugStyle.style TheSettLaf.devices |> Html.Styled.toUnstyled
+            DebugStyle.style devices |> toUnstyled
     in
         case model of
             True ->
-                Html.div [] (debugStyle :: innerView)
+                div [] (debugStyle :: innerView)
 
             False ->
-                Html.div [] innerView
+                div [] innerView
 
 
 debugControl model =
-    Html.div []
-        [ Html.input
-            [ Html.Attributes.type_ "checkbox"
-            , Html.Attributes.checked model
-            , Html.Events.onCheck Toggle
+    div []
+        [ input
+            [ type_ "checkbox"
+            , checked model
+            , onCheck Toggle
             ]
             []
-        , Html.text "debug"
+        , text "debug"
         ]

@@ -62,6 +62,7 @@ type alias DeviceProps =
     , breakWidth : Float
     , baseLineHeight : Float
     , lineHeightRatio : Float
+    , wrapperWidth : Float
     }
 
 
