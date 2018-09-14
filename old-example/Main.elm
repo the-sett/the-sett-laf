@@ -1,4 +1,4 @@
-module OldMain exposing (..)
+module Main exposing (..)
 
 import Array exposing (Array)
 import Dict exposing (Dict)
