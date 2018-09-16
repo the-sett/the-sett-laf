@@ -1,7 +1,7 @@
 module Layout exposing (layout)
 
 import Css
-import Html.Styled exposing (Html, styled, node, text, div, button, a, nav, body, input)
+import Html.Styled exposing (Html, styled, node, text, div, button, a, nav, body, input, ul, li)
 import Html.Styled.Attributes exposing (attribute, class, href, id, type_, checked)
 import Html.Styled.Events exposing (onCheck)
 import Responsive exposing (Devices)
@@ -28,7 +28,7 @@ topHeader devices model =
     div []
         [ styled div
             [ Css.displayFlex
-            , Css.justifyContent Css.spaceAround
+            , Css.justifyContent Css.spaceBetween
             , Responsive.deviceStyle devices <|
                 \deviceProps -> Css.height (Responsive.rhythm deviceProps 3)
             ]
@@ -36,8 +36,22 @@ topHeader devices model =
             [ a [ href "/Main.elm" ]
                 [ text "the-sett" ]
             , nav []
-                [ a [ href "/Main.elm" ]
-                    [ text "What is this?" ]
+                [ styled ul
+                    [ Css.display Css.inline ]
+                    []
+                    [ styled li
+                        [ Css.display Css.inline ]
+                        []
+                        [ text "Typography" ]
+                    , styled li
+                        [ Css.display Css.inline ]
+                        []
+                        [ text "Buttons" ]
+                    , styled li
+                        [ Css.display Css.inline ]
+                        []
+                        [ text "Etc" ]
+                    ]
                 ]
             , div []
                 [ input
