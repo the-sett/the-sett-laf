@@ -1,5 +1,6 @@
 module Layout exposing (layout)
 
+import Css
 import Html.Styled exposing (Html, styled, node, text, div, button, a, nav, body, input)
 import Html.Styled.Attributes exposing (attribute, class, href, id, type_, checked)
 import Html.Styled.Events exposing (onCheck)
@@ -25,17 +26,19 @@ pageBody template devices model =
 topHeader : Devices -> Model -> Html Msg
 topHeader devices model =
     div []
-        [ div []
+        [ styled div
+            [ Css.displayFlex
+            , Css.justifyContent Css.spaceAround
+            , Responsive.deviceStyle devices <|
+                \deviceProps -> Css.height (Responsive.rhythm deviceProps 3)
+            ]
+            []
             [ a [ href "/Main.elm" ]
                 [ text "the-sett" ]
-            , div []
-                [ text "spacer" ]
             , nav []
                 [ a [ href "/Main.elm" ]
                     [ text "What is this?" ]
                 ]
-            , div []
-                [ text "spacer" ]
             , div []
                 [ input
                     [ type_ "checkbox"
