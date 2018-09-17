@@ -26,17 +26,23 @@ pageBody template devices model =
 
 topHeader : Devices -> Model -> Html Msg
 topHeader devices model =
-    div
+    styled div
+        [ Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 6) (Css.px 0) (Css.rgba 0 0 0 0.75)
+        ]
         []
         [ styled div
             [ Css.displayFlex
             , Css.justifyContent Css.spaceBetween
+            , Css.alignItems Css.center
             , wrapper devices
             , Responsive.deviceStyle devices <|
                 \deviceProps -> Css.height (Responsive.rhythm deviceProps 3)
             ]
             []
-            [ div []
+            [ styled div
+                [ Css.height (Css.pct 90)
+                ]
+                []
                 [ Svg.Styled.fromUnstyled logo
                 ]
             , nav []
