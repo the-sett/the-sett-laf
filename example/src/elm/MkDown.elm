@@ -1,6 +1,7 @@
 module MkDown exposing (view)
 
 import Css
+import Html
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (title, class, name)
 import Markdown.Block as Block exposing (Block)
@@ -18,28 +19,27 @@ view devices model =
             [ Css.textAlign Css.center ]
             []
             [ text "Markdown" ]
+        , markdownView readmeMD
         ]
 
 
 
 --[ markdownView model ]
--- markdownView : Model -> Html msg
--- markdownView { options, textarea, showToC } =
---     let
---         blocks =
---             Block.parse (Just options) textarea
---
---         blocksView =
---             Block.defaultHtml Nothing Nothing
---                 |> flip List.concatMap blocks
---     in
---         if showToC then
---             blocksView
---                 |> (::) (tocView blocks)
---                 |> div [ width50Style ]
---         else
---             blocksView
---                 |> div [ width50Style ]
+
+
+markdownView : String -> Html msg
+markdownView textarea =
+    let
+        blocks =
+            Block.parse (Just defaultOptions) textarea
+
+        blocksView =
+            Block.defaultHtml Nothing Nothing
+                |> flip List.concatMap blocks
+    in
+        blocksView
+            |> Html.div []
+            |> fromUnstyled
 
 
 readmeMD : String
