@@ -3,8 +3,6 @@ module Typography exposing (view)
 import Css
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (title, class, name)
-import TheSettLaf exposing (wrapper)
-import Responsive exposing (Devices)
 import Structure exposing (Template)
 
 
