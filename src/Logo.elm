@@ -1,7 +1,7 @@
 module Logo exposing (logo)
 
 import Svg exposing (svg, defs, metadata, g, rect)
-import Svg.Attributes exposing (style, id, width, height, x, y, d, viewBox, version, transform)
+import Svg.Attributes exposing (style, id, width, height, x, y, d, viewBox, version, transform, shapeRendering)
 
 
 logo =
@@ -10,6 +10,7 @@ logo =
         , viewBox "0 0 42.862499 42.862501"
         , version "1.1"
         , id "svg8"
+        , shapeRendering "geometricPrecision"
         ]
         [ defs [ id "defs2" ] []
         , metadata [ id "metadata5" ] []
