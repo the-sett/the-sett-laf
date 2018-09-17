@@ -112,6 +112,7 @@ style devices =
 wrapper : Devices -> Css.Style
 wrapper devices =
     [ Css.margin2 (Css.px 0) Css.auto
+    , Css.padding2 (Css.px 0) (Css.px 5)
     , Responsive.deviceStyle devices <|
         \deviceProps ->
             Css.maxWidth (Css.px deviceProps.wrapperWidth)
