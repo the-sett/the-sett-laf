@@ -4,9 +4,11 @@ import Css
 import Html.Styled exposing (Html, styled, node, text, div, button, a, nav, body, input, ul, li)
 import Html.Styled.Attributes exposing (attribute, class, href, id, type_, checked)
 import Html.Styled.Events exposing (onCheck)
+import Logo exposing (logo)
 import Responsive exposing (Devices)
 import Structure exposing (Template, Layout)
 import State exposing (Model, Msg(..))
+import Svg.Styled
 import TheSettLaf exposing (wrapper)
 
 
@@ -35,8 +37,10 @@ topHeader devices model =
             ]
             []
             [ div []
-                [ a [ href "/Main.elm" ]
-                    [ text "the-sett" ]
+                [ Svg.Styled.fromUnstyled logo
+
+                --  a [ href "/Main.elm" ]
+                --     [ text "the-sett" ]
                 ]
             , nav []
                 [ styled ul
