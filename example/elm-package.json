@@ -4,7 +4,7 @@
     "repository": "https://github.com/no-user/not-a-github-project.git",
     "license": "private",
     "source-directories": [
-        ".",
+        "src/elm",
         "../src"
     ],
     "exposed-modules": [],
