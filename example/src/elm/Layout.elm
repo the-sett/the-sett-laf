@@ -56,7 +56,7 @@ topHeader devices model =
                     , styled li
                         [ Css.display Css.inline ]
                         []
-                        [ styled a [ Css.padding (Css.px 10) ] [ href "#buttons" ] [ text "Buttons" ] ]
+                        [ styled a [ Css.padding (Css.px 10) ] [ href "#cards" ] [ text "Cards" ] ]
                     , styled li
                         [ Css.display Css.inline ]
                         []
