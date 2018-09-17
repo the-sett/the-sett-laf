@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import Body
 import DebugStyle
 import Html exposing (program)
 import Html.Styled exposing (toUnstyled, div, input, text)
@@ -46,7 +47,7 @@ styledView model =
             [ responsiveMeta
             , fonts
             , TheSettLaf.style devices
-            , (Layout.layout <| Typography.view) devices model
+            , (Layout.layout <| Body.view [ Typography.view ]) devices model
             ]
 
         debugStyle =

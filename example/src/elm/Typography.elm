@@ -1,7 +1,8 @@
 module Typography exposing (view)
 
+import Css
 import Html.Styled exposing (..)
-import Html.Styled.Attributes exposing (title, class)
+import Html.Styled.Attributes exposing (title, class, name)
 import TheSettLaf exposing (wrapper)
 import Responsive exposing (Devices)
 import Structure exposing (Template)
@@ -9,10 +10,14 @@ import Structure exposing (Template)
 
 view : Template msg model
 view devices model =
-    styled div
-        [ wrapper devices ]
+    div
         []
-        [ h1 []
+        [ a [ name "typography" ] []
+        , styled h1
+            [ Css.textAlign Css.center ]
+            []
+            [ text "Typography" ]
+        , h1 []
             [ text "Heading 1" ]
         , h2 []
             [ text "Heading 2" ]
