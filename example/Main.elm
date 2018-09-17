@@ -6,6 +6,7 @@ import Html.Styled exposing (toUnstyled, div, input, text)
 import Html.Styled.Attributes exposing (type_, checked)
 import Html.Styled.Events exposing (onCheck)
 import Layout
+import Logo
 import State exposing (Model, Msg(..))
 import TheSettLaf exposing (fonts, responsiveMeta, devices)
 import Typography
@@ -21,7 +22,7 @@ main =
 
 
 init =
-    ( False, Cmd.none )
+    ( True, Cmd.none )
 
 
 subscriptions _ =

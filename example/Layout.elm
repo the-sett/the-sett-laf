@@ -17,24 +17,27 @@ layout template devices model =
 
 pageBody : Template Msg Model -> Devices -> Model -> Html Msg
 pageBody template devices model =
-    styled div
-        [ wrapper devices ]
+    div
         []
         [ topHeader devices model, template devices model, footer devices ]
 
 
 topHeader : Devices -> Model -> Html Msg
 topHeader devices model =
-    div []
+    div
+        []
         [ styled div
             [ Css.displayFlex
             , Css.justifyContent Css.spaceBetween
+            , wrapper devices
             , Responsive.deviceStyle devices <|
                 \deviceProps -> Css.height (Responsive.rhythm deviceProps 3)
             ]
             []
-            [ a [ href "/Main.elm" ]
-                [ text "the-sett" ]
+            [ div []
+                [ a [ href "/Main.elm" ]
+                    [ text "the-sett" ]
+                ]
             , nav []
                 [ styled ul
                     [ Css.display Css.inline ]
@@ -60,7 +63,7 @@ topHeader devices model =
                     , onCheck Toggle
                     ]
                     []
-                , text "debug"
+                , text "grid"
                 ]
             ]
         ]
