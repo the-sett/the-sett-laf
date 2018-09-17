@@ -9,6 +9,7 @@ import Html.Styled.Attributes exposing (type_, checked)
 import Html.Styled.Events exposing (onCheck)
 import Layout
 import Logo
+import MkDown
 import State exposing (Model, Msg(..))
 import TheSettLaf exposing (fonts, responsiveMeta, devices)
 import Typography
@@ -51,6 +52,7 @@ styledView model =
             , (Layout.layout <|
                 Body.view
                     [ Typography.view
+                    , MkDown.view
                     , Cards.view
                     ]
               )

@@ -85,7 +85,7 @@ if (isDev) {
               loader: 'elm-webpack-loader',
               options: {
                 verbose: true,
-                debug: true
+                debug: false
               }
             }
           ]
