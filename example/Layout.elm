@@ -38,9 +38,6 @@ topHeader devices model =
             []
             [ div []
                 [ Svg.Styled.fromUnstyled logo
-
-                --  a [ href "/Main.elm" ]
-                --     [ text "the-sett" ]
                 ]
             , nav []
                 [ styled ul
