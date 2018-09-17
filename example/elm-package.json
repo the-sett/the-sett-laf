@@ -15,7 +15,7 @@
         "elm-lang/navigation": "2.0.1 <= v < 3.0.0",
         "elm-lang/http": "1.0.0 <= v < 2.0.0",
         "Skinney/murmur3": "2.0.6 <= v < 2.0.7",
-        "rtfeldman/elm-css": "14.0.0 <= v < 15.0.0",
+        "rtfeldman/elm-css": "15.0.0 <= v < 15.1.0",
         "rgrempel/elm-http-decorators": "2.0.0 <= v < 3.0.0",
         "MichaelCombs28/elm-mdl": "1.0.1 <= v < 2.0.0",
         "elm-community/json-extra": "2.0.0 <= v < 3.0.0",

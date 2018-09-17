@@ -1,7 +1,7 @@
 module DebugStyle exposing (debug, style)
 
 import Css
-import Css.Foreign
+import Css.Global
 import Html.Styled exposing (Html)
 import Responsive exposing (DeviceProps, Devices, rhythm)
 
@@ -10,58 +10,58 @@ import Responsive exposing (DeviceProps, Devices, rhythm)
 -}
 style : Devices -> Html msg
 style devices =
-    Css.Foreign.global <| debug devices
+    Css.Global.global <| debug devices
 
 
 {-| The debug CSS.
 -}
-debug : Devices -> List Css.Foreign.Snippet
+debug : Devices -> List Css.Global.Snippet
 debug devices =
-    [ Css.Foreign.each
-        [ Css.Foreign.h1
-        , Css.Foreign.h2
-        , Css.Foreign.h3
-        , Css.Foreign.h4
-        , Css.Foreign.h5
-        , Css.Foreign.p
-        , Css.Foreign.typeSelector "dialog"
-        , Css.Foreign.div
-        , Css.Foreign.nav
-        , Css.Foreign.footer
+    [ Css.Global.each
+        [ Css.Global.h1
+        , Css.Global.h2
+        , Css.Global.h3
+        , Css.Global.h4
+        , Css.Global.h5
+        , Css.Global.p
+        , Css.Global.typeSelector "dialog"
+        , Css.Global.div
+        , Css.Global.nav
+        , Css.Global.footer
         ]
         [ Css.backgroundPosition2 (Css.px 0) (Css.px 0)
         , Css.property "background-image" (box "blue")
         ]
-    , Css.Foreign.each
-        [ Css.Foreign.table
-        , Css.Foreign.td
-        , Css.Foreign.th
+    , Css.Global.each
+        [ Css.Global.table
+        , Css.Global.td
+        , Css.Global.th
         ]
         [ Css.property "background-image" (box "grey")
         ]
-    , Css.Foreign.each
-        [ Css.Foreign.canvas
-        , Css.Foreign.typeSelector "object"
-        , Css.Foreign.span
+    , Css.Global.each
+        [ Css.Global.canvas
+        , Css.Global.typeSelector "object"
+        , Css.Global.span
         ]
         [ Css.property "background-image" (box "red")
         ]
-    , Css.Foreign.each
-        [ Css.Foreign.li
+    , Css.Global.each
+        [ Css.Global.li
         ]
         [ Css.property "background-image" (box "green")
         ]
-    , Css.Foreign.each
-        [ Css.Foreign.li
-        , Css.Foreign.div
-        , Css.Foreign.footer
-        , Css.Foreign.header
+    , Css.Global.each
+        [ Css.Global.li
+        , Css.Global.div
+        , Css.Global.footer
+        , Css.Global.header
         ]
         [ Css.backgroundColor Css.transparent |> Css.important
         ]
-    , Css.Foreign.each
-        [ Css.Foreign.typeSelector "dialog"
-        , Css.Foreign.body
+    , Css.Global.each
+        [ Css.Global.typeSelector "dialog"
+        , Css.Global.body
         ]
         [ Css.property "background-image" (lines "hsla(200, 100%, 50%, .3)")
         , Css.backgroundPosition2 (Css.px 0) (Css.px -1)

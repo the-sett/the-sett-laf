@@ -24,12 +24,12 @@ module Responsive
 import Array exposing (Array)
 import Css
 import Css.Media
-import Css.Foreign
+import Css.Global
 
 
 {-| The global CSS.
 -}
-responsive : TypeScale -> Devices -> List Css.Foreign.Snippet
+responsive : TypeScale -> Devices -> List Css.Global.Snippet
 responsive typeScale devices =
     (baseSpacing devices)
         ++ (typography devices typeScale)
@@ -310,46 +310,46 @@ fontSizeMixin typeScale (FontSizeLevel sizeLevel) deviceProps =
 -- Responsive typography to fit all devices.
 
 
-typography : Devices -> TypeScale -> List Css.Foreign.Snippet
+typography : Devices -> TypeScale -> List Css.Global.Snippet
 typography devices typeScale =
     let
         fontMediaStyles fontSizeLevel =
             mapMixins (mediaMixins devices (fontSizeMixin typeScale fontSizeLevel)) []
     in
         [ -- Base font.
-          Css.Foreign.each
-            [ Css.Foreign.html ]
+          Css.Global.each
+            [ Css.Global.html ]
             [ Css.fontFamilies [ "Nobile", "Helvetica" ]
             , Css.fontWeight <| Css.int 400
             , Css.textRendering Css.optimizeLegibility
             ]
 
         -- Headings are grey and at least medium.
-        , Css.Foreign.each
-            [ Css.Foreign.h1
-            , Css.Foreign.h2
-            , Css.Foreign.h3
-            , Css.Foreign.h4
-            , Css.Foreign.h5
+        , Css.Global.each
+            [ Css.Global.h1
+            , Css.Global.h2
+            , Css.Global.h3
+            , Css.Global.h4
+            , Css.Global.h5
             ]
             [ Css.color greyDark |> Css.important
             , Css.fontWeight <| Css.int 500
             ]
 
         -- Biggest headings are bold.
-        , Css.Foreign.each
-            [ Css.Foreign.h1
-            , Css.Foreign.h2
-            , Css.Foreign.h3
+        , Css.Global.each
+            [ Css.Global.h1
+            , Css.Global.h2
+            , Css.Global.h3
             ]
             [ Css.fontWeight Css.bold ]
 
         -- Media queries to set all font sizes accross all devices.
-        , Css.Foreign.html <| fontMediaStyles base
-        , Css.Foreign.h1 <| fontMediaStyles h1
-        , Css.Foreign.h2 <| fontMediaStyles h2
-        , Css.Foreign.h3 <| fontMediaStyles h3
-        , Css.Foreign.h4 <| fontMediaStyles h4
+        , Css.Global.html <| fontMediaStyles base
+        , Css.Global.h1 <| fontMediaStyles h1
+        , Css.Global.h2 <| fontMediaStyles h2
+        , Css.Global.h3 <| fontMediaStyles h3
+        , Css.Global.h4 <| fontMediaStyles h4
         ]
 
 
@@ -357,40 +357,40 @@ typography devices typeScale =
 -- Responsive Spacing
 
 
-baseSpacing : Devices -> List Css.Foreign.Snippet
+baseSpacing : Devices -> List Css.Global.Snippet
 baseSpacing devices =
     [ -- No margins on headings, the line spacing of the heading is sufficient.
-      Css.Foreign.each
-        [ Css.Foreign.h1
-        , Css.Foreign.h2
-        , Css.Foreign.h3
-        , Css.Foreign.h4
-        , Css.Foreign.h5
-        , Css.Foreign.h6
+      Css.Global.each
+        [ Css.Global.h1
+        , Css.Global.h2
+        , Css.Global.h3
+        , Css.Global.h4
+        , Css.Global.h5
+        , Css.Global.h6
         ]
         [ Css.margin3 (Css.px 0) (Css.px 0) (Css.px 0) ]
 
     -- Single direction margins.
-    , Css.Foreign.each
-        [ Css.Foreign.blockquote
-        , Css.Foreign.dl
-        , Css.Foreign.fieldset
-        , Css.Foreign.ol
-        , Css.Foreign.p
-        , Css.Foreign.pre
-        , Css.Foreign.table
-        , Css.Foreign.ul
-        , Css.Foreign.hr
+    , Css.Global.each
+        [ Css.Global.blockquote
+        , Css.Global.dl
+        , Css.Global.fieldset
+        , Css.Global.ol
+        , Css.Global.p
+        , Css.Global.pre
+        , Css.Global.table
+        , Css.Global.ul
+        , Css.Global.hr
         ]
         [ deviceStyle devices <|
             \deviceProps -> Css.margin3 (Css.px 0) (Css.px 0) (rhythm deviceProps 1)
         ]
 
     -- Consistent indenting for lists.
-    , Css.Foreign.each
-        [ Css.Foreign.dd
-        , Css.Foreign.ol
-        , Css.Foreign.ul
+    , Css.Global.each
+        [ Css.Global.dd
+        , Css.Global.ol
+        , Css.Global.ul
         ]
         [ deviceStyle devices <|
             \deviceProps -> Css.margin2 (rhythm deviceProps 1) (rhythm deviceProps 1)

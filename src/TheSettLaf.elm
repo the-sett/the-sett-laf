@@ -9,12 +9,12 @@ module TheSettLaf
 
 {-| The Sett Look and Feel
 
-@docs snippets, style
+@docs style, fonts, responsiveMeta, devices, wrapper
 
 -}
 
 import Css
-import Css.Foreign
+import Css.Global
 import Html.Styled.Attributes exposing (href, rel, name, content)
 import Html.Styled exposing (Html, node)
 import Reset exposing (reset)
@@ -65,6 +65,9 @@ desktopWide =
     }
 
 
+{-| Device configuration.
+-}
+devices : Devices
 devices =
     { mobile = mobile
     , tablet = tablet
@@ -84,6 +87,8 @@ fonts =
         []
 
 
+{-| Meta tag to include to indiciate that the layout is reponsive.
+-}
 responsiveMeta : Html msg
 responsiveMeta =
     node "meta"
@@ -97,11 +102,13 @@ responsiveMeta =
 -}
 style : Devices -> Html msg
 style devices =
-    Css.Foreign.global <|
+    Css.Global.global <|
         reset
             ++ (responsive majorThird devices)
 
 
+{-| A responsive wrapper div.
+-}
 wrapper : Devices -> Css.Style
 wrapper devices =
     [ Css.margin2 (Css.px 0) Css.auto
