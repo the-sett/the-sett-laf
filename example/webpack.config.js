@@ -45,6 +45,17 @@ const commonConfig = {
         test: /\.(eot|ttf|woff|woff2|svg)$/,
         use: 'file-loader?publicPath=../../&name=static/css/[hash].[ext]',
       },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]'
+            }
+          }
+        ]
+      }
     ]
   },
 
@@ -99,10 +110,10 @@ if (isDev) {
 
     devServer: {
       historyApiFallback: true,
-      contentBase: './src',
+      contentBase: './src/static',
       inline: true,
       stats: 'errors-only',
-      port: 9071
+      port: 9071,
     }
   });
 }

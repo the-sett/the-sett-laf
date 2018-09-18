@@ -21,7 +21,7 @@ view devices model =
             [ div [ class "mdl-grid" ]
                 [ div [ class "mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--3dp" ]
                     [ div [ class "mdl-card__media" ]
-                        [ img [ src "images/more-from-4-large.png" ]
+                        [ img [ src "images/more-from-4.png" ]
                             []
                         ]
                     , div [ class "mdl-card__title" ]
