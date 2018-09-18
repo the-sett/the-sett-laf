@@ -6,8 +6,18 @@ import Css.Global
 
 reset : List Css.Global.Snippet
 reset =
-    [ -- No margin or padding.
+    [ -- Ensures <code> elements do not add extra height.
       Css.Global.each
+        [ Css.Global.code ]
+        [ Css.lineHeight (Css.px 0) ]
+
+    -- Ensures tables do not add extra height.
+    , Css.Global.each
+        [ Css.Global.table ]
+        [ Css.property "-webkit-border-vertical-spacing" "0px" ]
+
+    -- No margin or padding.
+    , Css.Global.each
         [ Css.Global.blockquote
         , Css.Global.caption
         , Css.Global.dd
