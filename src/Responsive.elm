@@ -40,10 +40,10 @@ responsive typeScale devices =
 
 
 type Device
-    = Mobile
-    | Tablet
-    | Desktop
-    | DesktopWide
+    = Sm
+    | Md
+    | Lg
+    | Xl
 
 
 

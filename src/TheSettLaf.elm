@@ -24,7 +24,7 @@ import Responsive exposing (DeviceProps, Device(..), Devices, responsive, majorT
 
 mobile : DeviceProps
 mobile =
-    { device = Mobile
+    { device = Sm
     , baseFontSize = 14.0
     , breakWidth = 480
     , baseLineHeight = 21
@@ -35,7 +35,7 @@ mobile =
 
 tablet : DeviceProps
 tablet =
-    { device = Tablet
+    { device = Md
     , baseFontSize = 15.0
     , breakWidth = 768
     , baseLineHeight = 22
@@ -46,7 +46,7 @@ tablet =
 
 desktop : DeviceProps
 desktop =
-    { device = Desktop
+    { device = Lg
     , baseFontSize = 16.0
     , breakWidth = 992
     , baseLineHeight = 24
@@ -57,7 +57,7 @@ desktop =
 
 desktopWide : DeviceProps
 desktopWide =
-    { device = DesktopWide
+    { device = Xl
     , baseFontSize = 17.0
     , breakWidth = 1200
     , baseLineHeight = 24

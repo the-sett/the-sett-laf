@@ -1,31 +1,78 @@
 module Grid exposing (..)
 
+import Maybe.Extra
 import Css exposing (..)
 import Html.Styled exposing (styled, div, Html, Attribute)
 import Responsive exposing (Device(..), Devices, DeviceProps, rhythm, deviceStyle, deviceStyles)
 
 
-type Size
-    = Sm Int
-    | Md Int
-    | Lg Int
-    | Xl Int
+type alias Size =
+    { device : Device
+    , columns : Int
+    }
 
 
-sm =
-    Sm
+sm n =
+    { device = Sm
+    , columns = n
+    }
 
 
-md =
-    Md
+md n =
+    { device = Md
+    , columns = n
+    }
 
 
-lg =
-    Lg
+lg n =
+    { device = Lg
+    , columns = n
+    }
 
 
-xl =
-    Xl
+xl n =
+    { device = Xl
+    , columns = n
+    }
+
+
+type alias SizeSpec =
+    { mobile : Maybe Size
+    , tablet : Maybe Size
+    , desktop : Maybe Size
+    , desktopWide : Maybe Size
+    }
+
+
+toSizeSpec : List Size -> SizeSpec
+toSizeSpec sizes =
+    List.foldl
+        (\size accum ->
+            case size.device of
+                Sm ->
+                    { accum | mobile = Just size }
+
+                Md ->
+                    { accum | tablet = Just size }
+
+                Lg ->
+                    { accum | desktop = Just size }
+
+                Xl ->
+                    { accum | desktopWide = Just size }
+        )
+        { mobile = Nothing, tablet = Nothing, desktop = Nothing, desktopWide = Nothing }
+        sizes
+
+
+mapSizeSpec : (Size -> b) -> SizeSpec -> List b
+mapSizeSpec fn spec =
+    [ Maybe.map fn spec.mobile
+    , Maybe.map fn spec.mobile
+    , Maybe.map fn spec.mobile
+    , Maybe.map fn spec.mobile
+    ]
+        |> Maybe.Extra.values
 
 
 grid =
@@ -55,43 +102,41 @@ reverseCol =
 
 
 col : Devices -> List Size -> List (Attribute msg) -> List (Html msg) -> Html msg
-col _ sizes =
+col devices sizes =
     let
         n =
-            List.foldl
-                (\size _ ->
-                    case size of
-                        Sm sz ->
-                            sz
+            1
 
-                        Md sz ->
-                            sz
+        sizeSpec =
+            toSizeSpec sizes
 
-                        Lg sz ->
-                            sz
-
-                        Xl sz ->
-                            sz
-                )
-                0
-                sizes
-                |> toFloat
-
-        style =
-            [ boxSizing borderBox
-            , property "flex" "0 0 auto"
-            ]
-                ++ if n == 0 then
-                    [ flexBasis (pct (n / 12 * 100))
-                    , maxWidth (pct 100)
-                    , flexGrow (num 1)
-                    ]
-                   else
-                    [ flexBasis (pct (n / 12 * 100))
-                    , maxWidth (pct (n / 12 * 100))
-                    ]
+        style devices =
+            deviceStyles devices <|
+                \deviceProps ->
+                    mapSizeSpec
+                        (\size ->
+                            (if deviceProps.device == size.device then
+                                if size.columns == 0 then
+                                    [ boxSizing borderBox
+                                    , property "flex" "0 0 auto"
+                                    , flexBasis (pct ((toFloat size.columns) / 12 * 100))
+                                    , maxWidth (pct 100)
+                                    , flexGrow (num 1)
+                                    ]
+                                else
+                                    [ boxSizing borderBox
+                                    , property "flex" "0 0 auto"
+                                    , flexBasis (pct ((toFloat size.columns) / 12 * 100))
+                                    , maxWidth (pct ((toFloat size.columns) / 12 * 100))
+                                    ]
+                             else
+                                []
+                            )
+                                |> Css.batch
+                        )
+                        sizeSpec
     in
-        styled div style
+        styled div [ style devices ]
 
 
 offset colOffset =
