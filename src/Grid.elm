@@ -117,16 +117,12 @@ col devices sizes =
                         (\size ->
                             (if deviceProps.device == size.device then
                                 if size.columns == 0 then
-                                    [ boxSizing borderBox
-                                    , property "flex" "0 0 auto"
-                                    , flexBasis (pct ((toFloat size.columns) / 12 * 100))
+                                    [ flexBasis (pct ((toFloat size.columns) / 12 * 100))
                                     , maxWidth (pct 100)
                                     , flexGrow (num 1)
                                     ]
                                 else
-                                    [ boxSizing borderBox
-                                    , property "flex" "0 0 auto"
-                                    , flexBasis (pct ((toFloat size.columns) / 12 * 100))
+                                    [ flexBasis (pct ((toFloat size.columns) / 12 * 100))
                                     , maxWidth (pct ((toFloat size.columns) / 12 * 100))
                                     ]
                              else
@@ -136,7 +132,11 @@ col devices sizes =
                         )
                         sizeSpec
     in
-        styled div [ style devices ]
+        styled div
+            [ style devices
+            , boxSizing borderBox
+            , property "flex" "0 0 auto"
+            ]
 
 
 offset colOffset =

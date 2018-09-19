@@ -31,7 +31,7 @@ grid1 devices =
                 []
                 [ text "cell1" ]
             , col devices
-                [ md 6, sm 12 ]
+                [ md 3, sm 6 ]
                 []
                 [ text "cell2" ]
             ]
