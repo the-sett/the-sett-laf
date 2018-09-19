@@ -1,4 +1,4 @@
-module Grids exposing (view)
+module GridDemo exposing (view)
 
 import Css
 import Grid exposing (grid, row, col, sm, md, lg, xl)
