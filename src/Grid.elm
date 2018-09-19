@@ -68,9 +68,9 @@ toSizeSpec sizes =
 mapSizeSpec : (Size -> b) -> SizeSpec -> List b
 mapSizeSpec fn spec =
     [ Maybe.map fn spec.mobile
-    , Maybe.map fn spec.mobile
-    , Maybe.map fn spec.mobile
-    , Maybe.map fn spec.mobile
+    , Maybe.map fn spec.tablet
+    , Maybe.map fn spec.desktop
+    , Maybe.map fn spec.desktopWide
     ]
         |> Maybe.Extra.values
 

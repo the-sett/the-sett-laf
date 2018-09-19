@@ -27,7 +27,7 @@ grid1 devices =
         [ row
             []
             [ col devices
-                [ md 6, sm 12 ]
+                [ md 6, sm 6 ]
                 []
                 [ text "cell1" ]
             , col devices
