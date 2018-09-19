@@ -1,7 +1,8 @@
 module Cards exposing (view)
 
 import Css
-import Html.Styled exposing (..)
+import Grid exposing (grid, row, col, sm, md, lg, xl)
+import Html.Styled exposing (styled, div, text, h1, p, h4, img, a)
 import Html.Styled.Attributes exposing (title, class, name, src)
 import Structure exposing (Template)
 import Responsive exposing (deviceStyle, rhythm)
@@ -16,12 +17,18 @@ view devices model =
             [ Css.textAlign Css.center ]
             []
             [ text "Cards" ]
-        , styled div
+        , grid
             []
-            []
-            [ div [ class "mdl-grid" ]
-                [ card devices "Card1" "images/more-from-4.png"
-                , card devices "Card2" "images/more-from-3.png"
+            [ row
+                []
+                [ col devices
+                    [ sm 6, md 4, lg 3 ]
+                    []
+                    [ card devices "Card1" "images/more-from-4.png" ]
+                , col devices
+                    [ sm 6, md 4, lg 3 ]
+                    []
+                    [ card devices "Card2" "images/more-from-3.png" ]
                 ]
             ]
         ]
