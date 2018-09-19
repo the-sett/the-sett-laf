@@ -35,7 +35,9 @@ view devices model =
 
 
 card devices title imgSrc =
-    div [ class "mdl-cell mdl-cell--6-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--3dp" ]
+    styled div
+        [ Css.border3 (Css.px 1) Css.solid (Css.rgb 150 150 150) ]
+        []
         [ styled div
             [ deviceStyle devices <|
                 \deviceProps -> Css.height (rhythm deviceProps 6)
