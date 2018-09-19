@@ -56,7 +56,7 @@ topHeader devices model =
                     , styled li
                         [ Css.display Css.inline ]
                         []
-                        [ styled a [ Css.padding (Css.px 10) ] [ href "#markdown" ] [ text "Markdown" ] ]
+                        [ styled a [ Css.padding (Css.px 10) ] [ href "#grids" ] [ text "Grids" ] ]
                     , styled li
                         [ Css.display Css.inline ]
                         []
@@ -64,7 +64,7 @@ topHeader devices model =
                     , styled li
                         [ Css.display Css.inline ]
                         []
-                        [ styled a [ Css.padding (Css.px 10) ] [] [ text "Etc" ] ]
+                        [ styled a [ Css.padding (Css.px 10) ] [ href "#markdown" ] [ text "Markdown" ] ]
                     ]
                 ]
             , div []

@@ -3,6 +3,7 @@ module Main exposing (main)
 import Body
 import Cards
 import DebugStyle
+import Grids
 import Html exposing (program)
 import Html.Styled exposing (toUnstyled, div, input, text)
 import Html.Styled.Attributes exposing (type_, checked)
@@ -52,8 +53,9 @@ styledView model =
             , (Layout.layout <|
                 Body.view
                     [ Typography.view
-                    , MkDown.view
+                    , Grids.view
                     , Cards.view
+                    , MkDown.view
                     ]
               )
                 devices
