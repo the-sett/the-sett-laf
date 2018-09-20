@@ -33,7 +33,7 @@ grid1 devices =
                 []
                 [ text "cell1" ]
             , col devices
-                [ { md | columns = 3 }
+                [ { md | offset = 1, columns = 3 }
                 , { sm | columns = 6 }
                 ]
                 []

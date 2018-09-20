@@ -58,25 +58,25 @@ type alias ColSpec =
     DeviceSpec (Maybe ColLayout)
 
 
-toSizeSpec : List ColLayout -> ColSpec
-toSizeSpec sizes =
+toColSpec : List ColLayout -> ColSpec
+toColSpec layouts =
     List.foldl
-        (\size accum ->
-            case size.device of
+        (\layout accum ->
+            case layout.device of
                 Sm ->
-                    { accum | sm = Just size }
+                    { accum | sm = Just layout }
 
                 Md ->
-                    { accum | md = Just size }
+                    { accum | md = Just layout }
 
                 Lg ->
-                    { accum | lg = Just size }
+                    { accum | lg = Just layout }
 
                 Xl ->
-                    { accum | xl = Just size }
+                    { accum | xl = Just layout }
         )
         { sm = Nothing, md = Nothing, lg = Nothing, xl = Nothing }
-        sizes
+        layouts
 
 
 grid =
@@ -106,35 +106,38 @@ reverseCol =
 
 
 col : DeviceStyles -> List ColLayout -> List (Attribute msg) -> List (Html msg) -> Html msg
-col devices sizes =
+col devices layouts =
     let
-        n =
-            1
-
-        sizeSpec =
-            toSizeSpec sizes
+        colSpec =
+            toColSpec layouts
 
         style devices =
             deviceStyles devices <|
                 \deviceProps ->
                     mapMaybeDeviceSpec
-                        (\size ->
-                            (if deviceProps.device == size.device then
-                                if size.columns == 0 then
-                                    [ flexBasis (pct ((toFloat size.columns) / 12 * 100))
+                        (\layout ->
+                            (if deviceProps.device == layout.device then
+                                (if layout.columns == 0 then
+                                    [ flexBasis (pct ((toFloat layout.columns) / 12 * 100))
                                     , maxWidth (pct 100)
                                     , flexGrow (num 1)
                                     ]
-                                else
-                                    [ flexBasis (pct ((toFloat size.columns) / 12 * 100))
-                                    , maxWidth (pct ((toFloat size.columns) / 12 * 100))
+                                 else
+                                    [ flexBasis (pct ((toFloat layout.columns) / 12 * 100))
+                                    , maxWidth (pct ((toFloat layout.columns) / 12 * 100))
                                     ]
+                                )
+                                    ++ (if layout.offset > 0 then
+                                            offset (toFloat layout.offset)
+                                        else
+                                            []
+                                       )
                              else
                                 []
                             )
                                 |> Css.batch
                         )
-                        sizeSpec
+                        colSpec
     in
         styled div
             [ boxSizing borderBox
