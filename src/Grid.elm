@@ -133,9 +133,10 @@ col devices sizes =
                         sizeSpec
     in
         styled div
-            [ style devices
-            , boxSizing borderBox
-            , property "flex" "0 0 auto"
+            [ boxSizing borderBox
+            , flexShrink (num 0)
+            , flexGrow (num 0)
+            , style devices
             ]
 
 
