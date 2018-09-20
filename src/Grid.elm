@@ -3,7 +3,7 @@ module Grid exposing (..)
 import Maybe.Extra
 import Css exposing (..)
 import Html.Styled exposing (styled, div, Html, Attribute)
-import Responsive exposing (Device(..), DeviceStyles, BaseStyle, rhythm, deviceStyle, deviceStyles)
+import Responsive exposing (Device(..), DeviceSpec, DeviceStyles, BaseStyle, rhythm, deviceStyle, deviceStyles)
 
 
 type alias Size =
@@ -37,11 +37,7 @@ xl n =
 
 
 type alias SizeSpec =
-    { mobile : Maybe Size
-    , tablet : Maybe Size
-    , desktop : Maybe Size
-    , desktopWide : Maybe Size
-    }
+    DeviceSpec (Maybe Size)
 
 
 toSizeSpec : List Size -> SizeSpec
