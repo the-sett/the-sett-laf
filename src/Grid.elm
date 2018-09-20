@@ -6,41 +6,41 @@ import Html.Styled exposing (styled, div, Html, Attribute)
 import Responsive exposing (Device(..), DeviceSpec, DeviceStyles, BaseStyle, rhythm, deviceStyle, deviceStyles)
 
 
-type alias Size =
+type alias ColLayout =
     { device : Device
     , columns : Int
     }
 
 
-sm n =
+sm =
     { device = Sm
-    , columns = n
+    , columns = 0
     }
 
 
-md n =
+md =
     { device = Md
-    , columns = n
+    , columns = 0
     }
 
 
-lg n =
+lg =
     { device = Lg
-    , columns = n
+    , columns = 0
     }
 
 
-xl n =
+xl =
     { device = Xl
-    , columns = n
+    , columns = 0
     }
 
 
-type alias SizeSpec =
-    DeviceSpec (Maybe Size)
+type alias ColSpec =
+    DeviceSpec (Maybe ColLayout)
 
 
-toSizeSpec : List Size -> SizeSpec
+toSizeSpec : List ColLayout -> ColSpec
 toSizeSpec sizes =
     List.foldl
         (\size accum ->
@@ -61,7 +61,7 @@ toSizeSpec sizes =
         sizes
 
 
-mapSizeSpec : (Size -> b) -> SizeSpec -> List b
+mapSizeSpec : (ColLayout -> b) -> ColSpec -> List b
 mapSizeSpec fn spec =
     [ Maybe.map fn spec.sm
     , Maybe.map fn spec.md
@@ -97,7 +97,7 @@ reverseCol =
     [ flexDirection columnReverse ]
 
 
-col : DeviceStyles -> List Size -> List (Attribute msg) -> List (Html msg) -> Html msg
+col : DeviceStyles -> List ColLayout -> List (Attribute msg) -> List (Html msg) -> Html msg
 col devices sizes =
     let
         n =

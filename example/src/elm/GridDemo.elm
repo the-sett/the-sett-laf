@@ -27,11 +27,15 @@ grid1 devices =
         [ row
             []
             [ col devices
-                [ md 6, sm 6 ]
+                [ { md | columns = 6 }
+                , { sm | columns = 6 }
+                ]
                 []
                 [ text "cell1" ]
             , col devices
-                [ md 3, sm 6 ]
+                [ { md | columns = 3 }
+                , { sm | columns = 6 }
+                ]
                 []
                 [ text "cell2" ]
             ]

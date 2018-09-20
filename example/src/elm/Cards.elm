@@ -22,11 +22,17 @@ view devices model =
             [ row
                 []
                 [ col devices
-                    [ sm 6, md 4, lg 3 ]
+                    [ { sm | columns = 6 }
+                    , { md | columns = 4 }
+                    , { lg | columns = 3 }
+                    ]
                     []
                     [ card devices "Card1" "images/more-from-4.png" ]
                 , col devices
-                    [ sm 6, md 4, lg 3 ]
+                    [ { sm | columns = 6 }
+                    , { md | columns = 4 }
+                    , { lg | columns = 3 }
+                    ]
                     []
                     [ card devices "Card2" "images/more-from-3.png" ]
                 ]
