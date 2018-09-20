@@ -177,24 +177,24 @@ middle =
     [ alignItems Css.center ]
 
 
-bottomXs =
+bottom =
     [ alignItems flexEnd ]
 
 
-aroundXs =
+around =
     [ justifyContent spaceAround
     ]
 
 
-betweenXs =
+between =
     [ justifyContent spaceBetween ]
 
 
-firstXs =
+first =
     [ order (num -1) ]
 
 
-lastXs =
+last =
     [ order (num 1) ]
 
 
