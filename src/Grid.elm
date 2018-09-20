@@ -19,30 +19,38 @@ import Responsive
 type alias ColLayout =
     { device : Device
     , columns : Int
+    , offset : Int
+    }
+
+
+defaultColLayout =
+    { device = Sm
+    , columns = 0
+    , offset = 0
     }
 
 
 sm =
-    { device = Sm
-    , columns = 0
+    { defaultColLayout
+        | device = Sm
     }
 
 
 md =
-    { device = Md
-    , columns = 0
+    { defaultColLayout
+        | device = Md
     }
 
 
 lg =
-    { device = Lg
-    , columns = 0
+    { defaultColLayout
+        | device = Lg
     }
 
 
 xl =
-    { device = Xl
-    , columns = 0
+    { defaultColLayout
+        | device = Xl
     }
 
 
