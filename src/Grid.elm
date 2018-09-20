@@ -3,7 +3,7 @@ module Grid exposing (..)
 import Maybe.Extra
 import Css exposing (..)
 import Html.Styled exposing (styled, div, Html, Attribute)
-import Responsive exposing (Device(..), DeviceSpec, DeviceProps, rhythm, deviceStyle, deviceStyles)
+import Responsive exposing (Device(..), DeviceSpec, BaseStyle, rhythm, deviceStyle, deviceStyles)
 
 
 type alias Size =

@@ -4,7 +4,7 @@ module Responsive
           -- Devices
         , Device(..)
         , DeviceSpec
-        , DeviceProps
+        , BaseStyle
           -- Type scales
         , TypeScale
         , minorSecond
@@ -48,14 +48,14 @@ type Device
 
 
 -- What the user needs to supply
--- type alias DeviceProps =
+-- type alias BaseStyle =
 --     { baseFontSize : Float
 --     , breakWidth : Float
 --     , minLineHeight : Float
 --     }
 
 
-type alias DeviceProps =
+type alias BaseStyle =
     -- This is really the internal model
     { device : Device
     , baseFontSize : Float
@@ -67,10 +67,10 @@ type alias DeviceProps =
 
 
 type alias DeviceSpec =
-    { mobile : DeviceProps
-    , tablet : DeviceProps
-    , desktop : DeviceProps
-    , desktopWide : DeviceProps
+    { mobile : BaseStyle
+    , tablet : BaseStyle
+    , desktop : BaseStyle
+    , desktopWide : BaseStyle
     }
 
 
@@ -176,7 +176,7 @@ h4 =
         }
 
 
-fontSizePx : TypeScale -> DeviceProps -> FontSizeLevel -> Float
+fontSizePx : TypeScale -> BaseStyle -> FontSizeLevel -> Float
 fontSizePx typeScale { baseFontSize } (FontSizeLevel sizeLevel) =
     ((typeScale sizeLevel.level) * baseFontSize)
         |> floor
@@ -187,7 +187,7 @@ fontSizePx typeScale { baseFontSize } (FontSizeLevel sizeLevel) =
 -- Vertical rhythm.
 
 
-lineHeight : DeviceProps -> Float
+lineHeight : BaseStyle -> Float
 lineHeight deviceProps =
     max
         deviceProps.baseLineHeight
@@ -196,7 +196,7 @@ lineHeight deviceProps =
         |> toFloat
 
 
-rhythm : DeviceProps -> Float -> Css.Px
+rhythm : BaseStyle -> Float -> Css.Px
 rhythm deviceProps n =
     Css.px <| n * (lineHeight deviceProps)
 
@@ -205,13 +205,13 @@ rhythm deviceProps n =
 -- Device Dependant Styling
 
 
-deviceStyle : DeviceSpec -> (DeviceProps -> Css.Style) -> Css.Style
+deviceStyle : DeviceSpec -> (BaseStyle -> Css.Style) -> Css.Style
 deviceStyle devices styleFn =
     mapMixins (mediaMixins devices (styleFn >> styleAsMixin)) []
         |> Css.batch
 
 
-deviceStyles : DeviceSpec -> (DeviceProps -> List Css.Style) -> Css.Style
+deviceStyles : DeviceSpec -> (BaseStyle -> List Css.Style) -> Css.Style
 deviceStyles devices styleFn =
     mapMixins (mediaMixins devices (styleFn >> stylesAsMixin)) []
         |> Css.batch
@@ -253,7 +253,7 @@ media2x styles =
         styles
 
 
-mediaMinWidthMixin : DeviceProps -> Mixin
+mediaMinWidthMixin : BaseStyle -> Mixin
 mediaMinWidthMixin { breakWidth } =
     Css.Media.withMedia [ Css.Media.all [ Css.Media.minWidth <| Css.px breakWidth ] ]
         >> List.singleton
@@ -269,7 +269,7 @@ In this way, a mixin that is dependant on device properties can be applied accro
 all device. Use `mapMixins` to apply the list of mixins over a list of base styles.
 
 -}
-mediaMixins : DeviceSpec -> (DeviceProps -> Mixin) -> List Mixin
+mediaMixins : DeviceSpec -> (BaseStyle -> Mixin) -> List Mixin
 mediaMixins { mobile, tablet, desktop, desktopWide } deviceMixin =
     let
         minWidthDevices =
@@ -289,7 +289,7 @@ mediaMixins { mobile, tablet, desktop, desktopWide } deviceMixin =
         allMixins deviceMixin
 
 
-fontSizeMixin : TypeScale -> FontSizeLevel -> DeviceProps -> Mixin
+fontSizeMixin : TypeScale -> FontSizeLevel -> BaseStyle -> Mixin
 fontSizeMixin typeScale (FontSizeLevel sizeLevel) deviceProps =
     let
         pxVal =

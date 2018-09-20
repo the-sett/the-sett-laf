@@ -19,10 +19,10 @@ import Grid
 import Html.Styled.Attributes exposing (href, rel, name, content)
 import Html.Styled exposing (Html, node)
 import Reset exposing (reset)
-import Responsive exposing (DeviceProps, Device(..), DeviceSpec, responsive, majorThird)
+import Responsive exposing (BaseStyle, Device(..), DeviceSpec, responsive, majorThird)
 
 
-mobile : DeviceProps
+mobile : BaseStyle
 mobile =
     { device = Sm
     , baseFontSize = 14.0
@@ -33,7 +33,7 @@ mobile =
     }
 
 
-tablet : DeviceProps
+tablet : BaseStyle
 tablet =
     { device = Md
     , baseFontSize = 15.0
@@ -44,7 +44,7 @@ tablet =
     }
 
 
-desktop : DeviceProps
+desktop : BaseStyle
 desktop =
     { device = Lg
     , baseFontSize = 16.0
@@ -55,7 +55,7 @@ desktop =
     }
 
 
-desktopWide : DeviceProps
+desktopWide : BaseStyle
 desktopWide =
     { device = Xl
     , baseFontSize = 17.0

@@ -3,7 +3,7 @@ module DebugStyle exposing (debug, style)
 import Css
 import Css.Global
 import Html.Styled exposing (Html)
-import Responsive exposing (DeviceProps, DeviceSpec, rhythm)
+import Responsive exposing (BaseStyle, DeviceSpec, rhythm)
 
 
 {-| The CSS as an HTML <style> element.
