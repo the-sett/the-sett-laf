@@ -5,7 +5,7 @@ import Html.Styled exposing (Html, styled, node, text, div, button, a, nav, body
 import Html.Styled.Attributes exposing (attribute, class, href, id, type_, checked)
 import Html.Styled.Events exposing (onCheck)
 import Logo exposing (logo)
-import Responsive exposing (Devices)
+import Responsive exposing (DeviceSpec)
 import Structure exposing (Template, Layout)
 import State exposing (Model, Msg(..))
 import Svg.Styled
@@ -17,14 +17,14 @@ layout template devices model =
     pageBody template devices model
 
 
-pageBody : Template Msg Model -> Devices -> Model -> Html Msg
+pageBody : Template Msg Model -> DeviceSpec -> Model -> Html Msg
 pageBody template devices model =
     div
         []
         [ topHeader devices model, template devices model, footer devices ]
 
 
-topHeader : Devices -> Model -> Html Msg
+topHeader : DeviceSpec -> Model -> Html Msg
 topHeader devices model =
     styled div
         [ Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 6) (Css.px 0) (Css.rgba 0 0 0 0.75)
@@ -80,6 +80,6 @@ topHeader devices model =
         ]
 
 
-footer : Devices -> Html msg
+footer : DeviceSpec -> Html msg
 footer devices =
     node "footer" [ class "thesett-footer mdl-mega-footer" ] []

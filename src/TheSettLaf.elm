@@ -19,7 +19,7 @@ import Grid
 import Html.Styled.Attributes exposing (href, rel, name, content)
 import Html.Styled exposing (Html, node)
 import Reset exposing (reset)
-import Responsive exposing (DeviceProps, Device(..), Devices, responsive, majorThird)
+import Responsive exposing (DeviceProps, Device(..), DeviceSpec, responsive, majorThird)
 
 
 mobile : DeviceProps
@@ -68,7 +68,7 @@ desktopWide =
 
 {-| Device configuration.
 -}
-devices : Devices
+devices : DeviceSpec
 devices =
     { mobile = mobile
     , tablet = tablet
@@ -101,7 +101,7 @@ responsiveMeta =
 
 {-| The CSS as an HTML <style> element.
 -}
-style : Devices -> Html msg
+style : DeviceSpec -> Html msg
 style devices =
     Css.Global.global <|
         reset
@@ -110,7 +110,7 @@ style devices =
 
 {-| A responsive wrapper div.
 -}
-wrapper : Devices -> Css.Style
+wrapper : DeviceSpec -> Css.Style
 wrapper devices =
     [ Css.margin2 (Css.px 0) Css.auto
     , Css.padding2 (Css.px 0) (Css.px 5)

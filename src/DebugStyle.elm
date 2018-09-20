@@ -3,19 +3,19 @@ module DebugStyle exposing (debug, style)
 import Css
 import Css.Global
 import Html.Styled exposing (Html)
-import Responsive exposing (DeviceProps, Devices, rhythm)
+import Responsive exposing (DeviceProps, DeviceSpec, rhythm)
 
 
 {-| The CSS as an HTML <style> element.
 -}
-style : Devices -> Html msg
+style : DeviceSpec -> Html msg
 style devices =
     Css.Global.global <| debug devices
 
 
 {-| The debug CSS.
 -}
-debug : Devices -> List Css.Global.Snippet
+debug : DeviceSpec -> List Css.Global.Snippet
 debug devices =
     [ Css.Global.each
         [ Css.Global.h1
