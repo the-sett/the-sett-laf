@@ -46,27 +46,27 @@ toSizeSpec sizes =
         (\size accum ->
             case size.device of
                 Sm ->
-                    { accum | mobile = Just size }
+                    { accum | sm = Just size }
 
                 Md ->
-                    { accum | tablet = Just size }
+                    { accum | md = Just size }
 
                 Lg ->
-                    { accum | desktop = Just size }
+                    { accum | lg = Just size }
 
                 Xl ->
-                    { accum | desktopWide = Just size }
+                    { accum | xl = Just size }
         )
-        { mobile = Nothing, tablet = Nothing, desktop = Nothing, desktopWide = Nothing }
+        { sm = Nothing, md = Nothing, lg = Nothing, xl = Nothing }
         sizes
 
 
 mapSizeSpec : (Size -> b) -> SizeSpec -> List b
 mapSizeSpec fn spec =
-    [ Maybe.map fn spec.mobile
-    , Maybe.map fn spec.tablet
-    , Maybe.map fn spec.desktop
-    , Maybe.map fn spec.desktopWide
+    [ Maybe.map fn spec.sm
+    , Maybe.map fn spec.md
+    , Maybe.map fn spec.lg
+    , Maybe.map fn spec.xl
     ]
         |> Maybe.Extra.values
 

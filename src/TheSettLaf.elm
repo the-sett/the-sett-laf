@@ -22,8 +22,8 @@ import Reset exposing (reset)
 import Responsive exposing (BaseStyle, Device(..), DeviceStyles, responsive, majorThird)
 
 
-mobile : BaseStyle
-mobile =
+sm : BaseStyle
+sm =
     { device = Sm
     , baseFontSize = 14.0
     , breakWidth = 480
@@ -33,8 +33,8 @@ mobile =
     }
 
 
-tablet : BaseStyle
-tablet =
+md : BaseStyle
+md =
     { device = Md
     , baseFontSize = 15.0
     , breakWidth = 768
@@ -44,8 +44,8 @@ tablet =
     }
 
 
-desktop : BaseStyle
-desktop =
+lg : BaseStyle
+lg =
     { device = Lg
     , baseFontSize = 16.0
     , breakWidth = 992
@@ -55,8 +55,8 @@ desktop =
     }
 
 
-desktopWide : BaseStyle
-desktopWide =
+xl : BaseStyle
+xl =
     { device = Xl
     , baseFontSize = 17.0
     , breakWidth = 1200
@@ -70,10 +70,10 @@ desktopWide =
 -}
 devices : DeviceStyles
 devices =
-    { mobile = mobile
-    , tablet = tablet
-    , desktop = desktop
-    , desktopWide = desktopWide
+    { sm = sm
+    , md = md
+    , lg = lg
+    , xl = xl
     }
 
 

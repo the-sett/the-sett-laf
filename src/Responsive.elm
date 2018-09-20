@@ -68,10 +68,10 @@ type alias BaseStyle =
 
 
 type alias DeviceSpec a =
-    { mobile : a
-    , tablet : a
-    , desktop : a
-    , desktopWide : a
+    { sm : a
+    , md : a
+    , lg : a
+    , xl : a
     }
 
 
@@ -267,7 +267,7 @@ mediaMinWidthMixin { breakWidth } =
 {-| Given a set of devices, and a function to build mixins from the device properties,
 creates a list of mixins, one for each device type.
 
-The smallest (mobile) device is applied without a media query, and the larger
+The smallest (sm) device is applied without a media query, and the larger
 sizes are successively applied with media queries on their break widths.
 
 In this way, a mixin that is dependant on device properties can be applied accross
@@ -275,10 +275,10 @@ all device. Use `mapMixins` to apply the list of mixins over a list of base styl
 
 -}
 mediaMixins : DeviceStyles -> (BaseStyle -> Mixin) -> List Mixin
-mediaMixins { mobile, tablet, desktop, desktopWide } deviceMixin =
+mediaMixins { sm, md, lg, xl } deviceMixin =
     let
         minWidthDevices =
-            [ desktopWide, desktop, tablet ]
+            [ xl, lg, md ]
 
         minWidthMixin deviceMixin deviceProps =
             deviceMixin deviceProps
@@ -288,7 +288,7 @@ mediaMixins { mobile, tablet, desktop, desktopWide } deviceMixin =
             List.map (minWidthMixin deviceMixin) minWidthDevices
 
         allMixins deviceMixin =
-            (deviceMixin mobile)
+            (deviceMixin sm)
                 :: (minWidthMixins deviceMixin)
     in
         allMixins deviceMixin
