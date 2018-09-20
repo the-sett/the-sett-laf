@@ -5,7 +5,7 @@ import Grid exposing (grid, row, col, sm, md, lg, xl)
 import Html.Styled exposing (styled, div, text, h1, p, h4, img, a)
 import Html.Styled.Attributes exposing (title, class, name, src)
 import Structure exposing (Template)
-import Responsive exposing (deviceStyle, rhythm)
+import Responsive exposing (deviceStyle, deviceStyles, rhythm)
 
 
 view : Template msg model
@@ -44,6 +44,11 @@ card devices title imgSrc =
     styled div
         [ Css.borderRadius (Css.px 2)
         , Css.property "box-shadow" "rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px"
+        , deviceStyles devices <|
+            \deviceProps ->
+                [ Css.marginLeft (rhythm deviceProps 0.5)
+                , Css.marginRight (rhythm deviceProps 0.5)
+                ]
         ]
         []
         [ styled div
