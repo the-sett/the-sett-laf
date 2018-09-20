@@ -44,11 +44,8 @@ card devices title imgSrc =
     styled div
         [ Css.borderRadius (Css.px 2)
         , Css.property "box-shadow" "rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px"
-        , deviceStyles devices <|
-            \deviceProps ->
-                [ Css.marginLeft (rhythm deviceProps 0.5)
-                , Css.marginRight (rhythm deviceProps 0.5)
-                ]
+        , Css.marginLeft (Css.em 0.5)
+        , Css.marginRight (Css.em 0.5)
         ]
         []
         [ styled div
@@ -63,24 +60,38 @@ card devices title imgSrc =
                 [ src imgSrc ]
                 []
             ]
-        , div []
+        , styled div
+            [ Css.paddingLeft (Css.em 1)
+            , Css.paddingRight (Css.em 0.5)
+            ]
+            []
             [ h4 []
                 [ text title ]
             ]
-        , div []
+        , styled div
+            [ Css.paddingLeft (Css.em 0.5)
+            , Css.paddingRight (Css.em 0.5)
+            ]
+            []
             [ p []
                 [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " ]
             ]
-        , div []
-            [--  Button.render Mdl
-             --     [ 0 ]
-             --     model.mdl
-             --     [ Button.colored
-             --     , Button.ripple
-             --     ]
-             --     [ text "Link"
-             --     , i [ class "material-icons" ]
-             --         [ text "chevron_right" ]
-             --     ]
+        , styled div
+            [ Css.paddingLeft (Css.em 0.5)
+            , Css.paddingRight (Css.em 0.5)
+            , Css.paddingBottom (Css.em 1)
+            ]
+            []
+            [ text "button"
+              --  Button.render Mdl
+              --     [ 0 ]
+              --     model.mdl
+              --     [ Button.colored
+              --     , Button.ripple
+              --     ]
+              --     [ text "Link"
+              --     , i [ class "material-icons" ]
+              --         [ text "chevron_right" ]
+              --     ]
             ]
         ]
