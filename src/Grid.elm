@@ -3,7 +3,17 @@ module Grid exposing (..)
 import Maybe.Extra
 import Css exposing (..)
 import Html.Styled exposing (styled, div, Html, Attribute)
-import Responsive exposing (Device(..), DeviceSpec, DeviceStyles, BaseStyle, rhythm, deviceStyle, deviceStyles)
+import Responsive
+    exposing
+        ( Device(..)
+        , DeviceSpec
+        , DeviceStyles
+        , BaseStyle
+        , mapMaybeDeviceSpec
+        , rhythm
+        , deviceStyle
+        , deviceStyles
+        )
 
 
 type alias ColLayout =
@@ -61,16 +71,6 @@ toSizeSpec sizes =
         sizes
 
 
-mapSizeSpec : (ColLayout -> b) -> ColSpec -> List b
-mapSizeSpec fn spec =
-    [ Maybe.map fn spec.sm
-    , Maybe.map fn spec.md
-    , Maybe.map fn spec.lg
-    , Maybe.map fn spec.xl
-    ]
-        |> Maybe.Extra.values
-
-
 grid =
     styled div
         [ marginRight auto
@@ -109,7 +109,7 @@ col devices sizes =
         style devices =
             deviceStyles devices <|
                 \deviceProps ->
-                    mapSizeSpec
+                    mapMaybeDeviceSpec
                         (\size ->
                             (if deviceProps.device == size.device then
                                 if size.columns == 0 then

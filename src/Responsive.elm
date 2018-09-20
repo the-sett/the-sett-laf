@@ -6,6 +6,7 @@ module Responsive
         , DeviceSpec
         , DeviceStyles
         , BaseStyle
+        , mapMaybeDeviceSpec
           -- Type scales
         , TypeScale
         , minorSecond
@@ -26,6 +27,7 @@ import Array exposing (Array)
 import Css
 import Css.Media
 import Css.Global
+import Maybe.Extra
 
 
 {-| The global CSS.
@@ -77,6 +79,16 @@ type alias DeviceSpec a =
 
 type alias DeviceStyles =
     DeviceSpec BaseStyle
+
+
+mapMaybeDeviceSpec : (a -> b) -> DeviceSpec (Maybe a) -> List b
+mapMaybeDeviceSpec fn spec =
+    [ Maybe.map fn spec.sm
+    , Maybe.map fn spec.md
+    , Maybe.map fn spec.lg
+    , Maybe.map fn spec.xl
+    ]
+        |> Maybe.Extra.values
 
 
 
