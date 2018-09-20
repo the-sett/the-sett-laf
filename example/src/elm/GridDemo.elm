@@ -2,7 +2,7 @@ module GridDemo exposing (view)
 
 import Css
 import Grid exposing (grid, row, col, sm, md, lg, xl)
-import Html.Styled exposing (styled, h1, text, div, a)
+import Html.Styled exposing (styled, h1, h4, text, div, a)
 import Html.Styled.Attributes exposing (title, class, name, src)
 import Structure exposing (Template)
 import Responsive exposing (deviceStyle, rhythm)
@@ -17,26 +17,46 @@ view devices model =
             [ Css.textAlign Css.center ]
             []
             [ text "Grids" ]
-        , grid1 devices
+        , h4 [] [ text "Column Widths" ]
+        , gridn devices widths
+        , h4 [] [ text "Column Offsets" ]
+        , gridn devices offsets
         ]
 
 
-grid1 devices =
+red el =
+    styled el
+        [ Css.backgroundColor (Css.rgb 255 50 50) ]
+
+
+widths devices n =
+    red
+        (col devices
+            [ { sm | columns = n }
+            ]
+        )
+        []
+        [ text "cell" ]
+
+
+offsets devices n =
+    red
+        (col devices
+            [ { sm | offset = n - 1 }
+            ]
+        )
+        []
+        [ text "cell" ]
+
+
+gridn devices cellFn =
     grid
         []
-        [ row
-            []
-            [ col devices
-                [ { md | columns = 6 }
-                , { sm | columns = 6 }
-                ]
-                []
-                [ text "cell1" ]
-            , col devices
-                [ { md | offset = 1, columns = 3 }
-                , { sm | columns = 6 }
-                ]
-                []
-                [ text "cell2" ]
-            ]
-        ]
+        (List.map
+            (\n ->
+                row
+                    []
+                    [ (cellFn devices n) ]
+            )
+            (List.range 1 12)
+        )
