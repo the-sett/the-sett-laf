@@ -8,14 +8,14 @@ styling can be applied.
 -}
 
 import Html.Styled exposing (Html)
-import Responsive exposing (DeviceSpec)
+import Responsive exposing (DeviceStyles)
 
 
 {-| Defines the type of a template. A template takes a link builder, an editor and
 some content and produces Html.
 -}
 type alias Template msg model =
-    DeviceSpec -> model -> Html msg
+    DeviceStyles -> model -> Html msg
 
 
 {-| Defines the type of a layout. A layout is a higher level template; it takes a

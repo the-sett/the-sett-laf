@@ -4,6 +4,7 @@ module Responsive
           -- Devices
         , Device(..)
         , DeviceSpec
+        , DeviceStyles
         , BaseStyle
           -- Type scales
         , TypeScale
@@ -29,7 +30,7 @@ import Css.Global
 
 {-| The global CSS.
 -}
-responsive : TypeScale -> DeviceSpec -> List Css.Global.Snippet
+responsive : TypeScale -> DeviceStyles -> List Css.Global.Snippet
 responsive typeScale devices =
     (baseSpacing devices)
         ++ (typography devices typeScale)
@@ -66,12 +67,16 @@ type alias BaseStyle =
     }
 
 
-type alias DeviceSpec =
-    { mobile : BaseStyle
-    , tablet : BaseStyle
-    , desktop : BaseStyle
-    , desktopWide : BaseStyle
+type alias DeviceSpec a =
+    { mobile : a
+    , tablet : a
+    , desktop : a
+    , desktopWide : a
     }
+
+
+type alias DeviceStyles =
+    DeviceSpec BaseStyle
 
 
 
@@ -205,13 +210,13 @@ rhythm deviceProps n =
 -- Device Dependant Styling
 
 
-deviceStyle : DeviceSpec -> (BaseStyle -> Css.Style) -> Css.Style
+deviceStyle : DeviceStyles -> (BaseStyle -> Css.Style) -> Css.Style
 deviceStyle devices styleFn =
     mapMixins (mediaMixins devices (styleFn >> styleAsMixin)) []
         |> Css.batch
 
 
-deviceStyles : DeviceSpec -> (BaseStyle -> List Css.Style) -> Css.Style
+deviceStyles : DeviceStyles -> (BaseStyle -> List Css.Style) -> Css.Style
 deviceStyles devices styleFn =
     mapMixins (mediaMixins devices (styleFn >> stylesAsMixin)) []
         |> Css.batch
@@ -269,7 +274,7 @@ In this way, a mixin that is dependant on device properties can be applied accro
 all device. Use `mapMixins` to apply the list of mixins over a list of base styles.
 
 -}
-mediaMixins : DeviceSpec -> (BaseStyle -> Mixin) -> List Mixin
+mediaMixins : DeviceStyles -> (BaseStyle -> Mixin) -> List Mixin
 mediaMixins { mobile, tablet, desktop, desktopWide } deviceMixin =
     let
         minWidthDevices =
@@ -310,7 +315,7 @@ fontSizeMixin typeScale (FontSizeLevel sizeLevel) deviceProps =
 -- Responsive typography to fit all devices.
 
 
-typography : DeviceSpec -> TypeScale -> List Css.Global.Snippet
+typography : DeviceStyles -> TypeScale -> List Css.Global.Snippet
 typography devices typeScale =
     let
         fontMediaStyles fontSizeLevel =
@@ -357,7 +362,7 @@ typography devices typeScale =
 -- Responsive Spacing
 
 
-baseSpacing : DeviceSpec -> List Css.Global.Snippet
+baseSpacing : DeviceStyles -> List Css.Global.Snippet
 baseSpacing devices =
     [ -- No margins on headings, the line spacing of the heading is sufficient.
       Css.Global.each

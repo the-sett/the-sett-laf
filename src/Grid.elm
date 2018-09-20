@@ -3,7 +3,7 @@ module Grid exposing (..)
 import Maybe.Extra
 import Css exposing (..)
 import Html.Styled exposing (styled, div, Html, Attribute)
-import Responsive exposing (Device(..), DeviceSpec, BaseStyle, rhythm, deviceStyle, deviceStyles)
+import Responsive exposing (Device(..), DeviceStyles, BaseStyle, rhythm, deviceStyle, deviceStyles)
 
 
 type alias Size =
@@ -101,7 +101,7 @@ reverseCol =
     [ flexDirection columnReverse ]
 
 
-col : DeviceSpec -> List Size -> List (Attribute msg) -> List (Html msg) -> Html msg
+col : DeviceStyles -> List Size -> List (Attribute msg) -> List (Html msg) -> Html msg
 col devices sizes =
     let
         n =
