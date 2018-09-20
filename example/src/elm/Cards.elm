@@ -36,7 +36,9 @@ view devices model =
 
 card devices title imgSrc =
     styled div
-        [ Css.border3 (Css.px 1) Css.solid (Css.rgb 150 150 150) ]
+        [ Css.borderRadius (Css.px 2)
+        , Css.property "box-shadow" "rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px"
+        ]
         []
         [ styled div
             [ deviceStyle devices <|
