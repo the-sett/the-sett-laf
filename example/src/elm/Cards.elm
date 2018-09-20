@@ -44,7 +44,7 @@ card devices title imgSrc =
             [ deviceStyle devices <|
                 \deviceProps -> Css.height (rhythm deviceProps 6)
             ]
-            [ class "mdl-card__media" ]
+            []
             [ styled img
                 [ Css.maxHeight (Css.pct 100)
                 , Css.width (Css.pct 100)
@@ -52,15 +52,15 @@ card devices title imgSrc =
                 [ src imgSrc ]
                 []
             ]
-        , div [ class "mdl-card__title" ]
-            [ h4 [ class "mdl-card__title-text" ]
+        , div []
+            [ h4 []
                 [ text title ]
             ]
-        , div [ class "mdl-card__supporting-text" ]
+        , div []
             [ p []
                 [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " ]
             ]
-        , div [ class "mdl-card__actions" ]
+        , div []
             [--  Button.render Mdl
              --     [ 0 ]
              --     model.mdl
