@@ -67,7 +67,11 @@ topHeader devices model =
                         [ styled a [ Css.padding (Css.px 10) ] [ href "#markdown" ] [ text "Markdown" ] ]
                     ]
                 ]
-            , div []
+            , styled div
+                [ Css.position Css.fixed
+                , Css.right (Css.pct 5)
+                ]
+                []
                 [ input
                     [ type_ "checkbox"
                     , checked model

@@ -30,7 +30,7 @@ debug devices =
         , Css.Global.footer
         ]
         [ Css.backgroundPosition2 (Css.px 0) (Css.px 0)
-        , Css.property "background-image" (box "blue")
+        , Css.property "background-image" (box "rgba(0, 0, 255, .3)")
         ]
     , Css.Global.each
         [ Css.Global.table
@@ -44,12 +44,12 @@ debug devices =
         , Css.Global.typeSelector "object"
         , Css.Global.span
         ]
-        [ Css.property "background-image" (box "red")
+        [ Css.property "background-image" (box "rgba(255, 0, 0, .3)")
         ]
     , Css.Global.each
         [ Css.Global.li
         ]
-        [ Css.property "background-image" (box "green")
+        [ Css.property "background-image" (box "rgba(0, 255, 0, .3)")
         ]
     , Css.Global.each
         [ Css.Global.li
@@ -63,7 +63,7 @@ debug devices =
         [ Css.Global.typeSelector "dialog"
         , Css.Global.body
         ]
-        [ Css.property "background-image" (lines "hsla(200, 100%, 50%, .3)")
+        [ Css.property "background-image" (lines "hsla(200, 100%, 50%, .2)")
         , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
         , Css.backgroundRepeat Css.repeat
         , Responsive.deviceStyle devices <|
