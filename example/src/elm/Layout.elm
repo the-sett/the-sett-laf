@@ -1,9 +1,10 @@
 module Layout exposing (layout)
 
 import Css
+import Grid exposing (grid, row, col, sm, md, lg, xl)
 import Html.Styled exposing (Html, styled, node, text, div, button, a, nav, body, input, ul, li)
 import Html.Styled.Attributes exposing (attribute, class, href, id, type_, checked)
-import Html.Styled.Events exposing (onCheck)
+import Html.Styled.Events exposing (onClick)
 import Logo exposing (logo)
 import Responsive exposing (DeviceStyles)
 import Structure exposing (Template, Layout)
@@ -21,7 +22,7 @@ pageBody : Template Msg Model -> DeviceStyles -> Model -> Html Msg
 pageBody template devices model =
     div
         []
-        [ topHeader devices model, template devices model, footer devices ]
+        [ debugToggle devices model, topHeader devices model, template devices model, footer devices ]
 
 
 topHeader : DeviceStyles -> Model -> Html Msg
@@ -32,7 +33,7 @@ topHeader devices model =
         []
         [ styled div
             [ Css.displayFlex
-            , Css.justifyContent Css.spaceBetween
+              --, Css.justifyContent Css.spaceBetween
             , Css.alignItems Css.center
             , wrapper devices
             , Responsive.deviceStyle devices <|
@@ -45,7 +46,8 @@ topHeader devices model =
                 []
                 [ Svg.Styled.fromUnstyled logo
                 ]
-            , nav []
+            , div
+                []
                 [ styled ul
                     [ Css.display Css.inline ]
                     []
@@ -67,20 +69,32 @@ topHeader devices model =
                         [ styled a [ Css.padding (Css.px 10) ] [ href "#markdown" ] [ text "Markdown" ] ]
                     ]
                 ]
-            , styled div
-                [ Css.position Css.fixed
-                , Css.right (Css.pct 5)
-                ]
-                []
-                [ input
-                    [ type_ "checkbox"
-                    , checked model
-                    , onCheck Toggle
-                    ]
-                    []
-                , text "grid"
-                ]
             ]
+        ]
+
+
+debugToggle devices model =
+    styled div
+        [ Css.position Css.fixed
+        , Responsive.deviceStyles devices <|
+            \deviceProps ->
+                [ Css.right (Responsive.rhythm deviceProps 2)
+                , Css.top (Responsive.rhythm deviceProps 1)
+                ]
+        , if model then
+            Css.backgroundColor (Css.rgb 50 230 50) |> Css.important
+          else
+            Css.backgroundColor (Css.rgb 255 255 255)
+        , Css.hover [ Css.backgroundColor (Css.rgb 50 210 50) ]
+        , Css.padding2 (Css.px 5) (Css.px 10)
+        , Css.margin (Css.px -5)
+          --, Css.border3 (Css.px 1) Css.solid (Css.rgb 200 200 200)
+        , Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 3) (Css.px 0) (Css.rgba 0 0 0 0.75)
+        , Css.borderRadius (Css.px 4)
+        , Css.property "user-select" "none"
+        ]
+        [ onClick <| Toggle (not model) ]
+        [ text "grid"
         ]
 
 
