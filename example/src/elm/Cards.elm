@@ -61,24 +61,24 @@ card devices title imgSrc =
                 []
             ]
         , styled div
-            [ Css.paddingLeft (Css.rem 1)
-            , Css.paddingRight (Css.rem 0.5)
+            [ Css.paddingLeft (Css.rem 1.5)
+            , Css.paddingRight (Css.rem 1)
             ]
             []
             [ h4 []
                 [ text title ]
             ]
         , styled div
-            [ Css.paddingLeft (Css.rem 0.5)
-            , Css.paddingRight (Css.rem 0.5)
+            [ Css.paddingLeft (Css.rem 1)
+            , Css.paddingRight (Css.rem 1)
             ]
             []
             [ p []
                 [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " ]
             ]
         , styled div
-            [ Css.paddingLeft (Css.rem 0.5)
-            , Css.paddingRight (Css.rem 0.5)
+            [ Css.paddingLeft (Css.rem 1)
+            , Css.paddingRight (Css.rem 1)
             , Css.paddingBottom (Css.rem 1)
             ]
             []
