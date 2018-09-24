@@ -25,6 +25,13 @@ type alias ColLayout =
     }
 
 
+type alias RowLayout =
+    { device : Device
+    , halign : HAlign
+    , valign : VAlign
+    }
+
+
 type HAlign
     = Start
     | Center
