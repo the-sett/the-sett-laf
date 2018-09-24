@@ -1,7 +1,7 @@
 module GridDemo exposing (view)
 
 import Css
-import Grid exposing (grid, row, col, sm, md, lg, xl)
+import Grid exposing (grid, row, col, sm, md, lg, xl, HAlign(..), VAlign(..))
 import Html.Styled exposing (styled, h1, h4, text, div, a, li, ul)
 import Html.Styled.Attributes exposing (title, class, name, src, href)
 import Logo exposing (logo)
@@ -86,8 +86,8 @@ headerGrid devices =
                 [ Svg.Styled.fromUnstyled logo
                 ]
             , col devices
-                [ { sm | columns = 12 }
-                , { md | columns = 8, offset = 2 }
+                [ { sm | columns = 12, halign = Center }
+                , { md | columns = 10 }
                 ]
                 []
                 [ styled ul
