@@ -23,6 +23,8 @@ view devices model =
         , gridn devices widths
         , h4 [] [ text "Column Offsets" ]
         , gridn devices offsets
+        , h4 [] [ text "Centered" ]
+        , gridn devices centered
         , h4 [] [ text "Header" ]
         , headerGrid devices
         ]
@@ -31,6 +33,16 @@ view devices model =
 red el =
     styled el
         [ Css.backgroundColor (Css.rgb 255 50 50) ]
+
+
+centered devices n =
+    red
+        (col devices
+            [ { sm | columns = n, halign = Center }
+            ]
+        )
+        []
+        [ text "cell" ]
 
 
 widths devices n =
@@ -46,7 +58,7 @@ widths devices n =
 offsets devices n =
     red
         (col devices
-            [ { sm | offset = n - 1 }
+            [ { sm | columns = 1, offset = n - 1 }
             ]
         )
         []
