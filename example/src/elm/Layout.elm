@@ -22,7 +22,11 @@ pageBody : Template Msg Model -> DeviceStyles -> Model -> Html Msg
 pageBody template devices model =
     div
         []
-        [ debugToggle devices model, topHeader devices model, template devices model, footer devices ]
+        [ debugToggle devices model
+        , topHeader devices model
+        , template devices model
+        , footer devices
+        ]
 
 
 topHeader : DeviceStyles -> Model -> Html Msg
@@ -33,7 +37,7 @@ topHeader devices model =
         []
         [ styled div
             [ Css.displayFlex
-              --, Css.justifyContent Css.spaceBetween
+            , Css.justifyContent Css.spaceBetween
             , Css.alignItems Css.center
             , wrapper devices
             , Responsive.deviceStyle devices <|
@@ -81,14 +85,9 @@ debugToggle devices model =
                 [ Css.right (Responsive.rhythm deviceProps 2)
                 , Css.top (Responsive.rhythm deviceProps 1)
                 ]
-        , if model then
-            Css.backgroundColor (Css.rgb 50 230 50) |> Css.important
-          else
-            Css.backgroundColor (Css.rgb 255 255 255)
         , Css.hover [ Css.backgroundColor (Css.rgb 50 210 50) ]
         , Css.padding2 (Css.px 5) (Css.px 10)
         , Css.margin (Css.px -5)
-          --, Css.border3 (Css.px 1) Css.solid (Css.rgb 200 200 200)
         , Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 3) (Css.px 0) (Css.rgba 0 0 0 0.75)
         , Css.borderRadius (Css.px 4)
         , Css.property "user-select" "none"
