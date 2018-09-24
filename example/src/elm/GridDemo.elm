@@ -25,8 +25,6 @@ view devices model =
         , gridn devices offsets
         , h4 [] [ text "Centered" ]
         , gridn devices centered
-        , h4 [] [ text "Header" ]
-        , headerGrid devices
         ]
 
 
@@ -76,52 +74,3 @@ gridn devices cellFn =
             )
             (List.range 1 12)
         )
-
-
-headerGrid devices =
-    grid
-        []
-        [ styled row
-            [ Css.alignItems Css.center ]
-            []
-            [ styled
-                (col devices
-                    [ { sm | columns = 1 } ]
-                )
-                [ Responsive.deviceStyles devices <|
-                    \deviceProps ->
-                        [ Css.height (Responsive.rhythm deviceProps 3)
-                        , Css.width (Responsive.rhythm deviceProps 3)
-                        ]
-                ]
-                []
-                [ Svg.Styled.fromUnstyled logo
-                ]
-            , col devices
-                [ { sm | columns = 12, halign = Center }
-                , { md | columns = 10 }
-                ]
-                []
-                [ styled ul
-                    [ Css.display Css.inline ]
-                    []
-                    [ styled li
-                        [ Css.display Css.inline ]
-                        []
-                        [ styled a [ Css.padding (Css.px 10) ] [ href "#typography" ] [ text "Typography" ] ]
-                    , styled li
-                        [ Css.display Css.inline ]
-                        []
-                        [ styled a [ Css.padding (Css.px 10) ] [ href "#grids" ] [ text "Grids" ] ]
-                    , styled li
-                        [ Css.display Css.inline ]
-                        []
-                        [ styled a [ Css.padding (Css.px 10) ] [ href "#cards" ] [ text "Cards" ] ]
-                    , styled li
-                        [ Css.display Css.inline ]
-                        []
-                        [ styled a [ Css.padding (Css.px 10) ] [ href "#markdown" ] [ text "Markdown" ] ]
-                    ]
-                ]
-            ]
-        ]
