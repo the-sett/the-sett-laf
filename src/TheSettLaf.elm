@@ -16,6 +16,7 @@ module TheSettLaf
 import Css
 import Css.Global
 import Grid
+import GridAlt
 import Html.Styled.Attributes exposing (href, rel, name, content)
 import Html.Styled exposing (Html, node)
 import Reset exposing (reset)
