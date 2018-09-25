@@ -73,17 +73,17 @@ fixed styles _ _ =
     styles
 
 
-columns : Float -> Builder { grid : c1, row : Never, col : c2 }
+columns : Float -> Builder { a | row : Never }
 columns n =
     empty
 
 
-offset : Float -> Builder { grid : Never, row : Never, col : c1 }
+offset : Float -> Builder { a | grid : Never, row : Never }
 offset n =
     empty
 
 
-start : Builder { grid : Never, row : c1, col : Never }
+start : Builder { a | grid : Never, col : Never }
 start =
     fixed
         [ justifyContent flexStart
@@ -91,7 +91,7 @@ start =
         ]
 
 
-end : Builder { grid : Never, row : c1, col : Never }
+end : Builder { a | grid : Never, col : Never }
 end =
     fixed
         [ justifyContent flexEnd
@@ -99,7 +99,7 @@ end =
         ]
 
 
-center : Builder { grid : Never, row : c1, col : Never }
+center : Builder { a | grid : Never, col : Never }
 center =
     fixed
         [ justifyContent Css.center
@@ -107,17 +107,17 @@ center =
         ]
 
 
-around : Builder { grid : Never, row : c1, col : Never }
+around : Builder { a | grid : Never, col : Never }
 around =
     fixed [ justifyContent spaceAround ]
 
 
-between : Builder { grid : Never, row : c1, col : Never }
+between : Builder { a | grid : Never, col : Never }
 between =
     fixed [ justifyContent spaceBetween ]
 
 
-reverse : Builder { grid : Never, row : c1, col : c2 }
+reverse : Builder { a | grid : Never }
 reverse _ grid =
     case grid of
         Row ->
@@ -130,27 +130,27 @@ reverse _ grid =
             []
 
 
-top : Builder { grid : Never, row : Never, col : c2 }
+top : Builder { a | grid : Never, row : Never }
 top =
     fixed [ alignItems flexStart ]
 
 
-middle : Builder { grid : Never, row : Never, col : c2 }
+middle : Builder { a | grid : Never, row : Never }
 middle =
     fixed [ alignItems Css.center ]
 
 
-bottom : Builder { grid : Never, row : Never, col : c2 }
+bottom : Builder { a | grid : Never, row : Never }
 bottom =
     fixed [ alignItems flexEnd ]
 
 
-first : Builder { grid : Never, row : c1, col : c2 }
+first : Builder { a | grid : Never }
 first =
     fixed [ order (num -1) ]
 
 
-last : Builder { grid : Never, row : c2, col : c2 }
+last : Builder { a | grid : Never }
 last =
     fixed [ order (num 1) ]
 
