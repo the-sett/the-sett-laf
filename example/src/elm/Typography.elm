@@ -3,12 +3,13 @@ module Typography exposing (view)
 import Css
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (title, class, name)
+import Html.Styled.Lazy exposing (lazy)
 import Structure exposing (Template(..))
 
 
 view : Template msg model
 view =
-    (\devices model ->
+    (\devices ->
         div
             []
             [ a [ name "typography" ] []
@@ -76,5 +77,7 @@ view =
                     [ text "List 4" ]
                 ]
             ]
+            |> toUnstyled
     )
-        |> Dynamic
+        |> lazy
+        |> Static

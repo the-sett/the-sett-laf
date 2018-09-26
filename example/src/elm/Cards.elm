@@ -2,15 +2,16 @@ module Cards exposing (view)
 
 import Css
 import Grid exposing (grid, row, col, sm, md, lg, xl)
-import Html.Styled exposing (styled, div, text, h1, p, h4, img, a)
+import Html.Styled exposing (styled, toUnstyled, div, i, text, h1, p, h4, img, a)
 import Html.Styled.Attributes exposing (title, class, name, src)
+import Html.Styled.Lazy exposing (lazy)
 import Structure exposing (Template(..))
 import Responsive exposing (deviceStyle, deviceStyles, rhythm)
 
 
 view : Template msg model
 view =
-    (\devices model ->
+    (\devices ->
         div
             []
             [ a [ name "cards" ] []
@@ -39,8 +40,10 @@ view =
                     ]
                 ]
             ]
+            |> toUnstyled
     )
-        |> Dynamic
+        |> lazy
+        |> Static
 
 
 card devices title imgSrc =

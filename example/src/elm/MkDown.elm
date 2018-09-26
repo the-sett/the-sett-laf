@@ -4,6 +4,7 @@ import Css
 import Html
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (title, class, name)
+import Html.Styled.Lazy exposing (lazy)
 import Markdown.Block as Block exposing (Block)
 import Markdown.Config exposing (HtmlOption(..), defaultOptions, defaultSanitizeOptions)
 import Markdown.Inline as Inline
@@ -12,7 +13,7 @@ import Structure exposing (Template(..))
 
 view : Template msg model
 view =
-    (\devices model ->
+    (\devices ->
         div
             []
             [ a [ name "markdown" ] []
@@ -22,8 +23,10 @@ view =
                 [ text "Markdown" ]
             , markdownView readmeMD
             ]
+            |> toUnstyled
     )
-        |> Dynamic
+        |> lazy
+        |> Static
 
 
 
