@@ -109,6 +109,10 @@ debugToggle devices model =
                 [ Css.right (Responsive.rhythm deviceProps 2)
                 , Css.top (Responsive.rhythm deviceProps 1)
                 ]
+        , if model then
+            Css.backgroundColor (Css.rgb 50 230 50) |> Css.important
+          else
+            Css.backgroundColor (Css.rgb 255 255 255)
         , Css.hover [ Css.backgroundColor (Css.rgb 50 210 50) ]
         , Css.padding2 (Css.px 5) (Css.px 10)
         , Css.margin (Css.px -5)
