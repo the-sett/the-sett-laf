@@ -4,40 +4,43 @@ import Css
 import Grid exposing (grid, row, col, sm, md, lg, xl)
 import Html.Styled exposing (styled, div, text, h1, p, h4, img, a)
 import Html.Styled.Attributes exposing (title, class, name, src)
-import Structure exposing (Template)
+import Structure exposing (Template(..))
 import Responsive exposing (deviceStyle, deviceStyles, rhythm)
 
 
 view : Template msg model
-view devices model =
-    div
-        []
-        [ a [ name "cards" ] []
-        , styled h1
-            [ Css.textAlign Css.center ]
+view =
+    (\devices model ->
+        div
             []
-            [ text "Cards" ]
-        , grid
-            []
-            [ row
+            [ a [ name "cards" ] []
+            , styled h1
+                [ Css.textAlign Css.center ]
                 []
-                [ col devices
-                    [ { sm | columns = 6 }
-                    , { md | columns = 4, offset = 2 }
-                    , { lg | columns = 3, offset = 3 }
-                    ]
+                [ text "Cards" ]
+            , grid
+                []
+                [ row
                     []
-                    [ card devices "Card1" "images/more-from-4.png" ]
-                , col devices
-                    [ { sm | columns = 6 }
-                    , { md | columns = 4 }
-                    , { lg | columns = 3 }
+                    [ col devices
+                        [ { sm | columns = 6 }
+                        , { md | columns = 4, offset = 2 }
+                        , { lg | columns = 3, offset = 3 }
+                        ]
+                        []
+                        [ card devices "Card1" "images/more-from-4.png" ]
+                    , col devices
+                        [ { sm | columns = 6 }
+                        , { md | columns = 4 }
+                        , { lg | columns = 3 }
+                        ]
+                        []
+                        [ card devices "Card2" "images/more-from-3.png" ]
                     ]
-                    []
-                    [ card devices "Card2" "images/more-from-3.png" ]
                 ]
             ]
-        ]
+    )
+        |> Dynamic
 
 
 card devices title imgSrc =

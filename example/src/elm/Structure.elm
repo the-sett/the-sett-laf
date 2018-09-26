@@ -1,4 +1,4 @@
-module Structure exposing (Template, Layout)
+module Structure exposing (Template(..), Layout)
 
 {-| Defines the structure of a reactive application as layouts applied to templates.
 
@@ -14,8 +14,9 @@ import Responsive exposing (DeviceStyles)
 {-| Defines the type of a template. A template takes a link builder, an editor and
 some content and produces Html.
 -}
-type alias Template msg model =
-    DeviceStyles -> model -> Html msg
+type Template msg model
+    = Dynamic (DeviceStyles -> model -> Html msg)
+    | Static (DeviceStyles -> Html msg)
 
 
 {-| Defines the type of a layout. A layout is a higher level template; it takes a

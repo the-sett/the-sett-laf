@@ -7,20 +7,23 @@ import Html.Styled.Attributes exposing (title, class, name)
 import Markdown.Block as Block exposing (Block)
 import Markdown.Config exposing (HtmlOption(..), defaultOptions, defaultSanitizeOptions)
 import Markdown.Inline as Inline
-import Structure exposing (Template)
+import Structure exposing (Template(..))
 
 
 view : Template msg model
-view devices model =
-    div
-        []
-        [ a [ name "markdown" ] []
-        , styled h1
-            [ Css.textAlign Css.center ]
+view =
+    (\devices model ->
+        div
             []
-            [ text "Markdown" ]
-        , markdownView readmeMD
-        ]
+            [ a [ name "markdown" ] []
+            , styled h1
+                [ Css.textAlign Css.center ]
+                []
+                [ text "Markdown" ]
+            , markdownView readmeMD
+            ]
+    )
+        |> Dynamic
 
 
 

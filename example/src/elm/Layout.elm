@@ -7,26 +7,34 @@ import Html.Styled.Attributes exposing (attribute, class, href, id, type_, check
 import Html.Styled.Events exposing (onClick)
 import Logo exposing (logo)
 import Responsive exposing (DeviceStyles)
-import Structure exposing (Template, Layout)
+import Structure exposing (Template(..), Layout)
 import State exposing (Model, Msg(..))
 import Svg.Styled
 import TheSettLaf exposing (wrapper)
 
 
 layout : Layout Msg Model
-layout template devices model =
-    pageBody template devices model
+layout template =
+    pageBody template
 
 
-pageBody : Template Msg Model -> DeviceStyles -> Model -> Html Msg
-pageBody template devices model =
-    div
-        []
-        [ debugToggle devices model
-        , topHeader devices model
-        , template devices model
-        , footer devices
-        ]
+pageBody : Template Msg Model -> Template Msg Model
+pageBody template =
+    (\devices model ->
+        div
+            []
+            [ debugToggle devices model
+            , topHeader devices model
+            , case template of
+                Dynamic fn ->
+                    fn devices model
+
+                Static fn ->
+                    fn devices
+            , footer devices
+            ]
+    )
+        |> Dynamic
 
 
 topHeader : DeviceStyles -> Model -> Html Msg

@@ -6,26 +6,29 @@ import Html.Styled exposing (styled, h1, h4, text, div, a, li, ul)
 import Html.Styled.Attributes exposing (title, class, name, src, href)
 import Logo exposing (logo)
 import Svg.Styled
-import Structure exposing (Template)
+import Structure exposing (Template(..))
 import Responsive exposing (deviceStyle, rhythm)
 
 
 view : Template msg model
-view devices model =
-    div
-        []
-        [ a [ name "grids" ] []
-        , styled h1
-            [ Css.textAlign Css.center ]
+view =
+    (\devices model ->
+        div
             []
-            [ text "Grids" ]
-        , h4 [] [ text "Column Widths" ]
-        , gridn devices widths
-        , h4 [] [ text "Column Offsets" ]
-        , gridn devices offsets
-        , h4 [] [ text "Centered" ]
-        , gridn devices centered
-        ]
+            [ a [ name "grids" ] []
+            , styled h1
+                [ Css.textAlign Css.center ]
+                []
+                [ text "Grids" ]
+            , h4 [] [ text "Column Widths" ]
+            , gridn devices widths
+            , h4 [] [ text "Column Offsets" ]
+            , gridn devices offsets
+            , h4 [] [ text "Centered" ]
+            , gridn devices centered
+            ]
+    )
+        |> Dynamic
 
 
 red el =

@@ -12,6 +12,7 @@ import Layout
 import Logo
 import MkDown
 import State exposing (Model, Msg(..))
+import Structure exposing (Template(..))
 import TheSettLaf exposing (fonts, responsiveMeta, devices)
 import Typography
 
@@ -50,16 +51,21 @@ styledView model =
             [ responsiveMeta
             , fonts
             , TheSettLaf.style devices
-            , (Layout.layout <|
-                Body.view
-                    [ Typography.view
-                    , GridDemo.view
-                    , Cards.view
-                    , MkDown.view
-                    ]
-              )
-                devices
-                model
+            , case
+                (Layout.layout <|
+                    Body.view
+                        [ Typography.view
+                        , GridDemo.view
+                        , Cards.view
+                        , MkDown.view
+                        ]
+                )
+              of
+                Dynamic fn ->
+                    fn devices model
+
+                Static fn ->
+                    fn devices
             ]
 
         debugStyle =
