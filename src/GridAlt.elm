@@ -29,16 +29,8 @@ type Builder a
     = Builder Device Grid (Grid -> List Css.Style)
 
 
+applyDevice : Device -> List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
 applyDevice device builders =
-    -- List.map
-    --     (\buildFn ->
-    --         (\grid ->
-    --             case ((buildFn device) grid) of
-    --                 Builder _ grid styleFn ->
-    --                     styleFn grid
-    --         )
-    --     )
-    --     builders
     List.map (\buildFn -> buildFn device) builders
 
 
@@ -89,18 +81,32 @@ fixed styles device grid =
 
 
 
--- Works differently on column and grid.
+-- Should work differently on column and grid.
 -- On grid, sets the number of columns, on column sets width to fraction of columns.
 
 
 columns : Float -> Device -> Grid -> Builder { a | row : Never }
 columns n =
-    empty
+    if n > 0 then
+        fixed
+            [ flexBasis (pct (n / 12 * 100))
+            , maxWidth (pct (n / 12 * 100))
+            ]
+    else
+        fixed
+            [ flexBasis (pct (n / 12 * 100))
+            , maxWidth (pct 100)
+            , flexGrow (num 1)
+            ]
 
 
 offset : Float -> Device -> Grid -> Builder { a | grid : Never, row : Never }
 offset n =
-    empty
+    if n > 0 then
+        fixed
+            [ marginLeft (pct (n / 12 * 100)) ]
+    else
+        empty
 
 
 start : Device -> Grid -> Builder { a | grid : Never, col : Never }
