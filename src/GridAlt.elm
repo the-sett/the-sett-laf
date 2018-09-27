@@ -19,71 +19,91 @@ type Compatible
     = Compatible
 
 
-type Grid a
+type Grid
     = Grid
     | Row
     | Column
 
 
-type alias Builder a =
-    Device -> Grid a -> List Css.Style
+type Builder a
+    = Builder Device Grid (Grid -> List Css.Style)
 
 
-sm : List (Builder a) -> List (Grid a -> List Style)
+applyDevice device builders =
+    -- List.map
+    --     (\buildFn ->
+    --         (\grid ->
+    --             case ((buildFn device) grid) of
+    --                 Builder _ grid styleFn ->
+    --                     styleFn grid
+    --         )
+    --     )
+    --     builders
+    List.map (\buildFn -> buildFn device) builders
+
+
+sm : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
 sm builders =
-    List.map (\builder -> builder Sm) builders
+    applyDevice Sm builders
 
 
-md : List (Builder a) -> List (Grid a -> List Style)
+md : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
 md builders =
-    List.map (\builder -> builder Md) builders
+    applyDevice Md builders
 
 
-lg : List (Builder a) -> List (Grid a -> List Style)
+lg : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
 lg builders =
-    List.map (\builder -> builder Lg) builders
+    applyDevice Lg builders
 
 
-xl : List (Builder a) -> List (Grid a -> List Style)
+xl : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
 xl builders =
-    List.map (\builder -> builder Xl) builders
+    applyDevice Xl builders
 
 
-grid : List (List (Grid { a | grid : Compatible } -> List Style)) -> List b -> List c -> DeviceStyles -> ()
+grid : List (List (Grid -> Builder { a | grid : Compatible })) -> List b -> List c -> DeviceStyles -> ()
 grid _ _ _ _ =
     ()
 
 
-row : List (List (Grid { a | row : Compatible } -> List Style)) -> List b -> List c -> ()
+row : List (List (Grid -> Builder { a | row : Compatible })) -> List b -> List c -> ()
 row _ _ _ =
     ()
 
 
-col : List (List (Grid { a | col : Compatible } -> List Style)) -> List b -> List c -> ()
+col : List (List (Grid -> Builder { a | col : Compatible })) -> List b -> List c -> ()
 col _ _ _ =
+    -- Applies mapMaybeDeviceSpec - If device matches the builder output, or [] if not.
     ()
 
 
+empty : Device -> Grid -> Builder a
 empty =
-    (\grid devices -> [])
+    (\device grid -> Builder device grid (always []))
 
 
-fixed : List Css.Style -> Builder a
-fixed styles _ _ =
-    styles
+fixed : List Css.Style -> Device -> Grid -> Builder a
+fixed styles device grid =
+    Builder device grid (always styles)
 
 
-columns : Float -> Builder { a | row : Never }
+
+-- Works differently on column and grid.
+-- On grid, sets the number of columns, on column sets width to fraction of columns.
+
+
+columns : Float -> Device -> Grid -> Builder { a | row : Never }
 columns n =
     empty
 
 
-offset : Float -> Builder { a | grid : Never, row : Never }
+offset : Float -> Device -> Grid -> Builder { a | grid : Never, row : Never }
 offset n =
     empty
 
 
-start : Builder { a | grid : Never, col : Never }
+start : Device -> Grid -> Builder { a | grid : Never, col : Never }
 start =
     fixed
         [ justifyContent flexStart
@@ -91,7 +111,7 @@ start =
         ]
 
 
-end : Builder { a | grid : Never, col : Never }
+end : Device -> Grid -> Builder { a | grid : Never, col : Never }
 end =
     fixed
         [ justifyContent flexEnd
@@ -99,7 +119,7 @@ end =
         ]
 
 
-center : Builder { a | grid : Never, col : Never }
+center : Device -> Grid -> Builder { a | grid : Never, col : Never }
 center =
     fixed
         [ justifyContent Css.center
@@ -107,50 +127,52 @@ center =
         ]
 
 
-around : Builder { a | grid : Never, col : Never }
+around : Device -> Grid -> Builder { a | grid : Never, col : Never }
 around =
     fixed [ justifyContent spaceAround ]
 
 
-between : Builder { a | grid : Never, col : Never }
+between : Device -> Grid -> Builder { a | grid : Never, col : Never }
 between =
     fixed [ justifyContent spaceBetween ]
 
 
-reverse : Builder { a | grid : Never }
-reverse _ grid =
-    case grid of
-        Row ->
-            [ flexDirection rowReverse ]
+reverse : Device -> Grid -> Builder { a | grid : Never }
+reverse device grid =
+    Builder device grid <|
+        \grid ->
+            case grid of
+                Row ->
+                    [ flexDirection rowReverse ]
 
-        Column ->
-            [ flexDirection columnReverse ]
+                Column ->
+                    [ flexDirection columnReverse ]
 
-        _ ->
-            []
+                _ ->
+                    []
 
 
-top : Builder { a | grid : Never, row : Never }
+top : Device -> Grid -> Builder { a | grid : Never, row : Never }
 top =
     fixed [ alignItems flexStart ]
 
 
-middle : Builder { a | grid : Never, row : Never }
+middle : Device -> Grid -> Builder { a | grid : Never, row : Never }
 middle =
     fixed [ alignItems Css.center ]
 
 
-bottom : Builder { a | grid : Never, row : Never }
+bottom : Device -> Grid -> Builder { a | grid : Never, row : Never }
 bottom =
     fixed [ alignItems flexEnd ]
 
 
-first : Builder { a | grid : Never }
+first : Device -> Grid -> Builder { a | grid : Never }
 first =
     fixed [ order (num -1) ]
 
 
-last : Builder { a | grid : Never }
+last : Device -> Grid -> Builder { a | grid : Never }
 last =
     fixed [ order (num 1) ]
 
