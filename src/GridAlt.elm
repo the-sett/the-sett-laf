@@ -34,6 +34,11 @@ applyDevice device builders =
     List.map (\buildFn -> buildFn device) builders
 
 
+
+--sm : List (Grid a -> List Css.Style) -> Builder a
+-- where Builder a = Builder Device (Grid a -> List Css.stlye)
+
+
 sm : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
 sm builders =
     applyDevice Sm builders
