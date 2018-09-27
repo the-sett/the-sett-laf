@@ -1,7 +1,7 @@
 module GridAlt exposing (..)
 
 import Css exposing (..)
-import Html.Styled exposing (styled, div, Html, Attribute)
+import Html.Styled exposing (styled, div, Html, Attribute, text)
 import Responsive
     exposing
         ( Device(..)
@@ -59,20 +59,47 @@ xl builders =
     applyDevice Xl builders
 
 
-grid : List (List (Grid -> Builder { a | grid : Compatible })) -> List b -> List c -> DeviceStyles -> ()
-grid _ _ _ _ =
-    ()
+type alias GridT a msg =
+    List (List (Grid -> Builder { a | grid : Compatible })) -> List (Attribute msg) -> List (DeviceStyles -> Html msg) -> DeviceStyles -> Html msg
 
 
-row : List (List (Grid -> Builder { a | row : Compatible })) -> List b -> List c -> ()
-row _ _ _ =
-    ()
+grid : GridT a msg
+grid builders attributes innerHtml deviceStyles =
+    let
+        flatBuilders =
+            List.concat builders
+                |> List.map (\gridFn -> gridFn Column)
+    in
+        div [] (List.map (\deviceStyleFn -> deviceStyleFn deviceStyles) innerHtml)
 
 
-col : List (List (Grid -> Builder { a | col : Compatible })) -> List b -> List c -> ()
-col _ _ _ =
-    -- Applies mapMaybeDeviceSpec - If device matches the builder output, or [] if not.
-    ()
+type alias RowT a msg =
+    List (List (Grid -> Builder { a | row : Compatible })) -> List (Attribute msg) -> List (DeviceStyles -> Html msg) -> DeviceStyles -> Html msg
+
+
+row : RowT a msg
+row builders attributes innerHtml deviceStyles =
+    let
+        flatBuilders =
+            List.concat builders
+                |> List.map (\gridFn -> gridFn Column)
+    in
+        div [] (List.map (\deviceStyleFn -> deviceStyleFn deviceStyles) innerHtml)
+
+
+type alias ColT a msg =
+    List (List (Grid -> Builder { a | col : Compatible })) -> List (Attribute msg) -> List (Html msg) -> DeviceStyles -> Html msg
+
+
+col : ColT a msg
+col builders attributes innerHtml deviceStyles =
+    let
+        flatBuilders =
+            List.concat builders
+                |> List.map (\gridFn -> gridFn Column)
+    in
+        -- Should apply mapMaybeDeviceSpec - If device matches the builder output, or [] if not.
+        div [] innerHtml
 
 
 empty : Device -> Grid -> Builder a
