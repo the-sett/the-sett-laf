@@ -55,7 +55,7 @@ widths n =
 
 
 offsets n =
-    col [ sm [ columns 1, offset <| n - 1, red ] ] [] [ text "cell" ]
+    col [ sm [ columns <| 13 - n, offset <| n - 1, red ] ] [] [ text "cell" ]
 
 
 
