@@ -22,11 +22,13 @@ view =
                 []
                 [ text "Grids" ]
             , h4 [] [ text "Column Widths" ]
-            , gridn devices [] widths
+            , gridn devices widths
             , h4 [] [ text "Column Offsets" ]
-            , gridn devices [] offsets
+            , gridn devices offsets
             , h4 [] [ text "Centered" ]
-            , gridn devices centered widths
+            , gridn devices centered
+            , h4 [] [ text "End" ]
+            , gridn devices end
             ]
             |> toUnstyled
     )
@@ -34,41 +36,45 @@ view =
         |> Static
 
 
-
--- Row generating functions
-
-
-centered =
-    [ sm [ center ] ]
-
-
-
--- Column generating functions
-
-
 red =
     styles [ Css.backgroundColor <| Css.rgb 240 100 100 ]
 
 
+
+-- Row generating functions
+
+
 widths n =
-    col [ sm [ columns n, red ] ] [] [ text "cell" ]
+    row []
+        []
+        [ col [ sm [ columns n, red ] ] [] [ text "cell" ] ]
 
 
 offsets n =
-    col [ sm [ columns <| 13 - n, offset <| n - 1, red ] ] [] [ text "cell" ]
+    row []
+        []
+        [ col [ sm [ columns <| 13 - n, offset <| n - 1, red ] ] [] [ text "cell" ] ]
+
+
+centered n =
+    row [ sm [ center ] ]
+        []
+        [ col [ sm [ columns n, red ] ] [] [ text "cell" ] ]
+
+
+end n =
+    row [ sm [ Grid.end ] ]
+        []
+        [ col [ sm [ columns n, red ] ] [] [ text "cell" ] ]
 
 
 
 -- Grid generating functions
 
 
-gridn devices rowProps cellFn =
+gridn devices rowFn =
     grid
         []
         []
-        [ row
-            rowProps
-            []
-            (List.map cellFn <| List.map toFloat <| List.range 1 12)
-        ]
+        (List.map rowFn <| List.map toFloat <| List.range 1 12)
         devices
