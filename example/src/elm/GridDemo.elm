@@ -1,7 +1,7 @@
 module GridDemo exposing (view)
 
 import Css
-import Grid exposing (grid, row, col, sm, md, lg, xl, HAlign(..), VAlign(..))
+import GridAlt exposing (grid, row, col, sm, md, lg, xl, center, columns, offset)
 import Html.Styled exposing (styled, h1, h4, text, div, a, li, ul, toUnstyled)
 import Html.Styled.Attributes exposing (title, class, name, src, href)
 import Html.Styled.Lazy exposing (lazy)
@@ -22,11 +22,11 @@ view =
                 []
                 [ text "Grids" ]
             , h4 [] [ text "Column Widths" ]
-            , gridn devices widths
+            , gridn devices [] widths
             , h4 [] [ text "Column Offsets" ]
-            , gridn devices offsets
+            , gridn devices [] offsets
             , h4 [] [ text "Centered" ]
-            , gridn devices centered
+            , gridn devices centered widths
             ]
             |> toUnstyled
     )
@@ -34,49 +34,37 @@ view =
         |> Static
 
 
-red el =
-    styled el
-        [ Css.backgroundColor (Css.rgb 255 50 50) ]
+
+-- Row generating functions
 
 
-centered devices n =
-    red
-        (col devices
-            [ { sm | columns = n, halign = Center }
-            ]
-        )
-        []
-        [ text "cell" ]
+centered =
+    [ sm [ center ] ]
 
 
-widths devices n =
-    red
-        (col devices
-            [ { sm | columns = n }
-            ]
-        )
-        []
-        [ text "cell" ]
+
+-- Column generating functions
 
 
-offsets devices n =
-    red
-        (col devices
-            [ { sm | columns = 1, offset = n - 1 }
-            ]
-        )
-        []
-        [ text "cell" ]
+widths n =
+    col [ sm [ columns n ] ] [] [ text "cell" ]
 
 
-gridn devices cellFn =
+offsets n =
+    col [ sm [ columns 1, offset <| n - 1 ] ] [] [ text "cell" ]
+
+
+
+-- Grid generating functions
+
+
+gridn devices rowProps cellFn =
     grid
         []
-        (List.map
-            (\n ->
-                row
-                    []
-                    [ (cellFn devices n) ]
-            )
-            (List.range 1 12)
-        )
+        []
+        [ row
+            rowProps
+            []
+            (List.map cellFn <| List.map toFloat <| List.range 1 12)
+        ]
+        devices
