@@ -303,24 +303,3 @@ first =
 last : Device -> Grid -> Builder { a | grid : Never }
 last =
     fixed [ order (num 1) ]
-
-
-ex devices =
-    grid
-        [ sm [ columns 12 ]
-        ]
-        []
-        [ row
-            [ sm [ center ]
-            , lg [ start ]
-            ]
-            []
-            [ col
-                [ sm [ columns 1, offset 1 ]
-                , md [ columns 2, offset 2 ]
-                ]
-                []
-                []
-            ]
-        ]
-        devices
