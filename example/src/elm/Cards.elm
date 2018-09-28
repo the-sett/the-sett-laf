@@ -28,14 +28,12 @@ view =
                     [ col
                         [ sm [ columns 6 ]
                         , md [ columns 4, offset 2 ]
-                        , lg [ columns 3, offset 3 ]
                         ]
                         []
                         [ card devices "Card1" "images/more-from-4.png" ]
                     , col
                         [ sm [ columns 6 ]
                         , md [ columns 4 ]
-                        , lg [ columns 3 ]
                         ]
                         []
                         [ card devices "Card2" "images/more-from-3.png" ]
