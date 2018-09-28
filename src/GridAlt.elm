@@ -85,7 +85,13 @@ grid builders attributes innerHtml devices =
             List.concat builders
                 |> List.map (\gridFn -> gridFn Column)
     in
-        (styled div) [ styles flatBuilders devices ] [] (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
+        (styled div)
+            [ marginRight auto
+            , marginLeft auto
+            , styles flatBuilders devices
+            ]
+            []
+            (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
 
 
 type alias RowT a msg =
@@ -99,7 +105,16 @@ row builders attributes innerHtml devices =
             List.concat builders
                 |> List.map (\gridFn -> gridFn Column)
     in
-        (styled div) [ styles flatBuilders devices ] [] (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
+        (styled div)
+            [ boxSizing borderBox
+            , displayFlex
+            , property "flex" "0 1 auto"
+            , flexDirection Css.row
+            , flexWrap wrap
+            , styles flatBuilders devices
+            ]
+            []
+            (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
 
 
 type alias ColT a msg =
