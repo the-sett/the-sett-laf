@@ -12,6 +12,7 @@ module Grid
           -- Grid attributes
         , styles
         , columns
+        , auto
         , offset
         , start
         , end
@@ -28,32 +29,32 @@ module Grid
 
 import Css
     exposing
-        ( num
-        , alignItems
-        , boxSizing
-        , wrap
-        , borderBox
-        , marginLeft
-        , flexBasis
-        , flexShrink
-        , flexWrap
-        , property
+        ( alignItems
         , auto
-        , displayFlex
-        , marginRight
-        , order
-        , flexEnd
-        , flexStart
-        , flexDirection
-        , flexGrow
-        , rowReverse
+        , borderBox
+        , boxSizing
         , columnReverse
+        , displayFlex
+        , flexBasis
+        , flexDirection
+        , flexEnd
+        , flexGrow
+        , flexShrink
+        , flexStart
+        , flexWrap
         , justifyContent
-        , spaceBetween
-        , spaceAround
-        , textAlign
-        , pct
+        , marginLeft
+        , marginRight
         , maxWidth
+        , num
+        , order
+        , pct
+        , property
+        , rowReverse
+        , spaceAround
+        , spaceBetween
+        , textAlign
+        , wrap
         )
 import Html.Styled exposing (styled, div, Html, Attribute, text)
 import Responsive
@@ -140,8 +141,8 @@ grid builders attributes innerHtml devices =
                 |> List.map (\gridFn -> gridFn Column)
     in
         (styled div)
-            [ marginRight auto
-            , marginLeft auto
+            [ marginRight Css.auto
+            , marginLeft Css.auto
             , applyDevicesToBuilders flatBuilders devices
             ]
             []
@@ -206,6 +207,10 @@ styles styles device grid =
 
 -- Should work differently on column and grid.
 -- On grid, sets the number of columns, on column sets width to fraction of columns.
+
+
+auto =
+    columns 0
 
 
 columns : Float -> Device -> Grid -> Builder { a | row : Never }
