@@ -76,5 +76,5 @@ gridn devices rowFn =
     grid
         []
         []
-        (List.map rowFn <| List.map toFloat <| List.range 1 12)
+        (List.map rowFn <| List.map toFloat <| List.filter (\v -> v % 3 == 0) <| List.range 1 12)
         devices
