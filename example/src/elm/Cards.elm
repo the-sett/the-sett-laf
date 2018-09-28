@@ -63,7 +63,7 @@ card devices title imgSrc =
             ]
             []
             [ styled img
-                [ Css.maxHeight (Css.pct 100)
+                [ Css.height (Css.pct 100)
                 , Css.width (Css.pct 100)
                 ]
                 [ src imgSrc ]
