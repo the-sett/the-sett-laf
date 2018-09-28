@@ -129,7 +129,14 @@ col builders attributes innerHtml devices =
             List.concat builders
                 |> List.map (\gridFn -> gridFn Column)
     in
-        (styled div) [ styles flatBuilders devices ] [] innerHtml
+        (styled div)
+            [ boxSizing borderBox
+            , flexShrink (num 0)
+            , flexGrow (num 0)
+            , styles flatBuilders devices
+            ]
+            []
+            innerHtml
 
 
 empty : Device -> Grid -> Builder a
