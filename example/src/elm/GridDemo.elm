@@ -1,7 +1,7 @@
 module GridDemo exposing (view)
 
 import Css
-import Grid exposing (grid, row, col, sm, md, lg, xl, center, columns, offset)
+import Grid exposing (grid, row, col, sm, md, lg, xl, center, columns, offset, styles)
 import Html.Styled exposing (styled, h1, h4, text, div, a, li, ul, toUnstyled)
 import Html.Styled.Attributes exposing (title, class, name, src, href)
 import Html.Styled.Lazy exposing (lazy)
@@ -46,12 +46,16 @@ centered =
 -- Column generating functions
 
 
+red =
+    styles [ Css.backgroundColor <| Css.rgb 240 100 100 ]
+
+
 widths n =
-    col [ sm [ columns n ] ] [] [ text "cell" ]
+    col [ sm [ columns n, red ] ] [] [ text "cell" ]
 
 
 offsets n =
-    col [ sm [ columns 1, offset <| n - 1 ] ] [] [ text "cell" ]
+    col [ sm [ columns 1, offset <| n - 1, red ] ] [] [ text "cell" ]
 
 
 

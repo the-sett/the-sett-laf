@@ -54,7 +54,7 @@ topHeader devices model =
             ]
             []
             [ row
-                [ sm [ center ] ]
+                []
                 []
                 [ col
                     [ sm
@@ -78,7 +78,7 @@ topHeader devices model =
                     ]
                 , col
                     [ sm [ columns 12 ]
-                    , md [ columns 10 ]
+                    , md [ columns 10, center ]
                     ]
                     []
                     [ styled ul

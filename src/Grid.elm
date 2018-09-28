@@ -232,7 +232,7 @@ offset n =
         empty
 
 
-start : Device -> Grid -> Builder { a | grid : Never, col : Never }
+start : Device -> Grid -> Builder { a | grid : Never }
 start =
     styles
         [ justifyContent flexStart
@@ -240,7 +240,7 @@ start =
         ]
 
 
-end : Device -> Grid -> Builder { a | grid : Never, col : Never }
+end : Device -> Grid -> Builder { a | grid : Never }
 end =
     styles
         [ justifyContent flexEnd
@@ -248,7 +248,7 @@ end =
         ]
 
 
-center : Device -> Grid -> Builder { a | grid : Never, col : Never }
+center : Device -> Grid -> Builder { a | grid : Never }
 center =
     styles
         [ justifyContent Css.center
