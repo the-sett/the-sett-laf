@@ -1,8 +1,7 @@
 module Grid exposing (..)
 
-import Maybe.Extra
 import Css exposing (..)
-import Html.Styled exposing (styled, div, Html, Attribute)
+import Html.Styled exposing (styled, div, Html, Attribute, text)
 import Responsive
     exposing
         ( Device(..)
@@ -16,253 +15,259 @@ import Responsive
         )
 
 
-type alias ColLayout =
-    { device : Device
-    , columns : Int
-    , offset : Int
-    , halign : HAlign
-    , valign : VAlign
-    }
+type Compatible
+    = Compatible
 
 
-type alias RowLayout =
-    { device : Device
-    , halign : HAlign
-    , valign : VAlign
-    }
+type Grid
+    = Grid
+    | Row
+    | Column
 
 
-type HAlign
-    = Start
-    | Center
-    | End
-    | Around
-    | Between
-    | NoHAlign
+type Builder a
+    = Builder Device Grid (Grid -> List Css.Style)
 
 
-type VAlign
-    = Top
-    | Middle
-    | Bottom
-    | NoVAlign
+applyDevice : Device -> List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+applyDevice device builders =
+    List.map (\buildFn -> buildFn device) builders
 
 
-defaultColLayout =
-    { device = Sm
-    , columns = 0
-    , offset = 0
-    , halign = NoHAlign
-    , valign = NoVAlign
-    }
+
+--sm : List (Grid a -> List Css.Style) -> Builder a
+-- where Builder a = Builder Device (Grid a -> List Css.stlye)
 
 
-sm =
-    { defaultColLayout
-        | device = Sm
-    }
+sm : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+sm builders =
+    applyDevice Sm builders
 
 
-md =
-    { defaultColLayout
-        | device = Md
-    }
+md : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+md builders =
+    applyDevice Md builders
 
 
-lg =
-    { defaultColLayout
-        | device = Lg
-    }
+lg : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+lg builders =
+    applyDevice Lg builders
 
 
-xl =
-    { defaultColLayout
-        | device = Xl
-    }
+xl : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+xl builders =
+    applyDevice Xl builders
 
 
-type alias ColSpec =
-    DeviceSpec (Maybe ColLayout)
-
-
-toColSpec : List ColLayout -> ColSpec
-toColSpec layouts =
-    List.foldl
-        (\layout accum ->
-            case layout.device of
-                Sm ->
-                    { accum | sm = Just layout }
-
-                Md ->
-                    { accum | md = Just layout }
-
-                Lg ->
-                    { accum | lg = Just layout }
-
-                Xl ->
-                    { accum | xl = Just layout }
+styles buildersList devices =
+    deviceStyles devices
+        (\base ->
+            List.map
+                (\(Builder device grid fn) ->
+                    if device == base.device then
+                        fn grid
+                    else
+                        []
+                )
+                buildersList
+                |> List.concat
         )
-        { sm = Nothing, md = Nothing, lg = Nothing, xl = Nothing }
-        layouts
 
 
-grid =
-    styled div
-        [ marginRight auto
-        , marginLeft auto
-        ]
+type alias GridT a msg =
+    List (List (Grid -> Builder { a | grid : Compatible })) -> List (Attribute msg) -> List (DeviceStyles -> Html msg) -> DeviceStyles -> Html msg
 
 
-row =
-    styled div
-        [ boxSizing borderBox
-        , displayFlex
-        , property "flex" "0 1 auto"
-        , flexDirection Css.row
-        , flexWrap wrap
-        ]
-
-
-reverseRow =
-    [ flexDirection rowReverse
-    ]
-
-
-reverseCol =
-    [ flexDirection columnReverse ]
-
-
-col : DeviceStyles -> List ColLayout -> List (Attribute msg) -> List (Html msg) -> Html msg
-col devices layouts =
+grid : GridT a msg
+grid builders attributes innerHtml devices =
     let
-        colSpec =
-            toColSpec layouts
-
-        style devices =
-            deviceStyles devices <|
-                \deviceProps ->
-                    mapMaybeDeviceSpec
-                        (\layout ->
-                            (if deviceProps.device == layout.device then
-                                List.concat
-                                    [ colWidth layout
-                                    , offset layout
-                                    , halign layout
-                                    , valign layout
-                                    ]
-                             else
-                                []
-                            )
-                                |> Css.batch
-                        )
-                        colSpec
+        flatBuilders =
+            List.concat builders
+                |> List.map (\gridFn -> gridFn Column)
     in
-        styled div
+        (styled div)
+            [ marginRight auto
+            , marginLeft auto
+            , styles flatBuilders devices
+            ]
+            []
+            (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
+
+
+type alias RowT a msg =
+    List (List (Grid -> Builder { a | row : Compatible })) -> List (Attribute msg) -> List (DeviceStyles -> Html msg) -> DeviceStyles -> Html msg
+
+
+row : RowT a msg
+row builders attributes innerHtml devices =
+    let
+        flatBuilders =
+            List.concat builders
+                |> List.map (\gridFn -> gridFn Column)
+    in
+        (styled div)
+            [ boxSizing borderBox
+            , displayFlex
+            , property "flex" "0 1 auto"
+            , flexDirection Css.row
+            , flexWrap wrap
+            , styles flatBuilders devices
+            ]
+            []
+            (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
+
+
+type alias ColT a msg =
+    List (List (Grid -> Builder { a | col : Compatible })) -> List (Attribute msg) -> List (Html msg) -> DeviceStyles -> Html msg
+
+
+col : ColT a msg
+col builders attributes innerHtml devices =
+    let
+        flatBuilders : List (Builder { a | col : Compatible })
+        flatBuilders =
+            List.concat builders
+                |> List.map (\gridFn -> gridFn Column)
+    in
+        (styled div)
             [ boxSizing borderBox
             , flexShrink (num 0)
             , flexGrow (num 0)
-            , style devices
+            , styles flatBuilders devices
+            ]
+            []
+            innerHtml
+
+
+empty : Device -> Grid -> Builder a
+empty =
+    (\device grid -> Builder device grid (always []))
+
+
+fixed : List Css.Style -> Device -> Grid -> Builder a
+fixed styles device grid =
+    Builder device grid (always styles)
+
+
+
+-- Should work differently on column and grid.
+-- On grid, sets the number of columns, on column sets width to fraction of columns.
+
+
+columns : Float -> Device -> Grid -> Builder { a | row : Never }
+columns n =
+    if n > 0 then
+        fixed
+            [ flexBasis (pct (n / 12 * 100))
+            , maxWidth (pct (n / 12 * 100))
+            ]
+    else
+        fixed
+            [ flexBasis (pct (n / 12 * 100))
+            , maxWidth (pct 100)
+            , flexGrow (num 1)
             ]
 
 
-colWidth layout =
-    if layout.columns == 0 then
-        [ flexBasis (pct ((toFloat layout.columns) / 12 * 100))
-        , maxWidth (pct 100)
-        , flexGrow (num 1)
-        ]
+offset : Float -> Device -> Grid -> Builder { a | grid : Never, row : Never }
+offset n =
+    if n > 0 then
+        fixed
+            [ marginLeft (pct (n / 12 * 100)) ]
     else
-        [ flexBasis (pct ((toFloat layout.columns) / 12 * 100))
-        , maxWidth (pct ((toFloat layout.columns) / 12 * 100))
+        empty
+
+
+start : Device -> Grid -> Builder { a | grid : Never, col : Never }
+start =
+    fixed
+        [ justifyContent flexStart
+        , textAlign Css.start
         ]
 
 
-offset layout =
-    (if layout.offset > 0 then
-        [ marginLeft (pct ((toFloat layout.offset) / 12 * 100)) ]
-     else
-        []
-    )
-
-
-halign layout =
-    case layout.halign of
-        Start ->
-            start
-
-        Center ->
-            center
-
-        End ->
-            end
-
-        Around ->
-            around
-
-        Between ->
-            between
-
-        NoHAlign ->
-            []
-
-
-start =
-    [ justifyContent flexStart
-    , textAlign Css.start
-    ]
-
-
-center =
-    [ justifyContent Css.center
-    , textAlign Css.center
-    ]
-
-
+end : Device -> Grid -> Builder { a | grid : Never, col : Never }
 end =
-    [ justifyContent flexEnd
-    , textAlign Css.end
-    ]
+    fixed
+        [ justifyContent flexEnd
+        , textAlign Css.end
+        ]
 
 
+center : Device -> Grid -> Builder { a | grid : Never, col : Never }
+center =
+    fixed
+        [ justifyContent Css.center
+        , textAlign Css.center
+        ]
+
+
+around : Device -> Grid -> Builder { a | grid : Never, col : Never }
 around =
-    [ justifyContent spaceAround
-    ]
+    fixed [ justifyContent spaceAround ]
 
 
+between : Device -> Grid -> Builder { a | grid : Never, col : Never }
 between =
-    [ justifyContent spaceBetween ]
+    fixed [ justifyContent spaceBetween ]
 
 
-valign layout =
-    case layout.valign of
-        Top ->
-            top
+reverse : Device -> Grid -> Builder { a | grid : Never }
+reverse device grid =
+    Builder device grid <|
+        \grid ->
+            case grid of
+                Row ->
+                    [ flexDirection rowReverse ]
 
-        Middle ->
-            middle
+                Column ->
+                    [ flexDirection columnReverse ]
 
-        Bottom ->
-            bottom
-
-        NoVAlign ->
-            []
+                _ ->
+                    []
 
 
+top : Device -> Grid -> Builder { a | grid : Never, row : Never }
 top =
-    [ alignItems flexStart ]
+    fixed [ alignItems flexStart ]
 
 
+middle : Device -> Grid -> Builder { a | grid : Never, row : Never }
 middle =
-    [ alignItems Css.center ]
+    fixed [ alignItems Css.center ]
 
 
+bottom : Device -> Grid -> Builder { a | grid : Never, row : Never }
 bottom =
-    [ alignItems flexEnd ]
+    fixed [ alignItems flexEnd ]
 
 
+first : Device -> Grid -> Builder { a | grid : Never }
 first =
-    [ order (num -1) ]
+    fixed [ order (num -1) ]
 
 
+last : Device -> Grid -> Builder { a | grid : Never }
 last =
-    [ order (num 1) ]
+    fixed [ order (num 1) ]
+
+
+ex devices =
+    grid
+        [ sm [ columns 12 ]
+        ]
+        []
+        [ row
+            [ sm [ center ]
+            , lg [ start ]
+            ]
+            []
+            [ col
+                [ sm [ columns 1, offset 1 ]
+                , md [ columns 2, offset 2 ]
+                ]
+                []
+                []
+            ]
+        ]
+        devices

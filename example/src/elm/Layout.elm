@@ -1,7 +1,7 @@
 module Layout exposing (layout)
 
 import Css
-import Grid exposing (grid, row, col, sm, md, lg, xl, HAlign(..))
+import Grid exposing (grid, row, col, sm, md, lg, xl, columns)
 import Html.Styled exposing (Html, styled, node, text, div, button, a, nav, body, input, ul, li)
 import Html.Styled.Attributes exposing (attribute, class, href, id, type_, checked)
 import Html.Styled.Events exposing (onClick)
@@ -43,25 +43,28 @@ topHeader devices model =
         [ Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 6) (Css.px 0) (Css.rgba 0 0 0 0.75)
         ]
         []
-        [ styled grid
-            [ wrapper devices
-            , Responsive.deviceStyle devices <|
-                \deviceProps -> Css.height (Responsive.rhythm deviceProps 3)
-            ]
+        [ --styled
+          grid
+            -- [ wrapper devices
+            -- , Responsive.deviceStyle devices <|
+            --     \deviceProps -> Css.height (Responsive.rhythm deviceProps 3)
+            -- ]
             []
-            [ styled row
-                [ Css.alignItems Css.center ]
+            []
+            [ --styled
+              row
+                --[ Css.alignItems Css.center ]
                 []
-                [ styled
-                    (col devices
-                        [ { sm | columns = 1 } ]
-                    )
-                    [ Responsive.deviceStyles devices <|
-                        \deviceProps ->
-                            [ Css.height (Responsive.rhythm deviceProps (3))
-                            , Css.width (Responsive.rhythm deviceProps 3)
-                            ]
-                    ]
+                []
+                [ --styled
+                  col
+                    [ sm [ columns 1 ] ]
+                    -- [ Responsive.deviceStyles devices <|
+                    --     \deviceProps ->
+                    --         [ Css.height (Responsive.rhythm deviceProps (3))
+                    --         , Css.width (Responsive.rhythm deviceProps 3)
+                    --         ]
+                    -- ]
                     []
                     [ styled div
                         [ Css.height (Css.pct 90)
@@ -70,9 +73,9 @@ topHeader devices model =
                         []
                         [ Svg.Styled.fromUnstyled logo ]
                     ]
-                , col devices
-                    [ { sm | columns = 12, halign = Center }
-                    , { md | columns = 10 }
+                , col
+                    [ sm [ columns 12 ]
+                    , md [ columns 10 ]
                     ]
                     []
                     [ styled ul
@@ -98,6 +101,7 @@ topHeader devices model =
                     ]
                 ]
             ]
+            devices
         ]
 
 

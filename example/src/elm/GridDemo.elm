@@ -1,7 +1,7 @@
 module GridDemo exposing (view)
 
 import Css
-import GridAlt exposing (grid, row, col, sm, md, lg, xl, center, columns, offset)
+import Grid exposing (grid, row, col, sm, md, lg, xl, center, columns, offset)
 import Html.Styled exposing (styled, h1, h4, text, div, a, li, ul, toUnstyled)
 import Html.Styled.Attributes exposing (title, class, name, src, href)
 import Html.Styled.Lazy exposing (lazy)

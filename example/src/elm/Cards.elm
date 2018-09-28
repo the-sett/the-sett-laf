@@ -1,7 +1,7 @@
 module Cards exposing (view)
 
 import Css
-import Grid exposing (grid, row, col, sm, md, lg, xl)
+import Grid exposing (grid, row, col, sm, md, lg, xl, columns, offset)
 import Html.Styled exposing (styled, toUnstyled, div, i, text, h1, p, h4, img, a)
 import Html.Styled.Attributes exposing (title, class, name, src)
 import Html.Styled.Lazy exposing (lazy)
@@ -21,24 +21,27 @@ view =
                 [ text "Cards" ]
             , grid
                 []
+                []
                 [ row
                     []
-                    [ col devices
-                        [ { sm | columns = 6 }
-                        , { md | columns = 4, offset = 2 }
-                        , { lg | columns = 3, offset = 3 }
+                    []
+                    [ col
+                        [ sm [ columns 6 ]
+                        , md [ columns 4, offset 2 ]
+                        , lg [ columns 3, offset 3 ]
                         ]
                         []
                         [ card devices "Card1" "images/more-from-4.png" ]
-                    , col devices
-                        [ { sm | columns = 6 }
-                        , { md | columns = 4 }
-                        , { lg | columns = 3 }
+                    , col
+                        [ sm [ columns 6 ]
+                        , md [ columns 4 ]
+                        , lg [ columns 3 ]
                         ]
                         []
                         [ card devices "Card2" "images/more-from-3.png" ]
                     ]
                 ]
+                devices
             ]
             |> toUnstyled
     )
