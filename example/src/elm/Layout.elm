@@ -1,7 +1,7 @@
 module Layout exposing (layout)
 
 import Css
-import Grid exposing (grid, row, col, sm, md, lg, xl, columns)
+import Grid exposing (grid, row, col, sm, md, lg, xl, columns, center)
 import Html.Styled exposing (Html, styled, node, text, div, button, a, nav, body, input, ul, li)
 import Html.Styled.Attributes exposing (attribute, class, href, id, type_, checked)
 import Html.Styled.Events exposing (onClick)
@@ -53,8 +53,7 @@ topHeader devices model =
             []
             [ --styled
               row
-                --[ Css.alignItems Css.center ]
-                []
+                [ sm [ center ] ]
                 []
                 [ --styled
                   col
