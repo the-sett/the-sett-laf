@@ -27,7 +27,7 @@ main =
 
 
 init =
-    ( True, Cmd.none )
+    ( False, Cmd.none )
 
 
 subscriptions _ =
