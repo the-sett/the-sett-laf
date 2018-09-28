@@ -10,6 +10,7 @@ module Grid
         , row
         , col
           -- Grid attributes
+        , styles
         , columns
         , offset
         , start
@@ -112,7 +113,7 @@ xl builders =
     applyDevice Xl builders
 
 
-styles buildersList devices =
+applyDevicesToBuilders buildersList devices =
     deviceStyles devices
         (\base ->
             List.map
@@ -141,7 +142,7 @@ grid builders attributes innerHtml devices =
         (styled div)
             [ marginRight auto
             , marginLeft auto
-            , styles flatBuilders devices
+            , applyDevicesToBuilders flatBuilders devices
             ]
             []
             (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
@@ -164,7 +165,7 @@ row builders attributes innerHtml devices =
             , property "flex" "0 1 auto"
             , flexDirection Css.row
             , flexWrap wrap
-            , styles flatBuilders devices
+            , applyDevicesToBuilders flatBuilders devices
             ]
             []
             (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
@@ -186,7 +187,7 @@ col builders attributes innerHtml devices =
             [ boxSizing borderBox
             , flexShrink (num 0)
             , flexGrow (num 0)
-            , styles flatBuilders devices
+            , applyDevicesToBuilders flatBuilders devices
             ]
             []
             innerHtml
@@ -197,8 +198,8 @@ empty =
     (\device grid -> Builder device grid (always []))
 
 
-fixed : List Css.Style -> Device -> Grid -> Builder a
-fixed styles device grid =
+styles : List Css.Style -> Device -> Grid -> Builder a
+styles styles device grid =
     Builder device grid (always styles)
 
 
@@ -210,12 +211,12 @@ fixed styles device grid =
 columns : Float -> Device -> Grid -> Builder { a | row : Never }
 columns n =
     if n > 0 then
-        fixed
+        styles
             [ flexBasis (pct (n / 12 * 100))
             , maxWidth (pct (n / 12 * 100))
             ]
     else
-        fixed
+        styles
             [ flexBasis (pct (n / 12 * 100))
             , maxWidth (pct 100)
             , flexGrow (num 1)
@@ -225,7 +226,7 @@ columns n =
 offset : Float -> Device -> Grid -> Builder { a | grid : Never, row : Never }
 offset n =
     if n > 0 then
-        fixed
+        styles
             [ marginLeft (pct (n / 12 * 100)) ]
     else
         empty
@@ -233,7 +234,7 @@ offset n =
 
 start : Device -> Grid -> Builder { a | grid : Never, col : Never }
 start =
-    fixed
+    styles
         [ justifyContent flexStart
         , textAlign Css.start
         ]
@@ -241,7 +242,7 @@ start =
 
 end : Device -> Grid -> Builder { a | grid : Never, col : Never }
 end =
-    fixed
+    styles
         [ justifyContent flexEnd
         , textAlign Css.end
         ]
@@ -249,7 +250,7 @@ end =
 
 center : Device -> Grid -> Builder { a | grid : Never, col : Never }
 center =
-    fixed
+    styles
         [ justifyContent Css.center
         , textAlign Css.center
         ]
@@ -257,12 +258,12 @@ center =
 
 around : Device -> Grid -> Builder { a | grid : Never, col : Never }
 around =
-    fixed [ justifyContent spaceAround ]
+    styles [ justifyContent spaceAround ]
 
 
 between : Device -> Grid -> Builder { a | grid : Never, col : Never }
 between =
-    fixed [ justifyContent spaceBetween ]
+    styles [ justifyContent spaceBetween ]
 
 
 reverse : Device -> Grid -> Builder { a | grid : Never }
@@ -282,24 +283,24 @@ reverse device grid =
 
 top : Device -> Grid -> Builder { a | grid : Never, row : Never }
 top =
-    fixed [ alignItems flexStart ]
+    styles [ alignItems flexStart ]
 
 
 middle : Device -> Grid -> Builder { a | grid : Never, row : Never }
 middle =
-    fixed [ alignItems Css.center ]
+    styles [ alignItems Css.center ]
 
 
 bottom : Device -> Grid -> Builder { a | grid : Never, row : Never }
 bottom =
-    fixed [ alignItems flexEnd ]
+    styles [ alignItems flexEnd ]
 
 
 first : Device -> Grid -> Builder { a | grid : Never }
 first =
-    fixed [ order (num -1) ]
+    styles [ order (num -1) ]
 
 
 last : Device -> Grid -> Builder { a | grid : Never }
 last =
-    fixed [ order (num 1) ]
+    styles [ order (num 1) ]

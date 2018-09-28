@@ -1,7 +1,7 @@
 module Layout exposing (layout)
 
 import Css
-import Grid exposing (grid, row, col, sm, md, lg, xl, columns, center)
+import Grid exposing (grid, row, col, sm, md, lg, xl, columns, center, styles)
 import Html.Styled exposing (Html, styled, node, text, div, button, a, nav, body, input, ul, li)
 import Html.Styled.Attributes exposing (attribute, class, href, id, type_, checked)
 import Html.Styled.Events exposing (onClick)
@@ -43,27 +43,31 @@ topHeader devices model =
         [ Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 6) (Css.px 0) (Css.rgba 0 0 0 0.75)
         ]
         []
-        [ --styled
-          grid
-            -- [ wrapper devices
-            -- , Responsive.deviceStyle devices <|
-            --     \deviceProps -> Css.height (Responsive.rhythm deviceProps 3)
-            -- ]
+        [ grid
+            [ sm
+                [ styles
+                    [ wrapper devices
+                    , Responsive.deviceStyle devices <|
+                        \deviceProps -> Css.height (Responsive.rhythm deviceProps 3)
+                    ]
+                ]
+            ]
             []
-            []
-            [ --styled
-              row
+            [ row
                 [ sm [ center ] ]
                 []
-                [ --styled
-                  col
-                    [ sm [ columns 1 ] ]
-                    -- [ Responsive.deviceStyles devices <|
-                    --     \deviceProps ->
-                    --         [ Css.height (Responsive.rhythm deviceProps (3))
-                    --         , Css.width (Responsive.rhythm deviceProps 3)
-                    --         ]
-                    -- ]
+                [ col
+                    [ sm
+                        [ columns 1
+                        , styles
+                            [ Responsive.deviceStyles devices <|
+                                \deviceProps ->
+                                    [ Css.height (Responsive.rhythm deviceProps (3))
+                                    , Css.width (Responsive.rhythm deviceProps 3)
+                                    ]
+                            ]
+                        ]
+                    ]
                     []
                     [ styled div
                         [ Css.height (Css.pct 90)
