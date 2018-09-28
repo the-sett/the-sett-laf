@@ -59,18 +59,33 @@ xl builders =
     applyDevice Xl builders
 
 
+styles buildersList devices =
+    deviceStyles devices
+        (\base ->
+            List.map
+                (\(Builder device grid fn) ->
+                    if device == base.device then
+                        fn grid
+                    else
+                        []
+                )
+                buildersList
+                |> List.concat
+        )
+
+
 type alias GridT a msg =
     List (List (Grid -> Builder { a | grid : Compatible })) -> List (Attribute msg) -> List (DeviceStyles -> Html msg) -> DeviceStyles -> Html msg
 
 
 grid : GridT a msg
-grid builders attributes innerHtml deviceStyles =
+grid builders attributes innerHtml devices =
     let
         flatBuilders =
             List.concat builders
                 |> List.map (\gridFn -> gridFn Column)
     in
-        div [] (List.map (\deviceStyleFn -> deviceStyleFn deviceStyles) innerHtml)
+        (styled div) [ styles flatBuilders devices ] [] (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
 
 
 type alias RowT a msg =
@@ -78,13 +93,13 @@ type alias RowT a msg =
 
 
 row : RowT a msg
-row builders attributes innerHtml deviceStyles =
+row builders attributes innerHtml devices =
     let
         flatBuilders =
             List.concat builders
                 |> List.map (\gridFn -> gridFn Column)
     in
-        div [] (List.map (\deviceStyleFn -> deviceStyleFn deviceStyles) innerHtml)
+        (styled div) [ styles flatBuilders devices ] [] (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
 
 
 type alias ColT a msg =
@@ -92,14 +107,14 @@ type alias ColT a msg =
 
 
 col : ColT a msg
-col builders attributes innerHtml deviceStyles =
+col builders attributes innerHtml devices =
     let
+        flatBuilders : List (Builder { a | col : Compatible })
         flatBuilders =
             List.concat builders
                 |> List.map (\gridFn -> gridFn Column)
     in
-        -- Should apply mapMaybeDeviceSpec - If device matches the builder output, or [] if not.
-        div [] innerHtml
+        (styled div) [ styles flatBuilders devices ] [] innerHtml
 
 
 empty : Device -> Grid -> Builder a
