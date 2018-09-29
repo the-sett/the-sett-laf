@@ -43,7 +43,7 @@ view =
 cellStyle =
     styles
         [ Css.backgroundColor <| Css.rgba 150 100 100 0.3
-        , Css.border3 (Css.px 1) Css.solid (Css.rgb 0 0 0)
+        , Css.property "box-shadow" "0 0 0 1px black inset"
         ]
 
 
