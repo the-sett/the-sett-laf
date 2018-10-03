@@ -3,7 +3,7 @@ module Cards exposing (view)
 import Css
 import Grid exposing (col, columns, grid, lg, md, offset, row, sm, xl)
 import Html.Styled exposing (a, div, h1, h4, i, img, p, styled, text, toUnstyled)
-import Html.Styled.Attributes exposing (class, name, src, title)
+import Html.Styled.Attributes exposing (class, id, name, src, title)
 import Html.Styled.Lazy exposing (lazy)
 import Responsive exposing (deviceStyle, deviceStyles, rhythm)
 import Structure exposing (Template(..))
@@ -14,7 +14,7 @@ view =
     (\devices ->
         div
             []
-            [ a [ name "cards" ] []
+            [ div [ id "cards" ] []
             , styled h1
                 [ Css.textAlign Css.center ]
                 []

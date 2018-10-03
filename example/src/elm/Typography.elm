@@ -2,7 +2,7 @@ module Typography exposing (view)
 
 import Css
 import Html.Styled exposing (..)
-import Html.Styled.Attributes exposing (class, name, title)
+import Html.Styled.Attributes exposing (class, id, name, title)
 import Html.Styled.Lazy exposing (lazy)
 import Structure exposing (Template(..))
 
@@ -12,7 +12,7 @@ view =
     (\devices ->
         div
             []
-            [ a [ name "typography" ] []
+            [ div [ id "typography" ] []
             , styled h1
                 [ Css.textAlign Css.center ]
                 []

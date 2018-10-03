@@ -2,6 +2,7 @@ module Main exposing (main)
 
 import Body
 import Browser
+import Browser.Dom exposing (getViewportOf, setViewportOf)
 import Cards
 import DebugStyle
 import GridDemo
@@ -13,6 +14,7 @@ import Logo
 import MkDown
 import State exposing (Model, Msg(..))
 import Structure exposing (Template(..))
+import Task
 import TheSettLaf exposing (devices, fonts, responsiveMeta)
 import Typography
 
@@ -35,9 +37,22 @@ subscriptions _ =
 
 
 update msg model =
-    case msg of
+    case Debug.log "update" msg of
         Toggle state ->
             ( state, Cmd.none )
+
+        ScrollTo id ->
+            ( model, jumpToId id )
+
+        NoOp ->
+            ( model, Cmd.none )
+
+
+jumpToId : String -> Cmd Msg
+jumpToId id =
+    getViewportOf id
+        |> Task.andThen (\info -> setViewportOf id 0 (Debug.log "viewport" info).scene.height)
+        |> Task.attempt (\_ -> NoOp)
 
 
 view model =

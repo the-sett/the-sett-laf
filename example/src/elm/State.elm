@@ -6,6 +6,8 @@ module State exposing (Model, Msg(..))
 
 type Msg
     = Toggle Bool
+    | ScrollTo String
+    | NoOp
 
 
 type alias Model =
