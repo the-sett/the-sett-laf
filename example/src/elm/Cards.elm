@@ -1,12 +1,12 @@
 module Cards exposing (view)
 
 import Css
-import Grid exposing (grid, row, col, sm, md, lg, xl, columns, offset)
-import Html.Styled exposing (styled, toUnstyled, div, i, text, h1, p, h4, img, a)
-import Html.Styled.Attributes exposing (title, class, name, src)
+import Grid exposing (col, columns, grid, lg, md, offset, row, sm, xl)
+import Html.Styled exposing (a, div, h1, h4, i, img, p, styled, text, toUnstyled)
+import Html.Styled.Attributes exposing (class, name, src, title)
 import Html.Styled.Lazy exposing (lazy)
-import Structure exposing (Template(..))
 import Responsive exposing (deviceStyle, deviceStyles, rhythm)
+import Structure exposing (Template(..))
 
 
 view : Template msg model
@@ -41,7 +41,6 @@ view =
                 ]
                 devices
             ]
-            |> toUnstyled
     )
         |> lazy
         |> Static

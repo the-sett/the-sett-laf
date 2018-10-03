@@ -1,4 +1,4 @@
-module Structure exposing (Template(..), Layout)
+module Structure exposing (Layout, Template(..))
 
 {-| Defines the structure of a reactive application as layouts applied to templates.
 

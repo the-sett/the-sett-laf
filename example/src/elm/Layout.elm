@@ -1,14 +1,14 @@
 module Layout exposing (layout)
 
 import Css
-import Grid exposing (grid, row, col, sm, md, lg, xl, columns, center, styles)
-import Html.Styled exposing (Html, styled, node, text, div, button, a, nav, body, input, ul, li)
-import Html.Styled.Attributes exposing (attribute, class, href, id, type_, checked)
+import Grid exposing (center, col, columns, grid, lg, md, row, sm, styles, xl)
+import Html.Styled exposing (Html, a, button, div, input, li, nav, node, styled, text, ul)
+import Html.Styled.Attributes exposing (attribute, checked, class, href, id, type_)
 import Html.Styled.Events exposing (onClick)
 import Logo exposing (logo)
 import Responsive exposing (DeviceStyles)
-import Structure exposing (Template(..), Layout)
 import State exposing (Model, Msg(..))
+import Structure exposing (Layout, Template(..))
 import Svg.Styled
 import TheSettLaf exposing (wrapper)
 
@@ -62,7 +62,7 @@ topHeader devices model =
                         , styles
                             [ Responsive.deviceStyles devices <|
                                 \deviceProps ->
-                                    [ Css.height (Responsive.rhythm deviceProps (3))
+                                    [ Css.height (Responsive.rhythm deviceProps 3)
                                     , Css.width (Responsive.rhythm deviceProps 3)
                                     ]
                             ]
@@ -118,6 +118,7 @@ debugToggle devices model =
                 ]
         , if model then
             Css.backgroundColor (Css.rgb 50 230 50) |> Css.important
+
           else
             Css.backgroundColor (Css.rgb 255 255 255)
         , Css.hover [ Css.backgroundColor (Css.rgb 50 210 50) ]

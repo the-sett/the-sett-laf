@@ -1,7 +1,7 @@
 module Logo exposing (logo)
 
-import Svg exposing (svg, defs, metadata, g, rect, text_, text, tspan)
-import Svg.Attributes exposing (style, id, width, height, x, y, d, viewBox, version, transform, shapeRendering)
+import Svg exposing (defs, g, metadata, rect, svg, text, text_, tspan)
+import Svg.Attributes exposing (d, height, id, shapeRendering, style, transform, version, viewBox, width, x, y)
 
 
 logo =

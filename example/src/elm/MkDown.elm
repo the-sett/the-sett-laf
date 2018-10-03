@@ -3,7 +3,7 @@ module MkDown exposing (view)
 import Css
 import Html
 import Html.Styled exposing (..)
-import Html.Styled.Attributes exposing (title, class, name)
+import Html.Styled.Attributes exposing (class, name, title)
 import Html.Styled.Lazy exposing (lazy)
 import Markdown.Block as Block exposing (Block)
 import Markdown.Config exposing (HtmlOption(..), defaultOptions, defaultSanitizeOptions)
@@ -23,7 +23,6 @@ view =
                 [ text "Markdown" ]
             , markdownView readmeMD
             ]
-            |> toUnstyled
     )
         |> lazy
         |> Static
@@ -41,11 +40,11 @@ markdownView textarea =
 
         blocksView =
             Block.defaultHtml Nothing Nothing
-                |> flip List.concatMap blocks
+                |> (\a -> List.concatMap a blocks)
     in
-        blocksView
-            |> Html.div []
-            |> fromUnstyled
+    blocksView
+        |> Html.div []
+        |> fromUnstyled
 
 
 readmeMD : String

@@ -1,9 +1,9 @@
 module Body exposing (view)
 
 import Html.Styled exposing (..)
-import Html.Styled.Attributes exposing (title, class)
-import TheSettLaf exposing (wrapper)
+import Html.Styled.Attributes exposing (class, title)
 import Structure exposing (Template(..))
+import TheSettLaf exposing (wrapper)
 
 
 view : List (Template msg model) -> Template msg model

@@ -1,14 +1,14 @@
 module GridDemo exposing (view)
 
 import Css
-import Grid exposing (grid, row, col, sm, md, lg, xl, center, columns, offset, styles, auto)
-import Html.Styled exposing (styled, h1, h4, text, div, a, li, ul, toUnstyled)
-import Html.Styled.Attributes exposing (title, class, name, src, href)
+import Grid exposing (auto, center, col, columns, grid, lg, md, offset, row, sm, styles, xl)
+import Html.Styled exposing (a, div, h1, h4, li, styled, text, toUnstyled, ul)
+import Html.Styled.Attributes exposing (class, href, name, src, title)
 import Html.Styled.Lazy exposing (lazy)
 import Logo exposing (logo)
-import Svg.Styled
-import Structure exposing (Template(..))
 import Responsive exposing (deviceStyle, rhythm)
+import Structure exposing (Template(..))
+import Svg.Styled
 
 
 view : Template msg model
@@ -34,7 +34,6 @@ view =
             , h4 [] [ text "Mixed Fixed and Auto Width" ]
             , gridn devices widthAndAuto
             ]
-            |> toUnstyled
     )
         |> lazy
         |> Static
@@ -98,5 +97,5 @@ gridn devices rowFn =
     grid
         []
         []
-        (List.map rowFn <| List.map toFloat <| List.filter (\v -> v % 3 == 0) <| List.range 1 12)
+        (List.map rowFn <| List.map toFloat <| List.filter (\v -> modBy 3 v == 0) <| List.range 1 12)
         devices

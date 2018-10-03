@@ -1,11 +1,4 @@
-module TheSettLaf
-    exposing
-        ( style
-        , fonts
-        , responsiveMeta
-        , devices
-        , wrapper
-        )
+module TheSettLaf exposing (style, fonts, responsiveMeta, devices, wrapper)
 
 {-| The Sett Look and Feel
 
@@ -16,10 +9,10 @@ module TheSettLaf
 import Css
 import Css.Global
 import Grid
-import Html.Styled.Attributes exposing (href, rel, name, content)
 import Html.Styled exposing (Html, node)
+import Html.Styled.Attributes exposing (attribute, href, name, rel)
 import Reset exposing (reset)
-import Responsive exposing (BaseStyle, Device(..), DeviceStyles, responsive, majorThird)
+import Responsive exposing (BaseStyle, Device(..), DeviceStyles, majorThird, responsive)
 
 
 sm : BaseStyle
@@ -94,7 +87,7 @@ responsiveMeta : Html msg
 responsiveMeta =
     node "meta"
         [ name "viewport"
-        , content "width=device-width, initial-scale=1"
+        , attribute "content" "width=device-width, initial-scale=1"
         ]
         []
 
@@ -102,19 +95,19 @@ responsiveMeta =
 {-| The CSS as an HTML <style> element.
 -}
 style : DeviceStyles -> Html msg
-style devices =
+style devs =
     Css.Global.global <|
         reset
-            ++ (responsive majorThird devices)
+            ++ responsive majorThird devs
 
 
 {-| A responsive wrapper div.
 -}
 wrapper : DeviceStyles -> Css.Style
-wrapper devices =
+wrapper devs =
     [ Css.margin2 (Css.px 0) Css.auto
     , Css.padding2 (Css.px 0) (Css.px 5)
-    , Responsive.deviceStyle devices <|
+    , Responsive.deviceStyle devs <|
         \deviceProps ->
             Css.maxWidth (Css.px deviceProps.wrapperWidth)
     ]

@@ -1,41 +1,44 @@
-module Responsive
-    exposing
-        ( responsive
-          -- Devices
-        , Device(..)
-        , DeviceSpec
-        , DeviceStyles
-        , BaseStyle
-        , mapMaybeDeviceSpec
-          -- Type scales
-        , TypeScale
-        , minorSecond
-        , majorSecond
-        , minorThird
-        , majorThird
-        , perfectFourth
-        , augmentedFourth
-        , perfectFifth
-          -- Vertical Rhythm
-        , rhythm
-          -- Device Dependant Styling
-        , deviceStyle
-        , deviceStyles
-        )
+module Responsive exposing
+    ( BaseStyle
+    , Device(..)
+    , DeviceSpec
+    , DeviceStyles
+    , TypeScale
+    , augmentedFourth
+    , deviceStyle
+    , deviceStyles
+    , majorSecond
+    , majorThird
+    ,  mapMaybeDeviceSpec
+       -- Type scales
+
+    , minorSecond
+    , minorThird
+    ,  perfectFifth
+       -- Vertical Rhythm
+
+    , perfectFourth
+    ,  responsive
+       -- Devices
+
+    ,  rhythm
+       -- Device Dependant Styling
+
+    )
 
 import Array exposing (Array)
 import Css
-import Css.Media
 import Css.Global
+import Css.Media
 import Maybe.Extra
 
 
 {-| The global CSS.
 -}
 responsive : TypeScale -> DeviceStyles -> List Css.Global.Snippet
-responsive typeScale devices =
-    (baseSpacing devices)
-        ++ (typography devices typeScale)
+responsive scale devices =
+    baseSpacing devices
+        ++ typography devices scale
 
 
 
@@ -101,7 +104,7 @@ type alias TypeScale =
 
 typeScale : Float -> TypeScale
 typeScale ratio n =
-    (ratio ^ (toFloat (n - 1)))
+    ratio ^ toFloat (n - 1)
 
 
 minorSecond : TypeScale
@@ -194,8 +197,8 @@ h4 =
 
 
 fontSizePx : TypeScale -> BaseStyle -> FontSizeLevel -> Float
-fontSizePx typeScale { baseFontSize } (FontSizeLevel sizeLevel) =
-    ((typeScale sizeLevel.level) * baseFontSize)
+fontSizePx scale { baseFontSize } (FontSizeLevel sizeLevel) =
+    (scale sizeLevel.level * baseFontSize)
         |> floor
         |> toFloat
 
@@ -215,7 +218,7 @@ lineHeight deviceProps =
 
 rhythm : BaseStyle -> Float -> Css.Px
 rhythm deviceProps n =
-    Css.px <| n * (lineHeight deviceProps)
+    Css.px <| n * lineHeight deviceProps
 
 
 
@@ -256,7 +259,7 @@ stylesAsMixin style styles =
 
 mapMixins : List Mixin -> List Css.Style -> List Css.Style
 mapMixins mixins styles =
-    ((List.map (\mixin -> mixin styles) mixins) |> List.concat)
+    List.map (\mixin -> mixin styles) mixins |> List.concat
 
 
 
@@ -287,40 +290,40 @@ all device. Use `mapMixins` to apply the list of mixins over a list of base styl
 
 -}
 mediaMixins : DeviceStyles -> (BaseStyle -> Mixin) -> List Mixin
-mediaMixins { sm, md, lg, xl } deviceMixin =
+mediaMixins { sm, md, lg, xl } devMixin =
     let
         minWidthDevices =
             [ xl, lg, md ]
 
         minWidthMixin deviceMixin deviceProps =
             deviceMixin deviceProps
-                >> (mediaMinWidthMixin deviceProps)
+                >> mediaMinWidthMixin deviceProps
 
         minWidthMixins deviceMixin =
             List.map (minWidthMixin deviceMixin) minWidthDevices
 
         allMixins deviceMixin =
-            (deviceMixin sm)
-                :: (minWidthMixins deviceMixin)
+            deviceMixin sm
+                :: minWidthMixins deviceMixin
     in
-        allMixins deviceMixin
+    allMixins devMixin
 
 
 fontSizeMixin : TypeScale -> FontSizeLevel -> BaseStyle -> Mixin
-fontSizeMixin typeScale (FontSizeLevel sizeLevel) deviceProps =
+fontSizeMixin scale (FontSizeLevel sizeLevel) deviceProps =
     let
         pxVal =
-            fontSizePx typeScale deviceProps (FontSizeLevel sizeLevel)
+            fontSizePx scale deviceProps (FontSizeLevel sizeLevel)
 
         numLines =
             max sizeLevel.minLines
-                (ceiling (pxVal / (lineHeight deviceProps)))
+                (ceiling (pxVal / lineHeight deviceProps))
     in
-        Css.batch
-            [ Css.fontSize (Css.px pxVal)
-            , Css.lineHeight (rhythm deviceProps (toFloat numLines))
-            ]
-            |> styleAsMixin
+    Css.batch
+        [ Css.fontSize (Css.px pxVal)
+        , Css.lineHeight (rhythm deviceProps (toFloat numLines))
+        ]
+        |> styleAsMixin
 
 
 
@@ -328,46 +331,46 @@ fontSizeMixin typeScale (FontSizeLevel sizeLevel) deviceProps =
 
 
 typography : DeviceStyles -> TypeScale -> List Css.Global.Snippet
-typography devices typeScale =
+typography devices scale =
     let
         fontMediaStyles fontSizeLevel =
-            mapMixins (mediaMixins devices (fontSizeMixin typeScale fontSizeLevel)) []
+            mapMixins (mediaMixins devices (fontSizeMixin scale fontSizeLevel)) []
     in
-        [ -- Base font.
-          Css.Global.each
-            [ Css.Global.html ]
-            [ Css.fontFamilies [ "Nobile", "Helvetica" ]
-            , Css.fontWeight <| Css.int 400
-            , Css.textRendering Css.optimizeLegibility
-            ]
-
-        -- Headings are grey and at least medium.
-        , Css.Global.each
-            [ Css.Global.h1
-            , Css.Global.h2
-            , Css.Global.h3
-            , Css.Global.h4
-            , Css.Global.h5
-            ]
-            [ Css.color greyDark |> Css.important
-            , Css.fontWeight <| Css.int 500
-            ]
-
-        -- Biggest headings are bold.
-        , Css.Global.each
-            [ Css.Global.h1
-            , Css.Global.h2
-            , Css.Global.h3
-            ]
-            [ Css.fontWeight Css.bold ]
-
-        -- Media queries to set all font sizes accross all devices.
-        , Css.Global.html <| fontMediaStyles base
-        , Css.Global.h1 <| fontMediaStyles h1
-        , Css.Global.h2 <| fontMediaStyles h2
-        , Css.Global.h3 <| fontMediaStyles h3
-        , Css.Global.h4 <| fontMediaStyles h4
+    [ -- Base font.
+      Css.Global.each
+        [ Css.Global.html ]
+        [ Css.fontFamilies [ "Nobile", "Helvetica" ]
+        , Css.fontWeight <| Css.int 400
+        , Css.textRendering Css.optimizeLegibility
         ]
+
+    -- Headings are grey and at least medium.
+    , Css.Global.each
+        [ Css.Global.h1
+        , Css.Global.h2
+        , Css.Global.h3
+        , Css.Global.h4
+        , Css.Global.h5
+        ]
+        [ Css.color greyDark |> Css.important
+        , Css.fontWeight <| Css.int 500
+        ]
+
+    -- Biggest headings are bold.
+    , Css.Global.each
+        [ Css.Global.h1
+        , Css.Global.h2
+        , Css.Global.h3
+        ]
+        [ Css.fontWeight Css.bold ]
+
+    -- Media queries to set all font sizes accross all devices.
+    , Css.Global.html <| fontMediaStyles base
+    , Css.Global.h1 <| fontMediaStyles h1
+    , Css.Global.h2 <| fontMediaStyles h2
+    , Css.Global.h3 <| fontMediaStyles h3
+    , Css.Global.h4 <| fontMediaStyles h4
+    ]
 
 
 

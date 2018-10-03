@@ -1,31 +1,33 @@
-module Grid
-    exposing
-        ( -- Media sizes
-          sm
-        , md
-        , lg
-        , xl
-          -- Grid constructors
-        , grid
-        , row
-        , col
-          -- Grid attributes
-        , styles
-        , columns
-        , auto
-        , offset
-        , start
-        , end
-        , center
-        , around
-        , between
-        , reverse
-        , top
-        , middle
-        , bottom
-        , first
-        , last
-        )
+module Grid exposing
+    ( around
+    , auto
+    , between
+    , bottom
+    , center
+    ,  col
+       -- Grid attributes
+
+    , columns
+    , end
+    , first
+    , grid
+    , last
+    , lg
+    , md
+    , middle
+    , offset
+    , reverse
+    , row
+    ,  -- Media sizes
+       sm
+
+    , start
+    , styles
+    , top
+    ,  xl
+       -- Grid constructors
+
+    )
 
 import Css
     exposing
@@ -56,17 +58,17 @@ import Css
         , textAlign
         , wrap
         )
-import Html.Styled exposing (styled, div, Html, Attribute, text)
+import Html.Styled exposing (Attribute, Html, div, styled, text)
 import Responsive
     exposing
-        ( Device(..)
+        ( BaseStyle
+        , Device(..)
         , DeviceSpec
         , DeviceStyles
-        , BaseStyle
-        , mapMaybeDeviceSpec
-        , rhythm
         , deviceStyle
         , deviceStyles
+        , mapMaybeDeviceSpec
+        , rhythm
         )
 
 
@@ -118,9 +120,10 @@ applyDevicesToBuilders buildersList devices =
     deviceStyles devices
         (\base ->
             List.map
-                (\(Builder device grid fn) ->
+                (\(Builder device grd fn) ->
                     if device == base.device then
-                        fn grid
+                        fn grd
+
                     else
                         []
                 )
@@ -140,13 +143,13 @@ grid builders attributes innerHtml devices =
             List.concat builders
                 |> List.map (\gridFn -> gridFn Column)
     in
-        (styled div)
-            [ marginRight Css.auto
-            , marginLeft Css.auto
-            , applyDevicesToBuilders flatBuilders devices
-            ]
-            []
-            (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
+    styled div
+        [ marginRight Css.auto
+        , marginLeft Css.auto
+        , applyDevicesToBuilders flatBuilders devices
+        ]
+        []
+        (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
 
 
 type alias RowT a msg =
@@ -160,16 +163,16 @@ row builders attributes innerHtml devices =
             List.concat builders
                 |> List.map (\gridFn -> gridFn Column)
     in
-        (styled div)
-            [ boxSizing borderBox
-            , displayFlex
-            , property "flex" "0 1 auto"
-            , flexDirection Css.row
-            , flexWrap wrap
-            , applyDevicesToBuilders flatBuilders devices
-            ]
-            []
-            (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
+    styled div
+        [ boxSizing borderBox
+        , displayFlex
+        , property "flex" "0 1 auto"
+        , flexDirection Css.row
+        , flexWrap wrap
+        , applyDevicesToBuilders flatBuilders devices
+        ]
+        []
+        (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
 
 
 type alias ColT a msg =
@@ -184,24 +187,24 @@ col builders attributes innerHtml devices =
             List.concat builders
                 |> List.map (\gridFn -> gridFn Column)
     in
-        (styled div)
-            [ boxSizing borderBox
-            , flexShrink (num 0)
-            , flexGrow (num 0)
-            , applyDevicesToBuilders flatBuilders devices
-            ]
-            []
-            innerHtml
+    styled div
+        [ boxSizing borderBox
+        , flexShrink (num 0)
+        , flexGrow (num 0)
+        , applyDevicesToBuilders flatBuilders devices
+        ]
+        []
+        innerHtml
 
 
 empty : Device -> Grid -> Builder a
 empty =
-    (\device grid -> Builder device grid (always []))
+    \device grd -> Builder device grd (always [])
 
 
 styles : List Css.Style -> Device -> Grid -> Builder a
-styles styles device grid =
-    Builder device grid (always styles)
+styles styleList device grd =
+    Builder device grd (always styleList)
 
 
 
@@ -220,6 +223,7 @@ columns n =
             [ flexBasis (pct (n / 12 * 100))
             , maxWidth (pct (n / 12 * 100))
             ]
+
     else
         styles
             [ flexBasis (pct (n / 12 * 100))
@@ -233,6 +237,7 @@ offset n =
     if n > 0 then
         styles
             [ marginLeft (pct (n / 12 * 100)) ]
+
     else
         empty
 
@@ -272,10 +277,10 @@ between =
 
 
 reverse : Device -> Grid -> Builder { a | grid : Never }
-reverse device grid =
-    Builder device grid <|
-        \grid ->
-            case grid of
+reverse device grd =
+    Builder device grd <|
+        \container ->
+            case container of
                 Row ->
                     [ flexDirection rowReverse ]
 
