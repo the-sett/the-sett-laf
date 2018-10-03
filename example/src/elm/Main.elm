@@ -50,8 +50,8 @@ update msg model =
 
 jumpToId : String -> Cmd Msg
 jumpToId id =
-    getViewportOf id
-        |> Task.andThen (\info -> setViewportOf id 0 (Debug.log "viewport" info).scene.height)
+    Browser.Dom.getElement id
+        |> Task.andThen (\info -> Browser.Dom.setViewport 0 (Debug.log "viewport" info).element.y)
         |> Task.attempt (\_ -> NoOp)
 
 
