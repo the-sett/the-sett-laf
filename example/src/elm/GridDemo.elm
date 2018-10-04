@@ -3,7 +3,7 @@ module GridDemo exposing (view)
 import Css
 import Grid exposing (auto, center, col, columns, grid, lg, md, offset, row, sm, styles, xl)
 import Html.Styled exposing (a, div, h1, h4, li, styled, text, toUnstyled, ul)
-import Html.Styled.Attributes exposing (class, href, name, src, title)
+import Html.Styled.Attributes exposing (class, href, id, src, title)
 import Html.Styled.Lazy exposing (lazy)
 import Logo exposing (logo)
 import Responsive exposing (deviceStyle, rhythm)
@@ -16,7 +16,7 @@ view =
     (\devices ->
         div
             []
-            [ a [ name "grids" ] []
+            [ div [ id "grids" ] []
             , styled h1
                 [ Css.textAlign Css.center ]
                 []

@@ -3,7 +3,7 @@ module MkDown exposing (view)
 import Css
 import Html
 import Html.Styled exposing (..)
-import Html.Styled.Attributes exposing (class, name, title)
+import Html.Styled.Attributes exposing (class, id, title)
 import Html.Styled.Lazy exposing (lazy)
 import Markdown.Block as Block exposing (Block)
 import Markdown.Config exposing (HtmlOption(..), defaultOptions, defaultSanitizeOptions)
@@ -16,7 +16,7 @@ view =
     (\devices ->
         div
             []
-            [ a [ name "markdown" ] []
+            [ div [ id "markdown" ] []
             , styled h1
                 [ Css.textAlign Css.center ]
                 []
