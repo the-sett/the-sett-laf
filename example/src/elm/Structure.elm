@@ -16,7 +16,7 @@ some content and produces Html.
 -}
 type Template msg model
     = Dynamic (DeviceStyles -> model -> Html msg)
-    | Static (DeviceStyles -> Html msg)
+    | Static (DeviceStyles -> Html Never)
 
 
 {-| Defines the type of a layout. A layout is a higher level template; it takes a
