@@ -19,7 +19,7 @@ view templates =
                             fn devices model
 
                         Static fn ->
-                            fn devices
+                            Html.Styled.map never <| fn devices
                 )
                 templates
             )
