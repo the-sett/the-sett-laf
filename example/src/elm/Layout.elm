@@ -87,19 +87,35 @@ topHeader devices model =
                         [ styled li
                             [ Css.display Css.inline ]
                             []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| ScrollTo "typography" ] [ text "Typography" ] ]
+                            [ styled a
+                                [ Css.padding (Css.px 10) ]
+                                [ onClick <| ScrollTo "typography" ]
+                                [ text "Typography" ]
+                            ]
                         , styled li
                             [ Css.display Css.inline ]
                             []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| ScrollTo "grids" ] [ text "Grids" ] ]
+                            [ styled a
+                                [ Css.padding (Css.px 10) ]
+                                [ onClick <| ScrollTo "grids" ]
+                                [ text "Grids" ]
+                            ]
                         , styled li
                             [ Css.display Css.inline ]
                             []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| ScrollTo "cards" ] [ text "Cards" ] ]
+                            [ styled a
+                                [ Css.padding (Css.px 10) ]
+                                [ onClick <| ScrollTo "cards" ]
+                                [ text "Cards" ]
+                            ]
                         , styled li
                             [ Css.display Css.inline ]
                             []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| ScrollTo "markdown" ] [ text "Markdown" ] ]
+                            [ styled a
+                                [ Css.padding (Css.px 10) ]
+                                [ onClick <| ScrollTo "markdown" ]
+                                [ text "Markdown" ]
+                            ]
                         ]
                     ]
                 ]
