@@ -40,21 +40,18 @@ const commonConfig = {
 
   module: {
     noParse: /\.elm$/,
-    rules: [
-      {
+    rules: [{
         test: /\.(eot|ttf|woff|woff2|svg)$/,
         use: 'file-loader?publicPath=../../&name=static/css/[hash].[ext]',
       },
       {
         test: /\.(png|jpg|gif)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]'
-            }
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]'
           }
-        ]
+        }]
       }
     ]
   },
@@ -84,13 +81,11 @@ if (isDev) {
     ],
 
     module: {
-      rules: [
-        {
+      rules: [{
           test: /\.elm$/,
           exclude: [/elm-stuff/, /node_modules/],
-          use: [
-            {
-              loader: 'elm-hot-loader'
+          use: [{
+              loader: 'elm-hot-webpack-loader'
             },
             {
               loader: 'elm-webpack-loader',
@@ -108,10 +103,15 @@ if (isDev) {
       ]
     },
 
+    plugins: [
+      new webpack.HotModuleReplacementPlugin()
+    ],
+
     devServer: {
       historyApiFallback: true,
       contentBase: './src/static',
       inline: true,
+      hot: true,
       stats: 'errors-only',
       port: 9071,
     }
@@ -125,8 +125,7 @@ if (isProd) {
     entry: entryPath,
 
     module: {
-      rules: [
-        {
+      rules: [{
           test: /\.elm$/,
           exclude: [/elm-stuff/, /node_modules/],
           use: 'elm-webpack-loader'
@@ -147,9 +146,13 @@ if (isProd) {
         allChunks: true
       }),
 
-      new CopyWebpackPlugin([
-        { from: 'src/static/img', to: 'static/img' },
-        { from: 'src/static/favicon.ico' }
+      new CopyWebpackPlugin([{
+          from: 'src/static/img',
+          to: 'static/img'
+        },
+        {
+          from: 'src/static/favicon.ico'
+        }
       ]),
 
       new UglifyJsPlugin(),

@@ -1,5 +1,5 @@
-// Styles
-const Elm = require('../elm/Main');
+'use strict';
 
-const appElement = document.getElementById("application");
-const app = Elm.Main.embed(appElement);
+const {Elm} = require('../elm/Main.elm');
+
+Elm.Main.init({node: document.getElementById('application')});
