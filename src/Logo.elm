@@ -1,9 +1,18 @@
 module Logo exposing (logo)
 
-import Svg exposing (defs, g, metadata, rect, svg, text, text_, tspan)
+{-| The Sett logo as SVG.
+
+@docs logo
+
+-}
+
+import Svg exposing (Svg, defs, g, metadata, rect, svg, text, text_, tspan)
 import Svg.Attributes exposing (d, height, id, shapeRendering, style, transform, version, viewBox, width, x, y)
 
 
+{-| The Sett logo as SVG.
+-}
+logo : Svg msg
 logo =
     svg
         [ height "100%"

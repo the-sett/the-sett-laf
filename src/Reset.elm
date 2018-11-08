@@ -1,9 +1,18 @@
 module Reset exposing (reset)
 
+{-| Provides a standard CSS reset stylesheet, aimed at getting consitent
+behaviour accross browsers.
+
+@docs reset
+
+-}
+
 import Css
 import Css.Global
 
 
+{-| The CSS reset.
+-}
 reset : List Css.Global.Snippet
 reset =
     [ -- Ensures <code> elements do not add extra height.
