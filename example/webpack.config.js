@@ -17,7 +17,7 @@ const isProd = TARGET_ENV === prod;
 
 
 // entry and output path/filename variables
-const entryPath = path.join(__dirname, 'src/static/index.js');
+const entryPath = path.join(__dirname, 'assets/index.js');
 const outputPath = path.join(__dirname, 'dist');
 const outputFilename = isProd ? '[name]-[hash].js' : '[name].js';
 
@@ -26,50 +26,27 @@ console.log(`Building for ${TARGET_ENV}`);
 const commonConfig = {
   output: {
     path: outputPath,
-    filename: `static/js/${outputFilename}`,
+    filename: `assets/${outputFilename}`,
   },
 
   resolve: {
     extensions: ['.js', '.elm'],
-
-    alias: {
-      jquery: 'jquery/dist/jquery.min.js',
-      'text-to-svg': 'text-to-svg/build/src/index.js'
-    }
   },
 
   module: {
     noParse: /\.elm$/,
-    rules: [
-      {
+    rules: [{
         test: /\.(eot|ttf|woff|woff2|svg)$/,
         use: 'file-loader?publicPath=../../&name=static/css/[hash].[ext]',
       },
-      {
-        test: /\.(png|jpg|gif)$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]'
-            }
-          }
-        ]
-      }
     ]
   },
 
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'src/static/index.html',
+      template: 'assets/index.html',
       inject: 'body',
       filename: 'index.html',
-    }),
-    new webpack.ProvidePlugin({ //Delete this plugin if you don't need jQuery/Bootstrap
-      $: 'jquery',
-      jQuery: 'jquery',
-      'window.jQuery': 'jquery',
-      Popper: 'popper',
     }),
   ]
 };
@@ -84,36 +61,29 @@ if (isDev) {
     ],
 
     module: {
-      rules: [
-        {
-          test: /\.elm$/,
-          exclude: [/elm-stuff/, /node_modules/],
-          use: [
-            {
-              loader: 'elm-hot-loader'
-            },
-            {
-              loader: 'elm-webpack-loader',
-              options: {
-                verbose: true,
-                debug: false
-              }
+      rules: [{
+        test: /\.elm$/,
+        exclude: [/elm-stuff/, /node_modules/],
+        use: [{
+            loader: 'elm-hot-webpack-loader'
+          },
+          {
+            loader: 'elm-webpack-loader',
+            options: {
+              verbose: true,
+              debug: false
             }
-          ]
-        },
-        {
-          test: /\.s?css$/,
-          use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
-        }
-      ]
+          }
+        ]
+      }]
     },
 
     devServer: {
       historyApiFallback: true,
-      contentBase: './src/static',
+      contentBase: './src',
       inline: true,
       stats: 'errors-only',
-      port: 9071,
+      port: 9071
     }
   });
 }
@@ -125,8 +95,7 @@ if (isProd) {
     entry: entryPath,
 
     module: {
-      rules: [
-        {
+      rules: [{
           test: /\.elm$/,
           exclude: [/elm-stuff/, /node_modules/],
           use: 'elm-webpack-loader'
@@ -147,9 +116,13 @@ if (isProd) {
         allChunks: true
       }),
 
-      new CopyWebpackPlugin([
-        { from: 'src/static/img', to: 'static/img' },
-        { from: 'src/static/favicon.ico' }
+      new CopyWebpackPlugin([{
+          from: 'src/static/img',
+          to: 'static/img'
+        },
+        {
+          from: 'src/static/favicon.ico'
+        }
       ]),
 
       new UglifyJsPlugin(),
