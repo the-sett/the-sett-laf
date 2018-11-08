@@ -1,30 +1,51 @@
 module Grid exposing
-    ( around
-    , auto
-    , between
-    , bottom
-    , center
-    , col
-    , columns
-    , end
-    , first
-    , grid
-    , last
-    , lg
-    , md
-    , middle
-    , offset
-    , reverse
-    , row
-    , sm
-    , start
+    ( grid, row, col
+    , sm, md, lg, xl
     , styles
-    , top
-    , xl
+    , auto, columns, offset
+    , start, end, center, between, around
+    , top, middle, bottom, stretch, baseline
+    , first, last, reverse
     )
 
 {-| Responsive grids based on flexbox. This module provides a DSL for building
 such grids.
+
+
+# Grid constructors
+
+@docs grid, row, col
+
+
+# Device builders
+
+@docs sm, md, lg, xl
+
+
+# Inject any CSS styles
+
+@docs styles
+
+
+# Column size and offset
+
+@docs auto, columns, offset
+
+
+# Justify content
+
+@docs start, end, center, between, around
+
+
+# Align Items
+
+@docs top, middle, bottom, stretch, baseline
+
+
+# Ordering and direction
+
+@docs first, last, reverse
+
 -}
 
 import Css
@@ -191,18 +212,24 @@ xl builders =
     applyDevice Xl builders
 
 
-empty : Device -> Grid -> Builder a
-empty =
-    \device grd -> Builder device grd (always [])
+
+-- Inject any CSS styles
 
 
+{-| Adds any CSS style you like to a grid element.
+-}
 styles : List Css.Style -> Device -> Grid -> Builder a
 styles styleList device grd =
     Builder device grd (always styleList)
 
 
+
+-- Column size and offset
+
+
 {-| Auto column width means that a column expands to fill the available width.
 -}
+auto : Device -> Grid -> Builder { a | row : Never }
 auto =
     columns 0
 
@@ -387,3 +414,8 @@ applyDevicesToBuilders buildersList devices =
                 buildersList
                 |> List.concat
         )
+
+
+empty : Device -> Grid -> Builder a
+empty =
+    \device grd -> Builder device grd (always [])
