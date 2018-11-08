@@ -1,4 +1,16 @@
-module DebugStyle exposing (debug, style)
+module DebugStyle exposing (style, debug)
+
+{-| DebugStyle provides a debug stylesheet.
+
+This stylesheet uses repeating background image functions in CSS to display borders
+around different elements of a page in different colors, without chaging the size they
+are rendered at (as setting a border 1px would do).
+
+The vertical rhtythm is also drawn in as fitn background lines.
+
+@docs style, debug
+
+-}
 
 import Css
 import Css.Global

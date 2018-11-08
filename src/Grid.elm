@@ -4,9 +4,7 @@ module Grid exposing
     , between
     , bottom
     , center
-    ,  col
-       -- Grid attributes
-
+    , col
     , columns
     , end
     , first
@@ -18,16 +16,16 @@ module Grid exposing
     , offset
     , reverse
     , row
-    ,  -- Media sizes
-       sm
-
+    , sm
     , start
     , styles
     , top
-    ,  xl
-       -- Grid constructors
-
+    , xl
     )
+
+{-| Responsive grids based on flexbox. This module provides a DSL for building
+such grids.
+-}
 
 import Css
     exposing
@@ -72,6 +70,10 @@ import Responsive
         )
 
 
+
+-- Grid  data models
+
+
 type Compatible
     = Compatible
 
@@ -86,56 +88,16 @@ type Builder a
     = Builder Device Grid (Grid -> List Css.Style)
 
 
-applyDevice : Device -> List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
-applyDevice device builders =
-    List.map (\buildFn -> buildFn device) builders
 
-
-
---sm : List (Grid a -> List Css.Style) -> Builder a
--- where Builder a = Builder Device (Grid a -> List Css.stlye)
-
-
-sm : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
-sm builders =
-    applyDevice Sm builders
-
-
-md : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
-md builders =
-    applyDevice Md builders
-
-
-lg : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
-lg builders =
-    applyDevice Lg builders
-
-
-xl : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
-xl builders =
-    applyDevice Xl builders
-
-
-applyDevicesToBuilders buildersList devices =
-    deviceStyles devices
-        (\base ->
-            List.map
-                (\(Builder device grd fn) ->
-                    if device == base.device then
-                        fn grd
-
-                    else
-                        []
-                )
-                buildersList
-                |> List.concat
-        )
+-- Grid constructors
 
 
 type alias GridT a msg =
     List (List (Grid -> Builder { a | grid : Compatible })) -> List (Attribute msg) -> List (DeviceStyles -> Html msg) -> DeviceStyles -> Html msg
 
 
+{-| The outer builder of a responsive grid.
+-}
 grid : GridT a msg
 grid builders attributes innerHtml devices =
     let
@@ -156,6 +118,8 @@ type alias RowT a msg =
     List (List (Grid -> Builder { a | row : Compatible })) -> List (Attribute msg) -> List (DeviceStyles -> Html msg) -> DeviceStyles -> Html msg
 
 
+{-| The row builder for a responsive grid, on which row compatible properties can be defined.
+-}
 row : RowT a msg
 row builders attributes innerHtml devices =
     let
@@ -179,6 +143,8 @@ type alias ColT a msg =
     List (List (Grid -> Builder { a | col : Compatible })) -> List (Attribute msg) -> List (Html msg) -> DeviceStyles -> Html msg
 
 
+{-| The column builder for a responsive grid, on which column compatible properties can be defined.
+-}
 col : ColT a msg
 col builders attributes innerHtml devices =
     let
@@ -197,6 +163,34 @@ col builders attributes innerHtml devices =
         innerHtml
 
 
+{-| Small device grid property builder.
+-}
+sm : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+sm builders =
+    applyDevice Sm builders
+
+
+{-| Medium device grid property builder.
+-}
+md : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+md builders =
+    applyDevice Md builders
+
+
+{-| Largs device grid property builder.
+-}
+lg : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+lg builders =
+    applyDevice Lg builders
+
+
+{-| Extra large device grid property builder.
+-}
+xl : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+xl builders =
+    applyDevice Xl builders
+
+
 empty : Device -> Grid -> Builder a
 empty =
     \device grd -> Builder device grd (always [])
@@ -207,15 +201,15 @@ styles styleList device grd =
     Builder device grd (always styleList)
 
 
-
--- Should work differently on column and grid.
--- On grid, sets the number of columns, on column sets width to fraction of columns.
-
-
+{-| Auto column width means that a column expands to fill the available width.
+-}
 auto =
     columns 0
 
 
+{-| Defines how many column widths a column will take up. Zero means use 'auto'
+width and expand to fill available space.
+-}
 columns : Float -> Device -> Grid -> Builder { a | row : Never }
 columns n =
     if n > 0 then
@@ -232,6 +226,8 @@ columns n =
             ]
 
 
+{-| Defines how many column widths a column is offset from the left hand side by.
+-}
 offset : Float -> Device -> Grid -> Builder { a | grid : Never, row : Never }
 offset n =
     if n > 0 then
@@ -258,6 +254,8 @@ end =
         ]
 
 
+{-| Centers a row or column.
+-}
 center : Device -> Grid -> Builder { a | grid : Never }
 center =
     styles
@@ -266,16 +264,22 @@ center =
         ]
 
 
-around : Device -> Grid -> Builder { a | grid : Never, col : Never }
-around =
-    styles [ justifyContent spaceAround ]
-
-
+{-| Only pad spacing between items in a row.
+-}
 between : Device -> Grid -> Builder { a | grid : Never, col : Never }
 between =
     styles [ justifyContent spaceBetween ]
 
 
+{-| Pad spacing around items in a row, with space on the left and right hand sides.
+-}
+around : Device -> Grid -> Builder { a | grid : Never, col : Never }
+around =
+    styles [ justifyContent spaceAround ]
+
+
+{-| Reverses the order of items in a column or row.
+-}
 reverse : Device -> Grid -> Builder { a | grid : Never }
 reverse device grd =
     Builder device grd <|
@@ -314,3 +318,24 @@ first =
 last : Device -> Grid -> Builder { a | grid : Never }
 last =
     styles [ order (num 1) ]
+
+
+applyDevice : Device -> List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+applyDevice device builders =
+    List.map (\buildFn -> buildFn device) builders
+
+
+applyDevicesToBuilders buildersList devices =
+    deviceStyles devices
+        (\base ->
+            List.map
+                (\(Builder device grd fn) ->
+                    if device == base.device then
+                        fn grd
+
+                    else
+                        []
+                )
+                buildersList
+                |> List.concat
+        )
