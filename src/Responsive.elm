@@ -1,22 +1,27 @@
 module Responsive exposing
-    ( BaseStyle
-    , Device(..)
-    , DeviceSpec
-    , DeviceStyles
-    , Mixin
-    , baseSpacing
-    , deviceStyle
-    , deviceStyles
-    , lineHeight
-    , mapMaybeDeviceSpec
-    , mapMixins
-    , mediaMixins
-    , rhythm
-    , styleAsMixin
+    ( BaseStyle, Device(..), DeviceSpec, DeviceStyles
+    , baseSpacing, lineHeight, rhythm, deviceStyle, deviceStyles, mapMaybeDeviceSpec
+    , Mixin, mapMixins, mediaMixins, styleAsMixin
     )
 
 {-| The Responsive module provides a way of specifying sizing configurations for different devices,
 and for applying those to create CSS with media queries.
+
+
+# Models for specifying devices and their basic responsive properties.
+
+@docs BaseStyle, Device, DeviceSpec, DeviceStyles
+
+
+# Responsive helper functions.
+
+@docs baseSpacing, lineHeight, rhythm, deviceStyle, deviceStyles, mapMaybeDeviceSpec
+
+
+# Mixins
+
+@docs Mixin, mapMixins, mediaMixins, styleAsMixin
+
 -}
 
 import Array exposing (Array)
