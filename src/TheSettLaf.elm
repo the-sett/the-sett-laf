@@ -72,6 +72,8 @@ xl =
     }
 
 
+{-| The responsive device configuration.
+-}
 devices : DeviceStyles
 devices =
     { sm = sm
