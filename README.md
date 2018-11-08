@@ -1,7 +1,7 @@
 # The Sett - Look and Feel
 
-A collection of CSS definitions for styling The Sett Ltd. This package will not
-be of direct interest outside of The Sett Ltd, but you may find some inspiration
+A collection of CSS definitions for styling The Sett. This package will not
+be of direct interest outside of The Sett, but you may find some inspiration
 from the source code.
 
 Parts of this will eventually be split off into re-usable packages that will be
