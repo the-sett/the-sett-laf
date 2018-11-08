@@ -238,6 +238,12 @@ offset n =
         empty
 
 
+
+-- Justify Content
+
+
+{-| Puts the content of a row or column at the start.
+-}
 start : Device -> Grid -> Builder { a | grid : Never }
 start =
     styles
@@ -246,6 +252,8 @@ start =
         ]
 
 
+{-| Puts the content of a row or column at the end.
+-}
 end : Device -> Grid -> Builder { a | grid : Never }
 end =
     styles
@@ -278,6 +286,10 @@ around =
     styles [ justifyContent spaceAround ]
 
 
+
+-- Direction
+
+
 {-| Reverses the order of items in a column or row.
 -}
 reverse : Device -> Grid -> Builder { a | grid : Never }
@@ -295,29 +307,65 @@ reverse device grd =
                     []
 
 
-top : Device -> Grid -> Builder { a | grid : Never, row : Never }
+
+-- Align Items
+
+
+{-| Aligns items at the top of a row.
+-}
+top : Device -> Grid -> Builder { a | grid : Never, column : Never }
 top =
     styles [ alignItems flexStart ]
 
 
-middle : Device -> Grid -> Builder { a | grid : Never, row : Never }
+{-| Aligns items in the middle of a row.
+-}
+middle : Device -> Grid -> Builder { a | grid : Never, column : Never }
 middle =
     styles [ alignItems Css.center ]
 
 
-bottom : Device -> Grid -> Builder { a | grid : Never, row : Never }
+{-| Aligns items at the bottom of a row.
+-}
+bottom : Device -> Grid -> Builder { a | grid : Never, column : Never }
 bottom =
     styles [ alignItems flexEnd ]
 
 
+{-| Stretches items to fill the row height-wise.
+-}
+stretch : Device -> Grid -> Builder { a | grid : Never, column : Never }
+stretch =
+    styles [ alignItems Css.stretch ]
+
+
+{-| Aligns items so their balines align at the top of a row.
+-}
+baseline : Device -> Grid -> Builder { a | grid : Never, column : Never }
+baseline =
+    styles [ alignItems Css.baseline ]
+
+
+
+-- Ordering
+
+
+{-| Orders a row or column so it comes first.
+-}
 first : Device -> Grid -> Builder { a | grid : Never }
 first =
     styles [ order (num -1) ]
 
 
+{-| Orders a row or column so it comes last.
+-}
 last : Device -> Grid -> Builder { a | grid : Never }
 last =
     styles [ order (num 1) ]
+
+
+
+-- Helper functions
 
 
 applyDevice : Device -> List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
