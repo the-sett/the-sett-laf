@@ -15,6 +15,10 @@ module Responsive exposing
     , styleAsMixin
     )
 
+{-| The Responsive module provides a way of specifying sizing configurations for different devices,
+and for applying those to create CSS with media queries.
+-}
+
 import Array exposing (Array)
 import Css
 import Css.Global
@@ -26,6 +30,8 @@ import Maybe.Extra
 -- Devices and their properties.
 
 
+{-| Defines the possible classes of device; "small", "medium", "large" or "extra large".
+-}
 type Device
     = Sm
     | Md
@@ -33,17 +39,13 @@ type Device
     | Xl
 
 
+{-| Defines the font size, line height, device break point width, and wrapper size, for a device.
 
--- What the user needs to supply
--- type alias BaseStyle =
---     { baseFontSize : Float
---     , breakWidth : Float
---     , minLineHeight : Float
---     }
+TODO: line height ratio is a derived property. Should really hide derived props behind a type
+definition, so they cannot be set up wrongly.
 
-
+-}
 type alias BaseStyle =
-    -- This is really the internal model
     { device : Device
     , baseFontSize : Float
     , breakWidth : Float
@@ -53,6 +55,9 @@ type alias BaseStyle =
     }
 
 
+{-| Defines a mapping from devices to something else, that must always include a definition
+for each device size.
+-}
 type alias DeviceSpec a =
     { sm : a
     , md : a
@@ -61,10 +66,15 @@ type alias DeviceSpec a =
     }
 
 
+{-| Specifies the base styling properties accross all devices.
+-}
 type alias DeviceStyles =
     DeviceSpec BaseStyle
 
 
+{-| Maps a device spec with optional values into a list, where the list only contains values
+for the device specs that were actually defined.
+-}
 mapMaybeDeviceSpec : (a -> b) -> DeviceSpec (Maybe a) -> List b
 mapMaybeDeviceSpec fn spec =
     [ Maybe.map fn spec.sm
@@ -79,6 +89,8 @@ mapMaybeDeviceSpec fn spec =
 -- Vertical rhythm.
 
 
+{-| Calculates the line height for a base styling.
+-}
 lineHeight : BaseStyle -> Float
 lineHeight deviceProps =
     max
@@ -88,6 +100,8 @@ lineHeight deviceProps =
         |> toFloat
 
 
+{-| Calculates a multiple of the line height for a base styling.
+-}
 rhythm : BaseStyle -> Float -> Css.Px
 rhythm deviceProps n =
     Css.px <| n * lineHeight deviceProps
@@ -97,12 +111,18 @@ rhythm deviceProps n =
 -- Device Dependant Styling
 
 
+{-| Creates a single CSS property with media queries. Media queries will be
+generated for each of the devices specified.
+-}
 deviceStyle : DeviceStyles -> (BaseStyle -> Css.Style) -> Css.Style
 deviceStyle devices styleFn =
     mapMixins (mediaMixins devices (styleFn >> styleAsMixin)) []
         |> Css.batch
 
 
+{-| Creates a set of CSS properties with media queries. Media queries will be
+generated for each of the devices specified.
+-}
 deviceStyles : DeviceStyles -> (BaseStyle -> List Css.Style) -> Css.Style
 deviceStyles devices styleFn =
     mapMixins (mediaMixins devices (styleFn >> stylesAsMixin)) []
@@ -119,16 +139,28 @@ type alias Mixin =
     List Css.Style -> List Css.Style
 
 
+{-| Turns a single CSS property into a mixin.
+-}
 styleAsMixin : Css.Style -> Mixin
 styleAsMixin style styles =
     style :: styles
 
 
+{-| Turns a set of CSS properties into a mixin.
+-}
 stylesAsMixin : List Css.Style -> Mixin
 stylesAsMixin style styles =
     style ++ styles
 
 
+{-| Applies a list of mixins to a set of CSS properties, to produce a new list of CSS properties
+with all the mixins applied.
+
+TODO: Is this right? Looks like each mixin is being added into each style, than all are being
+concatentated together - which ought to lead to duplicates? I think perhaps the mixins should be
+chained together, not applied single then concatenated.
+
+-}
 mapMixins : List Mixin -> List Css.Style -> List Css.Style
 mapMixins mixins styles =
     List.map (\mixin -> mixin styles) mixins |> List.concat
@@ -138,6 +170,8 @@ mapMixins mixins styles =
 -- Media break points.
 
 
+{-| Media query to match high density devices.
+-}
 media2x : List Css.Style -> Css.Style
 media2x styles =
     Css.Media.withMediaQuery
@@ -145,6 +179,8 @@ media2x styles =
         styles
 
 
+{-| Creates a media query that has its min width set to the break point for a device style.
+-}
 mediaMinWidthMixin : BaseStyle -> Mixin
 mediaMinWidthMixin { breakWidth } =
     Css.Media.withMedia [ Css.Media.all [ Css.Media.minWidth <| Css.px breakWidth ] ]
@@ -185,6 +221,9 @@ mediaMixins { sm, md, lg, xl } devMixin =
 -- Responsive Spacing
 
 
+{-| A globaal CSS style sheet that sets up basic spaing for text, with single
+direction margins.
+-}
 baseSpacing : DeviceStyles -> List Css.Global.Snippet
 baseSpacing devices =
     [ -- No margins on headings, the line spacing of the heading is sufficient.
