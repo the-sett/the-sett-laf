@@ -39,6 +39,15 @@ const commonConfig = {
         test: /\.(eot|ttf|woff|woff2|svg)$/,
         use: 'file-loader?publicPath=../../&name=static/css/[hash].[ext]',
       },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: '/images/[name].[ext]'
+          }
+        }]
+      }
     ]
   },
 
