@@ -3,7 +3,7 @@ module Main exposing (main)
 import Body
 import Browser
 import Browser.Dom exposing (getViewportOf, setViewportOf)
-import Cards
+import CardsDemo
 import DebugStyle
 import GridDemo
 import Html.Styled exposing (div, input, text, toUnstyled)
@@ -71,7 +71,7 @@ styledView model =
                     Body.view
                         [ Typography.view
                         , GridDemo.view
-                        , Cards.view
+                        , CardsDemo.view
                         , MkDown.view
                         ]
               of
