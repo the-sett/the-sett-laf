@@ -59,17 +59,16 @@ card devices titleText imgSrc =
             ]
             []
             [ text "button"
-
-            --  Button.render Mdl
-            --     [ 0 ]
-            --     model.mdl
-            --     [ Button.colored
-            --     , Button.ripple
-            --     ]
-            --     [ text "Link"
-            --     , i [ class "material-icons" ]
-            --         [ text "chevron_right" ]
-            --     ]
+              --  Button.render Mdl
+              --     [ 0 ]
+              --     model.mdl
+              --     [ Button.colored
+              --     , Button.ripple
+              --     ]
+              --     [ text "Link"
+              --     , i [ class "material-icons" ]
+              --         [ text "chevron_right" ]
+              --     ]
             ]
         ]
 
@@ -95,9 +94,10 @@ crd _ _ =
     html
 
 
-image : List a -> Builder { a | card : Compatible }
-image _ =
-    ()
+
+-- image : List a -> Builder { a | card : Compatible }
+-- image _ =
+--     ()
 
 
 src _ =
@@ -125,11 +125,12 @@ html =
     div [] []
 
 
-test devices =
-    crd
-        [ image [ height 6, src "/whatever.png" ]
-        , title "Title"
-        , body [ html ]
-        , controls [ html ]
-        ]
-        devices
+
+-- test devices =
+--     crd
+--         [ image [ height 6, src "/whatever.png" ]
+--         , title "Title"
+--         , body [ html ]
+--         , controls [ html ]
+--         ]
+--         devices
