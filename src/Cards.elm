@@ -1,9 +1,19 @@
 module Cards exposing (card)
 
 import Css
-import Html.Styled exposing (a, div, h1, h4, i, img, p, styled, text, toUnstyled)
+import Html.Styled exposing (Attribute, Html, a, div, h1, h4, i, img, p, styled, text, toUnstyled)
 import Html.Styled.Attributes as Attributes exposing (class, id, name, title)
-import Responsive exposing (deviceStyle, deviceStyles, rhythm)
+import Responsive
+    exposing
+        ( BaseStyle
+        , Device(..)
+        , DeviceSpec
+        , DeviceStyles
+        , deviceStyle
+        , deviceStyles
+        , mapMaybeDeviceSpec
+        , rhythm
+        )
 
 
 card devices titleText imgSrc =
@@ -68,10 +78,24 @@ card devices titleText imgSrc =
 --image : Device -> Grid -> Builder { a | grid : Never, column : Never }
 
 
+type Compatible
+    = Compatible
+
+
+type Builder a
+    = Builder Device
+
+
+type alias CardT a msg =
+    List (Builder { a | card : Compatible }) -> DeviceStyles -> Html msg
+
+
+crd : List (Builder { a | card : Compatible }) -> DeviceStyles -> Html msg
 crd _ _ =
-    ()
+    html
 
 
+image : List a -> Builder { a | card : Compatible }
 image _ =
     ()
 
