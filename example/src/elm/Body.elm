@@ -1,16 +1,16 @@
 module Body exposing (view)
 
-import Html.Styled exposing (..)
+import Html.Styled exposing (div, styled)
 import Html.Styled.Attributes exposing (class, title)
 import Structure exposing (Template(..))
-import TheSettLaf exposing (wrapper)
+import TheSettLaf
 
 
 view : List (Template msg model) -> Template msg model
 view templates =
     (\devices model ->
         styled div
-            [ wrapper devices ]
+            [ TheSettLaf.wrapper devices ]
             []
             (List.map
                 (\template ->

@@ -16,7 +16,7 @@ import Logo
 import State exposing (Model, Msg(..))
 import Structure exposing (Template(..))
 import Task
-import TheSettLaf exposing (devices, fonts, responsiveMeta)
+import TheSettLaf
 
 
 main =
@@ -63,9 +63,9 @@ view model =
 styledView model =
     let
         innerView =
-            [ responsiveMeta
-            , fonts
-            , TheSettLaf.style devices
+            [ TheSettLaf.responsiveMeta
+            , TheSettLaf.fonts
+            , TheSettLaf.style TheSettLaf.devices
             , case
                 Layout.layout <|
                     Body.view
@@ -76,14 +76,14 @@ styledView model =
                         ]
               of
                 Dynamic fn ->
-                    fn devices model
+                    fn TheSettLaf.devices model
 
                 Static fn ->
-                    Html.Styled.map never <| fn devices
+                    Html.Styled.map never <| fn TheSettLaf.devices
             ]
 
         debugStyle =
-            DebugStyle.style devices
+            DebugStyle.style TheSettLaf.devices
     in
     case model of
         True ->

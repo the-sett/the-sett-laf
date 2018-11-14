@@ -1,13 +1,13 @@
 module Layout exposing (layout)
 
 import Css
-import Grid exposing (center, col, columns, grid, row)
+import Grid
 import Html.Styled exposing (Html, a, button, div, input, li, nav, node, styled, text, ul)
 import Html.Styled.Attributes exposing (attribute, checked, class, href, id, type_)
 import Html.Styled.Events exposing (onClick)
-import Logo exposing (logo)
+import Logo
 import Responsive exposing (DeviceStyles)
-import ResponsiveDSL exposing (md, sm, styles)
+import ResponsiveDSL exposing (md, sm)
 import State exposing (Model, Msg(..))
 import Structure exposing (Layout, Template(..))
 import Svg.Styled
@@ -44,9 +44,9 @@ topHeader devices model =
         [ Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 6) (Css.px 0) (Css.rgba 0 0 0 0.75)
         ]
         []
-        [ grid
+        [ Grid.grid
             [ sm
-                [ styles
+                [ ResponsiveDSL.styles
                     [ wrapper devices
                     , Responsive.deviceStyle devices <|
                         \deviceProps -> Css.height (Responsive.rhythm deviceProps 3)
@@ -54,13 +54,13 @@ topHeader devices model =
                 ]
             ]
             []
-            [ row
+            [ Grid.row
                 []
                 []
-                [ col
+                [ Grid.col
                     [ sm
-                        [ columns 1
-                        , styles
+                        [ Grid.columns 1
+                        , ResponsiveDSL.styles
                             [ Responsive.deviceStyles devices <|
                                 \deviceProps ->
                                     [ Css.height (Responsive.rhythm deviceProps 3)
@@ -75,11 +75,11 @@ topHeader devices model =
                         , Css.marginTop (Css.pct 4)
                         ]
                         []
-                        [ Svg.Styled.fromUnstyled logo ]
+                        [ Svg.Styled.fromUnstyled Logo.logo ]
                     ]
-                , col
-                    [ sm [ columns 12 ]
-                    , md [ columns 10, center ]
+                , Grid.col
+                    [ sm [ Grid.columns 12 ]
+                    , md [ Grid.columns 10, Grid.center ]
                     ]
                     []
                     [ styled ul
