@@ -2,11 +2,12 @@ module CardsDemo exposing (view)
 
 import Cards exposing (card)
 import Css
-import Grid exposing (col, columns, grid, lg, md, offset, row, sm, xl)
+import Grid exposing (col, columns, grid, offset, row)
 import Html.Styled exposing (a, div, h1, h4, i, img, p, styled, text, toUnstyled)
 import Html.Styled.Attributes exposing (class, id, name, src, title)
 import Html.Styled.Lazy exposing (lazy)
 import Responsive exposing (deviceStyle, deviceStyles, rhythm)
+import ResponsiveDSL exposing (md, sm)
 import Structure exposing (Template(..))
 
 

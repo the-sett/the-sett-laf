@@ -1,12 +1,13 @@
 module GridDemo exposing (view)
 
 import Css
-import Grid exposing (auto, center, col, columns, grid, lg, md, offset, row, sm, styles, xl)
+import Grid exposing (auto, center, col, columns, grid, offset, row)
 import Html.Styled exposing (a, div, h1, h4, li, styled, text, toUnstyled, ul)
 import Html.Styled.Attributes exposing (class, href, id, src, title)
 import Html.Styled.Lazy exposing (lazy)
 import Logo exposing (logo)
 import Responsive exposing (deviceStyle, rhythm)
+import ResponsiveDSL exposing (lg, md, sm, styles, xl)
 import Structure exposing (Template(..))
 import Svg.Styled
 

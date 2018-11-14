@@ -1,12 +1,13 @@
 module Layout exposing (layout)
 
 import Css
-import Grid exposing (center, col, columns, grid, lg, md, row, sm, styles, xl)
+import Grid exposing (center, col, columns, grid, row)
 import Html.Styled exposing (Html, a, button, div, input, li, nav, node, styled, text, ul)
 import Html.Styled.Attributes exposing (attribute, checked, class, href, id, type_)
 import Html.Styled.Events exposing (onClick)
 import Logo exposing (logo)
 import Responsive exposing (DeviceStyles)
+import ResponsiveDSL exposing (md, sm, styles)
 import State exposing (Model, Msg(..))
 import Structure exposing (Layout, Template(..))
 import Svg.Styled
