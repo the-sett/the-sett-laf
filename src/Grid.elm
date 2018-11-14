@@ -146,7 +146,7 @@ md builders =
     applyDevice Md builders
 
 
-{-| Largs device grid property builder.
+{-| Large device grid property builder.
 -}
 lg : List (Device -> ctx -> Builder a ctx) -> List (ctx -> Builder a ctx)
 lg builders =
