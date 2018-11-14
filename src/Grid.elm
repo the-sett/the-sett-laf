@@ -97,17 +97,13 @@ import ResponsiveDSL
 
 
 
--- Grid  data models
+{- The grid styling context. -}
 
 
 type Grid
     = Grid
     | Row
     | Column
-
-
-type alias GridBuilder a =
-    Builder a Grid
 
 
 
@@ -158,7 +154,6 @@ row builders attributes innerHtml devices =
 col : ElementBuilder { a | col : Compatible } Grid msg
 col builders attributes innerHtml devices =
     let
-        flatBuilders : List (GridBuilder { a | col : Compatible })
         flatBuilders =
             List.concat builders
                 |> List.map (\gridFn -> gridFn Column)
