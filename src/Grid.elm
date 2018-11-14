@@ -150,13 +150,14 @@ type alias GridBuilder a =
 -- Grid constructors
 
 
-type alias GridT a msg =
-    List (List (Grid -> GridBuilder { a | grid : Compatible })) -> List (Attribute msg) -> List (DeviceStyles -> Html msg) -> DeviceStyles -> Html msg
-
-
 {-| The outer builder of a responsive grid.
 -}
-grid : GridT a msg
+grid :
+    List (List (Grid -> GridBuilder { a | grid : Compatible }))
+    -> List (Attribute msg)
+    -> List (DeviceStyles -> Html msg)
+    -> DeviceStyles
+    -> Html msg
 grid builders attributes innerHtml devices =
     let
         flatBuilders =
@@ -172,13 +173,14 @@ grid builders attributes innerHtml devices =
         (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
 
 
-type alias RowT a msg =
-    List (List (Grid -> GridBuilder { a | row : Compatible })) -> List (Attribute msg) -> List (DeviceStyles -> Html msg) -> DeviceStyles -> Html msg
-
-
 {-| The row builder for a responsive grid, on which row compatible properties can be defined.
 -}
-row : RowT a msg
+row :
+    List (List (Grid -> GridBuilder { a | row : Compatible }))
+    -> List (Attribute msg)
+    -> List (DeviceStyles -> Html msg)
+    -> DeviceStyles
+    -> Html msg
 row builders attributes innerHtml devices =
     let
         flatBuilders =
@@ -197,13 +199,14 @@ row builders attributes innerHtml devices =
         (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
 
 
-type alias ColT a msg =
-    List (List (Grid -> GridBuilder { a | col : Compatible })) -> List (Attribute msg) -> List (Html msg) -> DeviceStyles -> Html msg
-
-
 {-| The column builder for a responsive grid, on which column compatible properties can be defined.
 -}
-col : ColT a msg
+col :
+    List (List (Grid -> GridBuilder { a | col : Compatible }))
+    -> List (Attribute msg)
+    -> List (Html msg)
+    -> DeviceStyles
+    -> Html msg
 col builders attributes innerHtml devices =
     let
         flatBuilders : List (GridBuilder { a | col : Compatible })
