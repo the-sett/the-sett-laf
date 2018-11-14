@@ -105,8 +105,12 @@ type Grid
     | Column
 
 
-type Builder a
-    = Builder Device Grid (Grid -> List Css.Style)
+type Builder a ctx
+    = Builder Device ctx (ctx -> List Css.Style)
+
+
+type alias GridBuilder a =
+    Builder a Grid
 
 
 
@@ -114,7 +118,7 @@ type Builder a
 
 
 type alias GridT a msg =
-    List (List (Grid -> Builder { a | grid : Compatible })) -> List (Attribute msg) -> List (DeviceStyles -> Html msg) -> DeviceStyles -> Html msg
+    List (List (Grid -> GridBuilder { a | grid : Compatible })) -> List (Attribute msg) -> List (DeviceStyles -> Html msg) -> DeviceStyles -> Html msg
 
 
 {-| The outer builder of a responsive grid.
@@ -136,7 +140,7 @@ grid builders attributes innerHtml devices =
 
 
 type alias RowT a msg =
-    List (List (Grid -> Builder { a | row : Compatible })) -> List (Attribute msg) -> List (DeviceStyles -> Html msg) -> DeviceStyles -> Html msg
+    List (List (Grid -> GridBuilder { a | row : Compatible })) -> List (Attribute msg) -> List (DeviceStyles -> Html msg) -> DeviceStyles -> Html msg
 
 
 {-| The row builder for a responsive grid, on which row compatible properties can be defined.
@@ -161,7 +165,7 @@ row builders attributes innerHtml devices =
 
 
 type alias ColT a msg =
-    List (List (Grid -> Builder { a | col : Compatible })) -> List (Attribute msg) -> List (Html msg) -> DeviceStyles -> Html msg
+    List (List (Grid -> GridBuilder { a | col : Compatible })) -> List (Attribute msg) -> List (Html msg) -> DeviceStyles -> Html msg
 
 
 {-| The column builder for a responsive grid, on which column compatible properties can be defined.
@@ -169,7 +173,7 @@ type alias ColT a msg =
 col : ColT a msg
 col builders attributes innerHtml devices =
     let
-        flatBuilders : List (Builder { a | col : Compatible })
+        flatBuilders : List (GridBuilder { a | col : Compatible })
         flatBuilders =
             List.concat builders
                 |> List.map (\gridFn -> gridFn Column)
@@ -186,28 +190,28 @@ col builders attributes innerHtml devices =
 
 {-| Small device grid property builder.
 -}
-sm : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+sm : List (Device -> Grid -> GridBuilder a) -> List (Grid -> GridBuilder a)
 sm builders =
     applyDevice Sm builders
 
 
 {-| Medium device grid property builder.
 -}
-md : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+md : List (Device -> Grid -> GridBuilder a) -> List (Grid -> GridBuilder a)
 md builders =
     applyDevice Md builders
 
 
 {-| Largs device grid property builder.
 -}
-lg : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+lg : List (Device -> Grid -> GridBuilder a) -> List (Grid -> GridBuilder a)
 lg builders =
     applyDevice Lg builders
 
 
 {-| Extra large device grid property builder.
 -}
-xl : List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+xl : List (Device -> Grid -> GridBuilder a) -> List (Grid -> GridBuilder a)
 xl builders =
     applyDevice Xl builders
 
@@ -218,7 +222,7 @@ xl builders =
 
 {-| Adds any CSS style you like to a grid element.
 -}
-styles : List Css.Style -> Device -> Grid -> Builder a
+styles : List Css.Style -> Device -> Grid -> GridBuilder a
 styles styleList device grd =
     Builder device grd (always styleList)
 
@@ -229,15 +233,20 @@ styles styleList device grd =
 
 {-| Auto column width means that a column expands to fill the available width.
 -}
-auto : Device -> Grid -> Builder { a | row : Never }
+auto : Device -> Grid -> GridBuilder { a | row : Never }
 auto =
     columns 0
 
 
 {-| Defines how many column widths a column will take up. Zero means use 'auto'
 width and expand to fill available space.
+
+When applied to a row or grid, this sets the total number of columns available.
+When applied to a column, this sets the number of columns taken up out of the
+total available.
+
 -}
-columns : Float -> Device -> Grid -> Builder { a | row : Never }
+columns : Float -> Device -> Grid -> GridBuilder { a | row : Never }
 columns n =
     if n > 0 then
         styles
@@ -255,7 +264,7 @@ columns n =
 
 {-| Defines how many column widths a column is offset from the left hand side by.
 -}
-offset : Float -> Device -> Grid -> Builder { a | grid : Never, row : Never }
+offset : Float -> Device -> Grid -> GridBuilder { a | grid : Never, row : Never }
 offset n =
     if n > 0 then
         styles
@@ -271,7 +280,7 @@ offset n =
 
 {-| Puts the content of a row or column at the start.
 -}
-start : Device -> Grid -> Builder { a | grid : Never }
+start : Device -> Grid -> GridBuilder { a | grid : Never }
 start =
     styles
         [ justifyContent flexStart
@@ -281,7 +290,7 @@ start =
 
 {-| Puts the content of a row or column at the end.
 -}
-end : Device -> Grid -> Builder { a | grid : Never }
+end : Device -> Grid -> GridBuilder { a | grid : Never }
 end =
     styles
         [ justifyContent flexEnd
@@ -291,7 +300,7 @@ end =
 
 {-| Centers a row or column.
 -}
-center : Device -> Grid -> Builder { a | grid : Never }
+center : Device -> Grid -> GridBuilder { a | grid : Never }
 center =
     styles
         [ justifyContent Css.center
@@ -301,14 +310,14 @@ center =
 
 {-| Only pad spacing between items in a row.
 -}
-between : Device -> Grid -> Builder { a | grid : Never, col : Never }
+between : Device -> Grid -> GridBuilder { a | grid : Never, col : Never }
 between =
     styles [ justifyContent spaceBetween ]
 
 
 {-| Pad spacing around items in a row, with space on the left and right hand sides.
 -}
-around : Device -> Grid -> Builder { a | grid : Never, col : Never }
+around : Device -> Grid -> GridBuilder { a | grid : Never, col : Never }
 around =
     styles [ justifyContent spaceAround ]
 
@@ -319,7 +328,7 @@ around =
 
 {-| Reverses the order of items in a column or row.
 -}
-reverse : Device -> Grid -> Builder { a | grid : Never }
+reverse : Device -> Grid -> GridBuilder { a | grid : Never }
 reverse device grd =
     Builder device grd <|
         \container ->
@@ -340,35 +349,35 @@ reverse device grd =
 
 {-| Aligns items at the top of a row.
 -}
-top : Device -> Grid -> Builder { a | grid : Never, column : Never }
+top : Device -> Grid -> GridBuilder { a | grid : Never, column : Never }
 top =
     styles [ alignItems flexStart ]
 
 
 {-| Aligns items in the middle of a row.
 -}
-middle : Device -> Grid -> Builder { a | grid : Never, column : Never }
+middle : Device -> Grid -> GridBuilder { a | grid : Never, column : Never }
 middle =
     styles [ alignItems Css.center ]
 
 
 {-| Aligns items at the bottom of a row.
 -}
-bottom : Device -> Grid -> Builder { a | grid : Never, column : Never }
+bottom : Device -> Grid -> GridBuilder { a | grid : Never, column : Never }
 bottom =
     styles [ alignItems flexEnd ]
 
 
 {-| Stretches items to fill the row height-wise.
 -}
-stretch : Device -> Grid -> Builder { a | grid : Never, column : Never }
+stretch : Device -> Grid -> GridBuilder { a | grid : Never, column : Never }
 stretch =
     styles [ alignItems Css.stretch ]
 
 
 {-| Aligns items so their balines align at the top of a row.
 -}
-baseline : Device -> Grid -> Builder { a | grid : Never, column : Never }
+baseline : Device -> Grid -> GridBuilder { a | grid : Never, column : Never }
 baseline =
     styles [ alignItems Css.baseline ]
 
@@ -379,14 +388,14 @@ baseline =
 
 {-| Orders a row or column so it comes first.
 -}
-first : Device -> Grid -> Builder { a | grid : Never }
+first : Device -> Grid -> GridBuilder { a | grid : Never }
 first =
     styles [ order (num -1) ]
 
 
 {-| Orders a row or column so it comes last.
 -}
-last : Device -> Grid -> Builder { a | grid : Never }
+last : Device -> Grid -> GridBuilder { a | grid : Never }
 last =
     styles [ order (num 1) ]
 
@@ -395,11 +404,12 @@ last =
 -- Helper functions
 
 
-applyDevice : Device -> List (Device -> Grid -> Builder a) -> List (Grid -> Builder a)
+applyDevice : Device -> List (Device -> Grid -> GridBuilder a) -> List (Grid -> GridBuilder a)
 applyDevice device builders =
     List.map (\buildFn -> buildFn device) builders
 
 
+applyDevicesToBuilders : List (GridBuilder a) -> DeviceStyles -> Css.Style
 applyDevicesToBuilders buildersList devices =
     deviceStyles devices
         (\base ->
@@ -416,6 +426,6 @@ applyDevicesToBuilders buildersList devices =
         )
 
 
-empty : Device -> Grid -> Builder a
+empty : Device -> Grid -> GridBuilder a
 empty =
     \device grd -> Builder device grd (always [])
