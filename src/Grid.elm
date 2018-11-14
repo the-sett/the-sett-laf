@@ -92,21 +92,47 @@ import Responsive
 
 
 
--- Grid  data models
+-- Responsive style builders.
 
 
 type Compatible
     = Compatible
 
 
+type Builder a ctx
+    = Builder Device ctx (ctx -> List Css.Style)
+
+
+applyDevice : Device -> List (Device -> ctx -> Builder a ctx) -> List (ctx -> Builder a ctx)
+applyDevice device builders =
+    List.map (\buildFn -> buildFn device) builders
+
+
+applyDevicesToBuilders : List (Builder a ctx) -> DeviceStyles -> Css.Style
+applyDevicesToBuilders buildersList devices =
+    deviceStyles devices
+        (\base ->
+            List.map
+                (\(Builder device grd fn) ->
+                    if device == base.device then
+                        fn grd
+
+                    else
+                        []
+                )
+                buildersList
+                |> List.concat
+        )
+
+
+
+-- Grid  data models
+
+
 type Grid
     = Grid
     | Row
     | Column
-
-
-type Builder a ctx
-    = Builder Device ctx (ctx -> List Css.Style)
 
 
 type alias GridBuilder a =
@@ -402,28 +428,6 @@ last =
 
 
 -- Helper functions
-
-
-applyDevice : Device -> List (Device -> Grid -> GridBuilder a) -> List (Grid -> GridBuilder a)
-applyDevice device builders =
-    List.map (\buildFn -> buildFn device) builders
-
-
-applyDevicesToBuilders : List (GridBuilder a) -> DeviceStyles -> Css.Style
-applyDevicesToBuilders buildersList devices =
-    deviceStyles devices
-        (\base ->
-            List.map
-                (\(Builder device grd fn) ->
-                    if device == base.device then
-                        fn grd
-
-                    else
-                        []
-                )
-                buildersList
-                |> List.concat
-        )
 
 
 empty : Device -> Grid -> GridBuilder a
