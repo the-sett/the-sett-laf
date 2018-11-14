@@ -107,12 +107,12 @@ controls innerHtml _ =
 
 
 height : Float -> StyleBuilder { a | card : Never } Card
-height _ =
-    -- deviceStyle devices <|
-    --     \deviceProps -> Css.height (rhythm deviceProps 6)
-    styles
-        [ Css.height <| Css.px 200 -- (rhythm deviceProps 6)
-        ]
+height n device ctx =
+    Builder device
+        ctx
+        (\_ baseProps ->
+            [ Css.height (rhythm baseProps n) ]
+        )
 
 
 src : String -> StyleBuilder { a | card : Never } Card

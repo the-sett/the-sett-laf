@@ -42,7 +42,7 @@ type Compatible
 
 
 type Builder a ctx
-    = Builder Device ctx (ctx -> List Css.Style)
+    = Builder Device ctx (ctx -> BaseStyle -> List Css.Style)
 
 
 type alias ContainerBuilder a ctx msg =
@@ -73,7 +73,7 @@ type alias StyleBuilder a ctx =
 -}
 styles : List Css.Style -> Device -> ctx -> Builder a ctx
 styles styleList device ctx =
-    Builder device ctx (always styleList)
+    Builder device ctx (always2 styleList)
 
 
 applyDevice : Device -> List (Device -> ctx -> Builder a ctx) -> List (ctx -> Builder a ctx)
@@ -84,11 +84,11 @@ applyDevice device builders =
 applyDevicesToBuilders : List (Builder a ctx) -> DeviceStyles -> Css.Style
 applyDevicesToBuilders buildersList devices =
     deviceStyles devices
-        (\base ->
+        (\baseStyle ->
             List.map
                 (\(Builder device grd fn) ->
-                    if device == base.device then
-                        fn grd
+                    if device == baseStyle.device then
+                        fn grd baseStyle
 
                     else
                         []
@@ -100,7 +100,7 @@ applyDevicesToBuilders buildersList devices =
 
 empty : StyleBuilder a ctx
 empty =
-    \device ctx -> Builder device ctx (always [])
+    \device ctx -> Builder device ctx (always2 [])
 
 
 {-| Small device grid property builder.
@@ -129,3 +129,7 @@ lg builders =
 xl : DeviceBuilder a ctx
 xl builders =
     applyDevice Xl builders
+
+
+always2 =
+    always >> always

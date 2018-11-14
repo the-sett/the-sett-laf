@@ -272,8 +272,8 @@ around =
 reverse : StyleBuilder { a | grid : Never } Grid
 reverse device grd =
     Builder device grd <|
-        \container ->
-            case container of
+        \ctx _ ->
+            case ctx of
                 Row ->
                     [ flexDirection rowReverse ]
 
