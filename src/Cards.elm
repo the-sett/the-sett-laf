@@ -14,6 +14,19 @@ import Responsive
         , mapMaybeDeviceSpec
         , rhythm
         )
+import ResponsiveDSL
+    exposing
+        ( Builder(..)
+        , Compatible(..)
+        , ContainerBuilder
+        , DeviceBuilder
+        , ElementBuilder
+        , StyleBuilder
+        , applyDevice
+        , applyDevicesToBuilders
+        , empty
+        , styles
+        )
 
 
 card devices titleText imgSrc =
@@ -74,65 +87,99 @@ card devices titleText imgSrc =
         ]
 
 
-
---image : Device -> Grid -> Builder { a | grid : Never, column : Never }
-
-
-type Compatible
-    = Compatible
-
-
-type Builder a
-    = Builder Device
+type Card
+    = Card
+    | Image
+    | Title
+    | Body
+    | Controls
 
 
-type alias CardT a msg =
-    List (Builder { a | card : Compatible }) -> DeviceStyles -> Html msg
+type alias CardBuilder a =
+    Builder a Card
 
 
-crd : List (Builder { a | card : Compatible }) -> DeviceStyles -> Html msg
-crd _ _ =
-    html
+crd : ContainerBuilder { a | card : Compatible } Card msg
+crd builders attributes innerHtml devices =
+    let
+        flatBuilders =
+            List.concat builders
+                |> List.map (\gridFn -> gridFn Card)
+    in
+    styled div
+        [ Css.borderRadius (Css.px 2)
+        , Css.property "box-shadow" "rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px"
+        , Css.marginLeft (Css.rem 0.5)
+        , Css.marginRight (Css.rem 0.5)
+        , applyDevicesToBuilders flatBuilders devices
+        ]
+        attributes
+        (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
 
 
-
--- image : List a -> Builder { a | card : Compatible }
--- image _ =
---     ()
-
-
-src _ =
-    ()
-
-
-title _ =
-    ()
-
-
-body _ =
-    ()
+image : ElementBuilder { a | image : Compatible } Card msg
+image builders attributes innerHtml devices =
+    let
+        flatBuilders =
+            List.concat builders
+                |> List.map (\gridFn -> gridFn Image)
+    in
+    styled div
+        [ applyDevicesToBuilders flatBuilders devices
+        ]
+        attributes
+        innerHtml
 
 
-controls _ =
-    ()
+title titleText _ =
+    styled div
+        [ Css.paddingLeft (Css.rem 1.5)
+        , Css.paddingRight (Css.rem 1)
+        ]
+        []
+        [ h4 []
+            [ text titleText ]
+        ]
 
 
+body innerHtml _ =
+    styled div
+        [ Css.paddingLeft (Css.rem 1)
+        , Css.paddingRight (Css.rem 1)
+        ]
+        []
+        innerHtml
+
+
+controls innerHtml _ =
+    styled div
+        [ Css.paddingLeft (Css.rem 1)
+        , Css.paddingRight (Css.rem 1)
+        , Css.paddingBottom (Css.rem 1)
+        ]
+        []
+        innerHtml
+
+
+height : Float -> StyleBuilder { a | card : Never } Card
 height _ =
-    ()
+    -- deviceStyle devices <|
+    --     \deviceProps -> Css.height (rhythm deviceProps 6)
+    empty
 
 
-html : Html.Styled.Html msg
-html =
-    div [] []
+src : String -> StyleBuilder { a | card : Never } Card
+src imageUrl =
+    styles [ Css.backgroundImage (Css.url imageUrl) ]
 
 
-
--- test devices =
---     crd
---         [ sm [ imageRhythm 6 ] ]
---         [ image "/whatever.png"
---         , title "Title"
---         , body [ html ]
---         , controls [ html ]
---         ]
---         devices
+test devices =
+    crd
+        []
+        []
+        [ image [ ResponsiveDSL.sm [ height 6, src "/whatever.png" ] ] [] []
+        , title "Title"
+        , body [ text "Body" ]
+        , controls [ text "Button" ]
+        ]
+        devices
