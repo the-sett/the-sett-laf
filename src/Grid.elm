@@ -131,7 +131,7 @@ grid builders attributes innerHtml devices =
         , marginLeft Css.auto
         , applyDevicesToBuilders flatBuilders devices
         ]
-        []
+        attributes
         (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
 
 
@@ -156,7 +156,7 @@ row builders attributes innerHtml devices =
         , flexWrap wrap
         , applyDevicesToBuilders flatBuilders devices
         ]
-        []
+        attributes
         (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
 
 
@@ -180,7 +180,7 @@ col builders attributes innerHtml devices =
         , flexGrow (num 0)
         , applyDevicesToBuilders flatBuilders devices
         ]
-        []
+        attributes
         innerHtml
 
 
@@ -224,7 +224,7 @@ styles styleList device grd =
 
 
 
--- Column size and offset
+--- Column size and offset
 
 
 {-| Auto column width means that a column expands to fill the available width.
