@@ -50,7 +50,7 @@ view =
 card devices title imageUrl =
     Cards.card []
         []
-        [ Cards.image [ ResponsiveDSL.sm [ Cards.height 6, Cards.src imageUrl ] ] [] []
+        [ Cards.image [ sm [ Cards.height 6, Cards.src imageUrl ] ] [] []
         , Cards.title title
         , Cards.body [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " ]
         , Cards.controls [ text "Button" ]
