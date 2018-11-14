@@ -128,7 +128,8 @@ html =
 
 -- test devices =
 --     crd
---         [ image [ height 6, src "/whatever.png" ]
+--         [ sm [ imageRhythm 6 ] ]
+--         [ image "/whatever.png"
 --         , title "Title"
 --         , body [ html ]
 --         , controls [ html ]
