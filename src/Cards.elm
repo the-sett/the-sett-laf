@@ -59,16 +59,17 @@ card devices titleText imgSrc =
             ]
             []
             [ text "button"
-              --  Button.render Mdl
-              --     [ 0 ]
-              --     model.mdl
-              --     [ Button.colored
-              --     , Button.ripple
-              --     ]
-              --     [ text "Link"
-              --     , i [ class "material-icons" ]
-              --         [ text "chevron_right" ]
-              --     ]
+
+            --  Button.render Mdl
+            --     [ 0 ]
+            --     model.mdl
+            --     [ Button.colored
+            --     , Button.ripple
+            --     ]
+            --     [ text "Link"
+            --     , i [ class "material-icons" ]
+            --         [ text "chevron_right" ]
+            --     ]
             ]
         ]
 
