@@ -6,7 +6,7 @@ import Grid
 import Html.Styled exposing (div, h1, styled, text)
 import Html.Styled.Attributes exposing (id)
 import Html.Styled.Lazy exposing (lazy)
-import ResponsiveDSL exposing (md, sm)
+import ResponsiveDSL exposing (lg, md, sm, xl)
 import Structure exposing (Template(..))
 
 
@@ -50,7 +50,14 @@ view =
 card devices title imageUrl =
     Cards.card []
         []
-        [ Cards.image [ sm [ Cards.height 6, Cards.src imageUrl ] ] [] []
+        [ Cards.image
+            [ sm [ Cards.height 4, Cards.src imageUrl ]
+            , md [ Cards.height 5 ]
+            , lg [ Cards.height 6 ]
+            , xl [ Cards.height 7 ]
+            ]
+            []
+            []
         , Cards.title title
         , Cards.body [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " ]
         , Cards.controls [ text "Button" ]
