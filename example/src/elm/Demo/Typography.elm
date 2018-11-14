@@ -1,4 +1,4 @@
-module Typography exposing (view)
+module Demo.Typography exposing (view)
 
 import Css
 import Html.Styled exposing (..)

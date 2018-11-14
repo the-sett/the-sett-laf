@@ -1,4 +1,4 @@
-module MkDown exposing (view)
+module Demo.MkDown exposing (view)
 
 import Css
 import Html

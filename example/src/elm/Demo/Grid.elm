@@ -1,4 +1,4 @@
-module GridDemo exposing (view)
+module Demo.Grid exposing (view)
 
 import Css
 import Grid exposing (auto, center, col, columns, grid, offset, row)

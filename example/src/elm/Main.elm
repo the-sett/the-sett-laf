@@ -3,20 +3,20 @@ module Main exposing (main)
 import Body
 import Browser
 import Browser.Dom exposing (getViewportOf, setViewportOf)
-import CardsDemo
 import DebugStyle
-import GridDemo
+import Demo.Cards
+import Demo.Grid
+import Demo.MkDown
+import Demo.Typography
 import Html.Styled exposing (div, input, text, toUnstyled)
 import Html.Styled.Attributes exposing (checked, type_)
 import Html.Styled.Events exposing (onCheck)
 import Layout
 import Logo
-import MkDown
 import State exposing (Model, Msg(..))
 import Structure exposing (Template(..))
 import Task
 import TheSettLaf exposing (devices, fonts, responsiveMeta)
-import Typography
 
 
 main =
@@ -69,10 +69,10 @@ styledView model =
             , case
                 Layout.layout <|
                     Body.view
-                        [ Typography.view
-                        , GridDemo.view
-                        , CardsDemo.view
-                        , MkDown.view
+                        [ Demo.Typography.view
+                        , Demo.Grid.view
+                        , Demo.Cards.view
+                        , Demo.MkDown.view
                         ]
               of
                 Dynamic fn ->

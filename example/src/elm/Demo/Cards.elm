@@ -1,4 +1,4 @@
-module CardsDemo exposing (view)
+module Demo.Cards exposing (view)
 
 import Cards
 import Css
