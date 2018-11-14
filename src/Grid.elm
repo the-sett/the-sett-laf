@@ -103,6 +103,13 @@ type Builder a ctx
     = Builder Device ctx (ctx -> List Css.Style)
 
 
+{-| Adds any CSS style you like to a grid element.
+-}
+styles : List Css.Style -> Device -> ctx -> Builder a ctx
+styles styleList device ctx =
+    Builder device ctx (always styleList)
+
+
 applyDevice : Device -> List (Device -> ctx -> Builder a ctx) -> List (ctx -> Builder a ctx)
 applyDevice device builders =
     List.map (\buildFn -> buildFn device) builders
@@ -240,17 +247,6 @@ lg builders =
 xl : List (Device -> Grid -> GridBuilder a) -> List (Grid -> GridBuilder a)
 xl builders =
     applyDevice Xl builders
-
-
-
--- Inject any CSS styles
-
-
-{-| Adds any CSS style you like to a grid element.
--}
-styles : List Css.Style -> Device -> Grid -> GridBuilder a
-styles styleList device grd =
-    Builder device grd (always styleList)
 
 
 
