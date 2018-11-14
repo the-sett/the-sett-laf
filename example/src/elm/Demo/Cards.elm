@@ -3,8 +3,8 @@ module Demo.Cards exposing (view)
 import Cards
 import Css
 import Grid
-import Html.Styled exposing (a, div, h1, h4, i, img, p, styled, text, toUnstyled)
-import Html.Styled.Attributes exposing (class, id, name, src, title)
+import Html.Styled exposing (div, h1, styled, text)
+import Html.Styled.Attributes exposing (id)
 import Html.Styled.Lazy exposing (lazy)
 import ResponsiveDSL exposing (md, sm)
 import Structure exposing (Template(..))

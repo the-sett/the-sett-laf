@@ -1,8 +1,8 @@
 module Demo.Typography exposing (view)
 
 import Css
-import Html.Styled exposing (..)
-import Html.Styled.Attributes exposing (class, id, name, title)
+import Html.Styled exposing (div, h1, h2, h3, h4, li, ol, p, styled, text, ul)
+import Html.Styled.Attributes exposing (id)
 import Html.Styled.Lazy exposing (lazy)
 import Structure exposing (Template(..))
 

@@ -2,8 +2,8 @@ module Demo.MkDown exposing (view)
 
 import Css
 import Html
-import Html.Styled exposing (..)
-import Html.Styled.Attributes exposing (class, id, title)
+import Html.Styled exposing (Html, div, fromUnstyled, h1, styled, text)
+import Html.Styled.Attributes exposing (id)
 import Html.Styled.Lazy exposing (lazy)
 import Markdown.Block as Block exposing (Block)
 import Markdown.Config exposing (HtmlOption(..), defaultOptions, defaultSanitizeOptions)

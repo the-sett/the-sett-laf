@@ -1,15 +1,12 @@
 module Demo.Grid exposing (view)
 
 import Css
-import Grid exposing (auto, center, col, columns, grid, offset, row)
-import Html.Styled exposing (a, div, h1, h4, li, styled, text, toUnstyled, ul)
-import Html.Styled.Attributes exposing (class, href, id, src, title)
+import Grid
+import Html.Styled exposing (div, h1, h4, styled, text)
+import Html.Styled.Attributes exposing (id)
 import Html.Styled.Lazy exposing (lazy)
-import Logo exposing (logo)
-import Responsive exposing (deviceStyle, rhythm)
 import ResponsiveDSL exposing (lg, md, sm, styles, xl)
 import Structure exposing (Template(..))
-import Svg.Styled
 
 
 view : Template msg model
@@ -52,41 +49,41 @@ cellStyle =
 
 
 widths n =
-    row []
+    Grid.row []
         []
-        [ col [ sm [ columns n, cellStyle ] ] [] [ text "cell" ] ]
+        [ Grid.col [ sm [ Grid.columns n, cellStyle ] ] [] [ text "cell" ] ]
 
 
 offsets n =
-    row []
+    Grid.row []
         []
-        [ col [ sm [ columns <| 13 - n, offset <| n - 1, cellStyle ] ] [] [ text "cell" ] ]
+        [ Grid.col [ sm [ Grid.columns <| 13 - n, Grid.offset <| n - 1, cellStyle ] ] [] [ text "cell" ] ]
 
 
 centecellStyle n =
-    row [ sm [ center ] ]
+    Grid.row [ sm [ Grid.center ] ]
         []
-        [ col [ sm [ columns n, cellStyle ] ] [] [ text "cell" ] ]
+        [ Grid.col [ sm [ Grid.columns n, cellStyle ] ] [] [ text "cell" ] ]
 
 
 end n =
-    row [ sm [ Grid.end ] ]
+    Grid.row [ sm [ Grid.end ] ]
         []
-        [ col [ sm [ columns n, cellStyle ] ] [] [ text "cell" ] ]
+        [ Grid.col [ sm [ Grid.columns n, cellStyle ] ] [] [ text "cell" ] ]
 
 
 autoWidth n =
-    row []
+    Grid.row []
         []
     <|
-        List.repeat (floor n) (col [ sm [ auto, cellStyle ] ] [] [ text "cell" ])
+        List.repeat (floor n) (Grid.col [ sm [ Grid.auto, cellStyle ] ] [] [ text "cell" ])
 
 
 widthAndAuto n =
-    row []
+    Grid.row []
         []
-        [ col [ sm [ columns n, cellStyle ] ] [] [ text "cell" ]
-        , col [ sm [ auto, cellStyle ] ] [] [ text "cell" ]
+        [ Grid.col [ sm [ Grid.columns n, cellStyle ] ] [] [ text "cell" ]
+        , Grid.col [ sm [ Grid.auto, cellStyle ] ] [] [ text "cell" ]
         ]
 
 
@@ -95,7 +92,7 @@ widthAndAuto n =
 
 
 gridn devices rowFn =
-    grid
+    Grid.grid
         []
         []
         (List.map rowFn <| List.map toFloat <| List.filter (\v -> modBy 3 v == 0) <| List.range 1 12)
