@@ -132,6 +132,34 @@ applyDevicesToBuilders buildersList devices =
         )
 
 
+{-| Small device grid property builder.
+-}
+sm : List (Device -> ctx -> Builder a ctx) -> List (ctx -> Builder a ctx)
+sm builders =
+    applyDevice Sm builders
+
+
+{-| Medium device grid property builder.
+-}
+md : List (Device -> ctx -> Builder a ctx) -> List (ctx -> Builder a ctx)
+md builders =
+    applyDevice Md builders
+
+
+{-| Largs device grid property builder.
+-}
+lg : List (Device -> ctx -> Builder a ctx) -> List (ctx -> Builder a ctx)
+lg builders =
+    applyDevice Lg builders
+
+
+{-| Extra large device grid property builder.
+-}
+xl : List (Device -> ctx -> Builder a ctx) -> List (ctx -> Builder a ctx)
+xl builders =
+    applyDevice Xl builders
+
+
 
 -- Grid  data models
 
@@ -222,34 +250,6 @@ col builders attributes innerHtml devices =
         ]
         attributes
         innerHtml
-
-
-{-| Small device grid property builder.
--}
-sm : List (Device -> Grid -> GridBuilder a) -> List (Grid -> GridBuilder a)
-sm builders =
-    applyDevice Sm builders
-
-
-{-| Medium device grid property builder.
--}
-md : List (Device -> Grid -> GridBuilder a) -> List (Grid -> GridBuilder a)
-md builders =
-    applyDevice Md builders
-
-
-{-| Largs device grid property builder.
--}
-lg : List (Device -> Grid -> GridBuilder a) -> List (Grid -> GridBuilder a)
-lg builders =
-    applyDevice Lg builders
-
-
-{-| Extra large device grid property builder.
--}
-xl : List (Device -> Grid -> GridBuilder a) -> List (Grid -> GridBuilder a)
-xl builders =
-    applyDevice Xl builders
 
 
 
