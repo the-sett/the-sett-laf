@@ -154,7 +154,9 @@ fontSizeMixin scale (FontSizeLevel sizeLevel) deviceProps =
     in
     Css.batch
         [ Css.fontSize (Css.em emVal)
-        , Css.lineHeight (rhythm deviceProps (toFloat numLines))
+
+        --, Css.lineHeight (rhythm deviceProps (toFloat numLines))
+        , Css.lineHeight <| Css.rem (1 * deviceProps.lineHeightRatio * toFloat numLines)
         ]
         |> styleAsMixin
 
