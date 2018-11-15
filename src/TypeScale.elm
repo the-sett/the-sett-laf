@@ -4,6 +4,7 @@ module TypeScale exposing
     , augmentedFourth
     , base
     , fontSizeMixin
+    , fontSizePctMixin
     , goldenRatio
     , h1
     , h2
@@ -153,6 +154,26 @@ fontSizeMixin scale (FontSizeLevel sizeLevel) deviceProps =
     in
     Css.batch
         [ Css.fontSize (Css.em emVal)
+        , Css.lineHeight (rhythm deviceProps (toFloat numLines))
+        ]
+        |> styleAsMixin
+
+
+fontSizePctMixin : TypeScale -> FontSizeLevel -> BaseStyle -> Mixin
+fontSizePctMixin scale (FontSizeLevel sizeLevel) deviceProps =
+    let
+        emVal =
+            fontSizeEm scale deviceProps (FontSizeLevel sizeLevel)
+
+        pxVal =
+            fontSizePx scale deviceProps (FontSizeLevel sizeLevel)
+
+        numLines =
+            max sizeLevel.minLines
+                (ceiling (pxVal / lineHeight deviceProps))
+    in
+    Css.batch
+        [ Css.fontSize <| Css.pct (emVal * 100.0)
         , Css.lineHeight (rhythm deviceProps (toFloat numLines))
         ]
         |> styleAsMixin

@@ -13,7 +13,7 @@ import Html.Styled exposing (Html, node)
 import Html.Styled.Attributes exposing (attribute, href, name, rel)
 import Reset exposing (reset)
 import Responsive exposing (BaseStyle, Device(..), DeviceStyles, baseSpacing, mapMixins, mediaMixins)
-import TypeScale exposing (TypeScale, base, fontSizeMixin, h1, h2, h3, h4, majorThird)
+import TypeScale exposing (TypeScale, base, fontSizeMixin, fontSizePctMixin, h1, h2, h3, h4, majorThird)
 
 
 
@@ -112,11 +112,12 @@ typography deviceStyles scale =
     let
         -- Generates font size in Em as relative sizes to the root font-size.
         fontBaseStyle fontSizeLevel =
+            --fontSizeMixin scale fontSizeLevel deviceStyles.sm []
             mapMixins (mediaMixins deviceStyles (fontSizeMixin scale fontSizeLevel)) []
 
         -- Generates font size in Em with different relative sizes for different devices.
         fontMediaStyles fontSizeLevel =
-            mapMixins (mediaMixins deviceStyles (fontSizeMixin scale fontSizeLevel)) []
+            mapMixins (mediaMixins deviceStyles (fontSizePctMixin scale fontSizeLevel)) []
     in
     [ -- Base font.
       Css.Global.each
@@ -147,12 +148,13 @@ typography deviceStyles scale =
         [ Css.fontWeight Css.bold ]
 
     -- Media queries to set all font sizes accross all devices.
-    -- TODO: The font size might be better as a pct?
     , Css.Global.html <| fontMediaStyles base
     , Css.Global.h1 <| fontBaseStyle h1
     , Css.Global.h2 <| fontBaseStyle h2
     , Css.Global.h3 <| fontBaseStyle h3
     , Css.Global.h4 <| fontBaseStyle h4
+
+    -- TODO: The root font-size should be a pct, that sets up media dependant em.
     ]
 
 
