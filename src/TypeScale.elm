@@ -4,7 +4,6 @@ module TypeScale exposing
     , augmentedFourth
     , base
     , fontSizeMixin
-    , fontSizePctMixin
     , goldenRatio
     , h1
     , h2
@@ -134,16 +133,16 @@ fontSizePx scale { baseFontSize } (FontSizeLevel sizeLevel) =
         |> toFloat
 
 
-fontSizeEm : TypeScale -> BaseStyle -> FontSizeLevel -> Float
-fontSizeEm scale { baseFontSize } (FontSizeLevel sizeLevel) =
+fontSizeRem : TypeScale -> BaseStyle -> FontSizeLevel -> Float
+fontSizeRem scale { baseFontSize } (FontSizeLevel sizeLevel) =
     scale sizeLevel.level * baseFontSize / 16.0
 
 
 fontSizeMixin : TypeScale -> FontSizeLevel -> BaseStyle -> Mixin
 fontSizeMixin scale (FontSizeLevel sizeLevel) deviceProps =
     let
-        emVal =
-            fontSizeEm scale deviceProps (FontSizeLevel sizeLevel)
+        remVal =
+            fontSizeRem scale deviceProps (FontSizeLevel sizeLevel)
 
         pxVal =
             fontSizePx scale deviceProps (FontSizeLevel sizeLevel)
@@ -153,29 +152,9 @@ fontSizeMixin scale (FontSizeLevel sizeLevel) deviceProps =
                 (ceiling (pxVal / lineHeight deviceProps))
     in
     Css.batch
-        [ Css.fontSize (Css.em emVal)
-
-        --, Css.lineHeight (rhythm deviceProps (toFloat numLines))
-        , Css.lineHeight <| Css.rem (1 * deviceProps.lineHeightRatio * toFloat numLines)
-        ]
-        |> styleAsMixin
-
-
-fontSizePctMixin : TypeScale -> FontSizeLevel -> BaseStyle -> Mixin
-fontSizePctMixin scale (FontSizeLevel sizeLevel) deviceProps =
-    let
-        emVal =
-            fontSizeEm scale deviceProps (FontSizeLevel sizeLevel)
-
-        pxVal =
-            fontSizePx scale deviceProps (FontSizeLevel sizeLevel)
-
-        numLines =
-            max sizeLevel.minLines
-                (ceiling (pxVal / lineHeight deviceProps))
-    in
-    Css.batch
-        [ Css.fontSize <| Css.pct (emVal * 100.0)
+        [ Css.fontSize (Css.rem remVal)
         , Css.lineHeight (rhythm deviceProps (toFloat numLines))
+
+        --, Css.lineHeight <| Css.rem (1 * deviceProps.lineHeightRatio * toFloat numLines)
         ]
         |> styleAsMixin

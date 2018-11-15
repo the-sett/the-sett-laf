@@ -98,11 +98,11 @@ mapMaybeDeviceSpec fn spec =
 -}
 lineHeight : BaseStyle -> Float
 lineHeight deviceProps =
+    -- |> floor
+    -- |> toFloat
     max
         deviceProps.baseLineHeight
         (deviceProps.lineHeightRatio * deviceProps.baseFontSize)
-        |> floor
-        |> toFloat
 
 
 {-| Calculates a multiple of the line height for a base styling.

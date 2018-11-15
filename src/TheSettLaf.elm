@@ -13,7 +13,7 @@ import Html.Styled exposing (Html, node)
 import Html.Styled.Attributes exposing (attribute, href, name, rel)
 import Reset exposing (reset)
 import Responsive exposing (BaseStyle, Device(..), DeviceStyles, baseSpacing, mapMixins, mediaMixins)
-import TypeScale exposing (TypeScale, base, fontSizeMixin, fontSizePctMixin, h1, h2, h3, h4, majorThird)
+import TypeScale exposing (TypeScale, base, fontSizeMixin, h1, h2, h3, h4, majorThird)
 
 
 
@@ -117,7 +117,7 @@ typography deviceStyles scale =
 
         -- Generates font size in Em with different relative sizes for different devices.
         fontMediaStyles fontSizeLevel =
-            mapMixins (mediaMixins deviceStyles (fontSizePctMixin scale fontSizeLevel)) []
+            mapMixins (mediaMixins deviceStyles (fontSizeMixin scale fontSizeLevel)) []
     in
     [ -- Base font.
       Css.Global.each
@@ -158,7 +158,7 @@ typography deviceStyles scale =
     ]
 
 
-{-| The global CSS.
+{-| The global CSS
 -}
 responsive : TypeScale -> DeviceStyles -> List Css.Global.Snippet
 responsive scale deviceStyles =

@@ -79,7 +79,7 @@ debug devices =
         , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
         , Css.backgroundRepeat Css.repeat
         , Responsive.deviceStyle devices <|
-            \deviceProps -> Css.backgroundSize2 (rhythm deviceProps 1) (rhythm deviceProps 1)
+            \deviceProps -> Css.backgroundSize2 (Debug.log "rhythm1" <| rhythm deviceProps 1) (rhythm deviceProps 1)
         ]
     ]
 
