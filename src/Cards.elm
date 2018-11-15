@@ -111,7 +111,7 @@ height n device ctx =
     Builder device
         ctx
         (\_ baseProps ->
-            [ Css.height <| rhythm baseProps n ]
+            [ Css.height (Debug.log "height" <| rhythm (Debug.log "baseProps" baseProps) (Debug.log "n" n)) ]
         )
 
 

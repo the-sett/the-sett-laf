@@ -55,7 +55,7 @@ topHeader devices model =
             ]
             []
             [ Grid.row
-                [ sm [ Grid.middle ] ]
+                []
                 []
                 [ Grid.col
                     [ sm
@@ -78,7 +78,7 @@ topHeader devices model =
                         [ Svg.Styled.fromUnstyled Logo.logo ]
                     ]
                 , Grid.col
-                    [ sm [ Grid.columns 8, Grid.center ]
+                    [ sm [ Grid.columns 12 ]
                     , md [ Grid.columns 10, Grid.center ]
                     ]
                     []

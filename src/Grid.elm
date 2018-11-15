@@ -37,6 +37,34 @@ such grids.
 -}
 
 import Css
+    exposing
+        ( alignItems
+        , auto
+        , borderBox
+        , boxSizing
+        , columnReverse
+        , displayFlex
+        , flexBasis
+        , flexDirection
+        , flexEnd
+        , flexGrow
+        , flexShrink
+        , flexStart
+        , flexWrap
+        , justifyContent
+        , marginLeft
+        , marginRight
+        , maxWidth
+        , num
+        , order
+        , pct
+        , property
+        , rowReverse
+        , spaceAround
+        , spaceBetween
+        , textAlign
+        , wrap
+        )
 import Html.Styled exposing (Attribute, Html, div, styled, text)
 import Responsive
     exposing
@@ -92,8 +120,8 @@ grid builders attributes innerHtml devices =
                 |> List.map (\gridFn -> gridFn Column)
     in
     styled div
-        [ Css.marginRight Css.auto
-        , Css.marginLeft Css.auto
+        [ marginRight Css.auto
+        , marginLeft Css.auto
         , applyDevicesToBuilders flatBuilders devices
         ]
         attributes
@@ -110,11 +138,11 @@ row builders attributes innerHtml devices =
                 |> List.map (\gridFn -> gridFn Column)
     in
     styled div
-        [ Css.boxSizing Css.borderBox
-        , Css.displayFlex
-        , Css.property "flex" "0 1 auto"
-        , Css.flexDirection Css.row
-        , Css.flexWrap Css.wrap
+        [ boxSizing borderBox
+        , displayFlex
+        , property "flex" "0 1 auto"
+        , flexDirection Css.row
+        , flexWrap wrap
         , applyDevicesToBuilders flatBuilders devices
         ]
         attributes
@@ -131,9 +159,9 @@ col builders attributes innerHtml devices =
                 |> List.map (\gridFn -> gridFn Column)
     in
     styled div
-        [ Css.boxSizing Css.borderBox
-        , Css.flexShrink (Css.num 0)
-        , Css.flexGrow (Css.num 0)
+        [ boxSizing borderBox
+        , flexShrink (num 0)
+        , flexGrow (num 0)
         , applyDevicesToBuilders flatBuilders devices
         ]
         attributes
@@ -163,15 +191,15 @@ columns : Float -> StyleBuilder { a | row : Never } Grid
 columns n =
     if n > 0 then
         styles
-            [ Css.flexBasis (Css.pct (n / 12 * 100))
-            , Css.maxWidth (Css.pct (n / 12 * 100))
+            [ flexBasis (pct (n / 12 * 100))
+            , maxWidth (pct (n / 12 * 100))
             ]
 
     else
         styles
-            [ Css.flexBasis (Css.pct (n / 12 * 100))
-            , Css.maxWidth (Css.pct 100)
-            , Css.flexGrow (Css.num 1)
+            [ flexBasis (pct (n / 12 * 100))
+            , maxWidth (pct 100)
+            , flexGrow (num 1)
             ]
 
 
@@ -181,7 +209,7 @@ offset : Float -> StyleBuilder { a | grid : Never, row : Never } Grid
 offset n =
     if n > 0 then
         styles
-            [ Css.marginLeft (Css.pct (n / 12 * 100)) ]
+            [ marginLeft (pct (n / 12 * 100)) ]
 
     else
         empty
@@ -196,8 +224,8 @@ offset n =
 start : StyleBuilder { a | grid : Never } Grid
 start =
     styles
-        [ Css.justifyContent Css.flexStart
-        , Css.textAlign Css.start
+        [ justifyContent flexStart
+        , textAlign Css.start
         ]
 
 
@@ -206,8 +234,8 @@ start =
 end : StyleBuilder { a | grid : Never } Grid
 end =
     styles
-        [ Css.justifyContent Css.flexEnd
-        , Css.textAlign Css.end
+        [ justifyContent flexEnd
+        , textAlign Css.end
         ]
 
 
@@ -216,8 +244,8 @@ end =
 center : StyleBuilder { a | grid : Never } Grid
 center =
     styles
-        [ Css.justifyContent Css.center
-        , Css.textAlign Css.center
+        [ justifyContent Css.center
+        , textAlign Css.center
         ]
 
 
@@ -225,14 +253,14 @@ center =
 -}
 between : StyleBuilder { a | grid : Never, col : Never } Grid
 between =
-    styles [ Css.justifyContent Css.spaceBetween ]
+    styles [ justifyContent spaceBetween ]
 
 
 {-| Pad spacing around items in a row, with space on the left and right hand sides.
 -}
 around : StyleBuilder { a | grid : Never, col : Never } Grid
 around =
-    styles [ Css.justifyContent Css.spaceAround ]
+    styles [ justifyContent spaceAround ]
 
 
 
@@ -247,10 +275,10 @@ reverse device grd =
         \ctx _ ->
             case ctx of
                 Row ->
-                    [ Css.flexDirection Css.rowReverse ]
+                    [ flexDirection rowReverse ]
 
                 Column ->
-                    [ Css.flexDirection Css.columnReverse ]
+                    [ flexDirection columnReverse ]
 
                 _ ->
                     []
@@ -264,35 +292,35 @@ reverse device grd =
 -}
 top : StyleBuilder { a | grid : Never, column : Never } Grid
 top =
-    styles [ Css.alignItems Css.flexStart ]
+    styles [ alignItems flexStart ]
 
 
 {-| Aligns items in the middle of a row.
 -}
 middle : StyleBuilder { a | grid : Never, column : Never } Grid
 middle =
-    styles [ Css.alignItems Css.center ]
+    styles [ alignItems Css.center ]
 
 
 {-| Aligns items at the bottom of a row.
 -}
 bottom : StyleBuilder { a | grid : Never, column : Never } Grid
 bottom =
-    styles [ Css.alignItems Css.flexEnd ]
+    styles [ alignItems flexEnd ]
 
 
 {-| Stretches items to fill the row height-wise.
 -}
 stretch : StyleBuilder { a | grid : Never, column : Never } Grid
 stretch =
-    styles [ Css.alignItems Css.stretch ]
+    styles [ alignItems Css.stretch ]
 
 
 {-| Aligns items so their balines align at the top of a row.
 -}
 baseline : StyleBuilder { a | grid : Never, column : Never } Grid
 baseline =
-    styles [ Css.alignItems Css.baseline ]
+    styles [ alignItems Css.baseline ]
 
 
 
@@ -303,11 +331,11 @@ baseline =
 -}
 first : StyleBuilder { a | grid : Never } Grid
 first =
-    styles [ Css.order (Css.num -1) ]
+    styles [ order (num -1) ]
 
 
 {-| Orders a row or column so it comes last.
 -}
 last : StyleBuilder { a | grid : Never } Grid
 last =
-    styles [ Css.order (Css.num 1) ]
+    styles [ order (num 1) ]

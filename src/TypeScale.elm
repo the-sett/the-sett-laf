@@ -4,6 +4,7 @@ module TypeScale exposing
     , augmentedFourth
     , base
     , fontSizeMixin
+    , fontSizePx
     , goldenRatio
     , h1
     , h2
@@ -133,17 +134,9 @@ fontSizePx scale { baseFontSize } (FontSizeLevel sizeLevel) =
         |> toFloat
 
 
-fontSizeRem : TypeScale -> BaseStyle -> FontSizeLevel -> Float
-fontSizeRem scale { baseFontSize } (FontSizeLevel sizeLevel) =
-    scale sizeLevel.level * baseFontSize / 16.0
-
-
 fontSizeMixin : TypeScale -> FontSizeLevel -> BaseStyle -> Mixin
 fontSizeMixin scale (FontSizeLevel sizeLevel) deviceProps =
     let
-        remVal =
-            fontSizeRem scale deviceProps (FontSizeLevel sizeLevel)
-
         pxVal =
             fontSizePx scale deviceProps (FontSizeLevel sizeLevel)
 
@@ -152,9 +145,7 @@ fontSizeMixin scale (FontSizeLevel sizeLevel) deviceProps =
                 (ceiling (pxVal / lineHeight deviceProps))
     in
     Css.batch
-        [ Css.fontSize (Css.rem remVal)
+        [ Css.fontSize (Css.px pxVal)
         , Css.lineHeight (rhythm deviceProps (toFloat numLines))
-
-        --, Css.lineHeight <| Css.rem (1 * deviceProps.lineHeightRatio * toFloat numLines)
         ]
         |> styleAsMixin

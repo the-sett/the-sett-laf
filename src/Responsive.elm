@@ -98,18 +98,18 @@ mapMaybeDeviceSpec fn spec =
 -}
 lineHeight : BaseStyle -> Float
 lineHeight deviceProps =
-    -- |> floor
-    -- |> toFloat
     max
         deviceProps.baseLineHeight
         (deviceProps.lineHeightRatio * deviceProps.baseFontSize)
+        |> floor
+        |> toFloat
 
 
 {-| Calculates a multiple of the line height for a base styling.
 -}
-rhythm : BaseStyle -> Float -> Css.Rem
+rhythm : BaseStyle -> Float -> Css.Px
 rhythm deviceProps n =
-    Css.rem <| n * lineHeight deviceProps / 16.0
+    Css.px <| n * lineHeight deviceProps
 
 
 
