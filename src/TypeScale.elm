@@ -126,12 +126,11 @@ h4 =
         }
 
 
-
--- fontSizePx : TypeScale -> BaseStyle -> FontSizeLevel -> Float
--- fontSizePx scale { baseFontSize } (FontSizeLevel sizeLevel) =
---     (scale sizeLevel.level * baseFontSize)
---         |> floor
---         |> toFloat
+fontSizePx : TypeScale -> BaseStyle -> FontSizeLevel -> Float
+fontSizePx scale { baseFontSize } (FontSizeLevel sizeLevel) =
+    (scale sizeLevel.level * baseFontSize)
+        |> floor
+        |> toFloat
 
 
 fontSizeEm : TypeScale -> BaseStyle -> FontSizeLevel -> Float
@@ -145,9 +144,12 @@ fontSizeMixin scale (FontSizeLevel sizeLevel) deviceProps =
         emVal =
             fontSizeEm scale deviceProps (FontSizeLevel sizeLevel)
 
+        pxVal =
+            fontSizePx scale deviceProps (FontSizeLevel sizeLevel)
+
         numLines =
             max sizeLevel.minLines
-                (ceiling (emVal / lineHeight deviceProps))
+                (ceiling (pxVal / lineHeight deviceProps))
     in
     Css.batch
         [ Css.fontSize (Css.em emVal)

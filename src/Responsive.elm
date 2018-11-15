@@ -107,9 +107,9 @@ lineHeight deviceProps =
 
 {-| Calculates a multiple of the line height for a base styling.
 -}
-rhythm : BaseStyle -> Float -> Css.Em
+rhythm : BaseStyle -> Float -> Css.Rem
 rhythm deviceProps n =
-    Css.em <| n * lineHeight deviceProps / 16.0
+    Css.rem <| n * lineHeight deviceProps / 16.0
 
 
 
