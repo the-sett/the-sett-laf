@@ -110,6 +110,11 @@ fonts =
 typography : DeviceStyles -> TypeScale -> List Css.Global.Snippet
 typography deviceStyles scale =
     let
+        -- Generates font size in Em as relative sizes to the root font-size.
+        fontBaseStyle fontSizeLevel =
+            mapMixins (mediaMixins deviceStyles (fontSizeMixin scale fontSizeLevel)) []
+
+        -- Generates font size in Em with different relative sizes for different devices.
         fontMediaStyles fontSizeLevel =
             mapMixins (mediaMixins deviceStyles (fontSizeMixin scale fontSizeLevel)) []
     in
@@ -142,11 +147,12 @@ typography deviceStyles scale =
         [ Css.fontWeight Css.bold ]
 
     -- Media queries to set all font sizes accross all devices.
+    -- TODO: The font size might be better as a pct?
     , Css.Global.html <| fontMediaStyles base
-    , Css.Global.h1 <| fontMediaStyles h1
-    , Css.Global.h2 <| fontMediaStyles h2
-    , Css.Global.h3 <| fontMediaStyles h3
-    , Css.Global.h4 <| fontMediaStyles h4
+    , Css.Global.h1 <| fontBaseStyle h1
+    , Css.Global.h2 <| fontBaseStyle h2
+    , Css.Global.h3 <| fontBaseStyle h3
+    , Css.Global.h4 <| fontBaseStyle h4
     ]
 
 
