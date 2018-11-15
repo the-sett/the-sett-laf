@@ -124,11 +124,10 @@ reset =
         [ Css.display Css.block ]
 
     -- Correct the font size and margin on `h1` elements within `section` and `article` contexts in Chrome, Firefox, and Safari.
-    , Css.Global.h1
-        [ Css.fontSize (Css.em 2)
-        , Css.margin2 (Css.em 0.67) Css.zero
-        ]
-
+    -- , Css.Global.h1
+    --     [ Css.fontSize (Css.em 2)
+    --     , Css.margin2 (Css.em 0.67) Css.zero
+    --     ]
     --Add the correct display in IE 9-.
     -- 1. Add the correct display in IE.
     , Css.Global.each
@@ -234,9 +233,8 @@ reset =
         ]
 
     -- Add the correct font size in all browsers.
-    , Css.Global.small
-        [ Css.fontSize (Css.pct 80) ]
-
+    -- , Css.Global.small
+    --     [ Css.fontSize (Css.pct 80) ]
     -- Prevent `sub` and `sup` elements from affecting the line height in all browsers.
     , Css.Global.each
         [ Css.Global.typeSelector "sub"
