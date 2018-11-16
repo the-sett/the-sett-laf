@@ -65,7 +65,8 @@ image n imageUrl devices =
     styled div
         [ Responsive.deviceStyle devices <|
             \deviceProps -> Css.height <| rhythm deviceProps n
-        , Css.backgroundImage (Css.url imageUrl)
+        , Css.backgroundImage <| Css.url imageUrl
+        , Css.backgroundSize Css.cover
         ]
         []
         []
