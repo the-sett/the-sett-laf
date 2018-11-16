@@ -50,7 +50,14 @@ view =
 card devices title imageUrl =
     Cards.card []
         []
-        [ Cards.image 4 imageUrl
+        [ Cards.image 4
+            [ sm [ Cards.height 4, Cards.src imageUrl ]
+            , md [ Cards.height 5 ]
+            , lg [ Cards.height 6 ]
+            , xl [ Cards.height 7 ]
+            ]
+            []
+            []
         , Cards.title title
         , Cards.body [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " ]
         , Cards.controls [ text "Button" ]

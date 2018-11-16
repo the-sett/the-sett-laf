@@ -2,7 +2,9 @@ module Cards exposing
     ( body
     , card
     , controls
+    , height
     , image
+    , src
     , title
     )
 
@@ -60,16 +62,20 @@ card builders attributes innerHtml devices =
         (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
 
 
-image : Float -> String -> DeviceStyles -> Html msg
-image n imageUrl devices =
+image : Float -> ElementBuilder { a | image : Compatible } Card msg
+image defaultHeight builders attributes innerHtml devices =
+    let
+        flatBuilders =
+            List.concat builders
+                |> List.map (\gridFn -> gridFn Image)
+    in
     styled div
-        [ Responsive.deviceStyle devices <|
-            \deviceProps -> Css.height <| rhythm deviceProps n
-        , Css.backgroundImage <| Css.url imageUrl
-        , Css.backgroundSize Css.cover
+        [ applyDevicesToBuilders flatBuilders devices
+        , Responsive.deviceStyle devices <|
+            \deviceProps -> Css.height <| rhythm deviceProps defaultHeight
         ]
-        []
-        []
+        attributes
+        innerHtml
 
 
 title titleText _ =
@@ -102,30 +108,15 @@ controls innerHtml _ =
         innerHtml
 
 
+height : Float -> StyleBuilder { a | card : Never } Card
+height n device ctx =
+    Builder device
+        ctx
+        (\_ baseProps ->
+            [ Css.height <| rhythm baseProps n ]
+        )
 
--- image : ElementBuilder { a | image : Compatible } Card msg
--- image builders attributes innerHtml devices =
---     let
---         flatBuilders =
---             List.concat builders
---                 |> List.map (\gridFn -> gridFn Image)
---     in
---     styled div
---         [ applyDevicesToBuilders flatBuilders devices
---         ]
---         attributes
---         innerHtml
---
---
--- height : Float -> StyleBuilder { a | card : Never } Card
--- height n device ctx =
---     Builder device
---         ctx
---         (\_ baseProps ->
---             [ Css.height <| rhythm baseProps n ]
---         )
---
---
--- src : String -> StyleBuilder { a | card : Never } Card
--- src imageUrl =
---     styles [ Css.backgroundImage (Css.url imageUrl) ]
+
+src : String -> StyleBuilder { a | card : Never } Card
+src imageUrl =
+    styles [ Css.backgroundImage (Css.url imageUrl) ]
