@@ -54,7 +54,6 @@ type alias BaseStyle =
     { device : Device
     , baseFontSize : Float
     , breakWidth : Float
-    , baseLineHeight : Float
     , lineHeightRatio : Float
     , wrapperWidth : Float
     }
@@ -98,9 +97,7 @@ mapMaybeDeviceSpec fn spec =
 -}
 lineHeight : BaseStyle -> Float
 lineHeight deviceProps =
-    max
-        deviceProps.baseLineHeight
-        (deviceProps.lineHeightRatio * deviceProps.baseFontSize)
+    (deviceProps.lineHeightRatio * deviceProps.baseFontSize)
         |> floor
         |> toFloat
 
