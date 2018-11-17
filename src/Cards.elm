@@ -20,7 +20,7 @@ import Responsive
         , deviceStyle
         , deviceStyles
         , mapMaybeDeviceSpec
-        , rhythm
+        , rhythmEm
         )
 import ResponsiveDSL
     exposing
@@ -111,7 +111,7 @@ height n device ctx =
     Builder device
         ctx
         (\_ baseProps ->
-            [ Css.height <| Css.em (n * baseProps.lineHeightRatio) ]
+            [ Css.height <| rhythmEm baseProps n ]
         )
 
 

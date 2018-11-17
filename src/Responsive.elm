@@ -1,6 +1,6 @@
 module Responsive exposing
     ( BaseStyle, Device(..), DeviceSpec, DeviceStyles
-    , baseSpacing, lineHeight, rhythm, deviceStyle, deviceStyles, mapMaybeDeviceSpec
+    , baseSpacing, lineHeight, rhythm, rhythmEm, deviceStyle, deviceStyles, mapMaybeDeviceSpec
     , Mixin, mapMixins, mediaMixins, styleAsMixin
     )
 
@@ -15,7 +15,7 @@ and for applying those to create CSS with media queries.
 
 # Responsive helper functions.
 
-@docs baseSpacing, lineHeight, rhythm, deviceStyle, deviceStyles, mapMaybeDeviceSpec
+@docs baseSpacing, lineHeight, rhythm, rhythmEm, deviceStyle, deviceStyles, mapMaybeDeviceSpec
 
 
 # Mixins
@@ -103,10 +103,24 @@ lineHeight deviceProps =
 
 
 {-| Calculates a multiple of the line height for a base styling.
+
+This produces a result in px, which works the most accurately.
+
 -}
 rhythm : BaseStyle -> Float -> Css.Px
 rhythm deviceProps n =
     Css.px <| n * lineHeight deviceProps
+
+
+{-| Calculates a multiple of the line height for a base styling.
+
+This produces a result in em, which is not as accurate as px. Sometimes
+expressing in em is easier, as that adapts.
+
+-}
+rhythmEm : BaseStyle -> Float -> Css.Em
+rhythmEm deviceProps n =
+    Css.em <| n * deviceProps.lineHeightRatio
 
 
 
