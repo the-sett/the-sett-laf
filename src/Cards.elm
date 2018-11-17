@@ -100,7 +100,6 @@ controls innerHtml _ =
     styled div
         [ Css.paddingLeft (Css.rem 1)
         , Css.paddingRight (Css.rem 1)
-        , Css.paddingBottom (Css.rem 1)
         ]
         []
         innerHtml
