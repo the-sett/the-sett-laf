@@ -50,7 +50,7 @@ view =
 card devices title imageUrl =
     Cards.card []
         []
-        [ Cards.image 4
+        [ Cards.image
             [ sm [ Cards.height 4, Cards.src imageUrl ]
             , md [ Cards.height 5 ]
             , lg [ Cards.height 6 ]

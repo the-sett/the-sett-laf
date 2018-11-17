@@ -62,8 +62,8 @@ card builders attributes innerHtml devices =
         (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
 
 
-image : Float -> ElementBuilder { a | image : Compatible } Card msg
-image defaultHeight builders attributes innerHtml devices =
+image : ElementBuilder { a | image : Compatible } Card msg
+image builders attributes innerHtml devices =
     let
         flatBuilders =
             List.concat builders
@@ -71,8 +71,6 @@ image defaultHeight builders attributes innerHtml devices =
     in
     styled div
         [ applyDevicesToBuilders flatBuilders devices
-        , Responsive.deviceStyle devices <|
-            \deviceProps -> Css.height <| rhythm deviceProps defaultHeight
         ]
         attributes
         innerHtml
@@ -113,7 +111,7 @@ height n device ctx =
     Builder device
         ctx
         (\_ baseProps ->
-            [ Css.height <| rhythm baseProps n ]
+            [ Css.height <| Css.em (n * baseProps.lineHeightRatio) ]
         )
 
 
