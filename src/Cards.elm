@@ -49,6 +49,8 @@ type Card
     | Image
 
 
+{-| Creates a Card container.
+-}
 card : ContainerBuilder { a | card : Compatible } Card msg
 card builders attributes innerHtml devices =
     let
@@ -67,6 +69,8 @@ card builders attributes innerHtml devices =
         (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
 
 
+{-| Creates an image on the card.
+-}
 image : ElementBuilder { a | image : Compatible } Card msg
 image builders attributes innerHtml devices =
     let
@@ -81,6 +85,9 @@ image builders attributes innerHtml devices =
         innerHtml
 
 
+{-| Creates a title on the card.
+-}
+title : String -> DeviceStyles -> Html msg
 title titleText _ =
     styled div
         [ Css.paddingLeft (Css.rem 1.5)
@@ -92,6 +99,9 @@ title titleText _ =
         ]
 
 
+{-| Defines the body of the card.
+-}
+body : List (Html msg) -> DeviceStyles -> Html msg
 body innerHtml _ =
     styled div
         [ Css.paddingLeft (Css.rem 1)
@@ -101,6 +111,8 @@ body innerHtml _ =
         innerHtml
 
 
+{-| Defines the controls on the card
+-}
 controls innerHtml _ =
     styled div
         [ Css.paddingLeft (Css.rem 1)
@@ -110,6 +122,8 @@ controls innerHtml _ =
         innerHtml
 
 
+{-| Sets the height of the image, in rhythm units.
+-}
 height : Float -> StyleBuilder { a | card : Never } Card
 height n device ctx =
     Builder device
@@ -119,6 +133,8 @@ height n device ctx =
         )
 
 
+{-| Sets the URL of the image.
+-}
 src : String -> StyleBuilder { a | card : Never } Card
 src imageUrl =
     styles [ Css.backgroundImage (Css.url imageUrl) ]
