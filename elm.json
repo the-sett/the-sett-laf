@@ -3,7 +3,7 @@
     "name": "the-sett/the-sett-laf",
     "summary": "Look and Feel for The Sett.",
     "license": "BSD-3-Clause",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "exposed-modules": [
         "Cards",
         "DebugStyle",

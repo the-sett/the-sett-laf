@@ -113,6 +113,7 @@ body innerHtml _ =
 
 {-| Defines the controls on the card
 -}
+controls : List (Html msg) -> DeviceStyles -> Html msg
 controls innerHtml _ =
     styled div
         [ Css.paddingLeft (Css.rem 1)
