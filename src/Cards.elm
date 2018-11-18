@@ -1,12 +1,17 @@
 module Cards exposing
-    ( body
-    , card
-    , controls
-    , height
-    , image
-    , src
-    , title
+    ( card, image, title, body, controls
+    , src, height
     )
+
+{-| For building parts of a card:
+
+@docs card, image, title, body, controls
+
+For styling parts of a card:
+
+@docs src, height
+
+-}
 
 import Css
 import Html.Styled exposing (Attribute, Html, a, div, h1, h4, i, img, p, styled, text, toUnstyled)
