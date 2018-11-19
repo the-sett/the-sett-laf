@@ -21,7 +21,11 @@ import TypeScale exposing (TypeScale, base, fontSizeMixin, h1, h2, h3, h4, major
 
 
 greyDark =
-    Css.hex "727272"
+    Css.hex "646464"
+
+
+printBlack =
+    Css.hex "242424"
 
 
 
@@ -120,6 +124,7 @@ typography deviceStyles scale =
         [ Css.fontFamilies [ "Open Sans", "Helvetica" ]
         , Css.fontWeight <| Css.int 400
         , Css.textRendering Css.optimizeLegibility
+        , Css.color printBlack |> Css.important
         ]
 
     -- Headings are grey and bold.
