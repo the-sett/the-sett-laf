@@ -128,7 +128,6 @@ typography deviceStyles scale =
         , Css.Global.h2
         , Css.Global.h3
         , Css.Global.h4
-        , Css.Global.h5
         ]
         [ Css.color greyDark |> Css.important
         , Css.fontWeight <| Css.int 500
@@ -139,6 +138,7 @@ typography deviceStyles scale =
         [ Css.Global.h1
         , Css.Global.h2
         , Css.Global.h3
+        , Css.Global.h4
         ]
         [ Css.fontWeight Css.bold ]
 
