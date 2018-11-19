@@ -33,7 +33,7 @@ sm =
     { device = Sm
     , baseFontSize = 14.0
     , breakWidth = 480
-    , wrapperWidth = 768
+    , wrapperWidth = 608
     }
 
 
@@ -42,7 +42,7 @@ md =
     { device = Md
     , baseFontSize = 15.0
     , breakWidth = 768
-    , wrapperWidth = 992
+    , wrapperWidth = 792
     }
 
 
@@ -51,7 +51,7 @@ lg =
     { device = Lg
     , baseFontSize = 16.0
     , breakWidth = 992
-    , wrapperWidth = 970
+    , wrapperWidth = 920
     }
 
 
@@ -60,7 +60,7 @@ xl =
     { device = Xl
     , baseFontSize = 17.0
     , breakWidth = 1200
-    , wrapperWidth = 1170
+    , wrapperWidth = 1040
     }
 
 
@@ -68,7 +68,7 @@ xl =
 -}
 devices : ResponsiveStyle
 devices =
-    { commonStyle = { lineHeightRatio = 1.6 }
+    { commonStyle = { lineHeightRatio = 1.4 }
     , deviceStyles =
         { sm = sm
         , md = md
@@ -94,7 +94,9 @@ responsiveMeta =
 fonts : Html msg
 fonts =
     node "link"
-        [ href "https://fonts.googleapis.com/css?family=Nobile:300,400,500,700"
+        [ href "https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,700"
+
+        --, href "https://fonts.googleapis.com/css?family=Nobile:300,400,500,700"
         , rel "stylesheet"
         ]
         []
@@ -115,7 +117,7 @@ typography deviceStyles scale =
     [ -- Base font.
       Css.Global.each
         [ Css.Global.html ]
-        [ Css.fontFamilies [ "Nobile", "Helvetica" ]
+        [ Css.fontFamilies [ "Open Sans", "Helvetica" ]
         , Css.fontWeight <| Css.int 400
         , Css.textRendering Css.optimizeLegibility
         ]
