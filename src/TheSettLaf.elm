@@ -94,7 +94,7 @@ responsiveMeta =
 fonts : Html msg
 fonts =
     node "link"
-        [ href "https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,700"
+        [ href "https://fonts.googleapis.com/css?family=Open+Sans:400,700"
 
         --, href "https://fonts.googleapis.com/css?family=Nobile:300,400,500,700"
         , rel "stylesheet"
@@ -122,7 +122,7 @@ typography deviceStyles scale =
         , Css.textRendering Css.optimizeLegibility
         ]
 
-    -- Headings are grey and at least medium.
+    -- Headings are grey and bold.
     , Css.Global.each
         [ Css.Global.h1
         , Css.Global.h2
@@ -130,17 +130,8 @@ typography deviceStyles scale =
         , Css.Global.h4
         ]
         [ Css.color greyDark |> Css.important
-        , Css.fontWeight <| Css.int 500
+        , Css.fontWeight Css.bold
         ]
-
-    -- Biggest headings are bold.
-    , Css.Global.each
-        [ Css.Global.h1
-        , Css.Global.h2
-        , Css.Global.h3
-        , Css.Global.h4
-        ]
-        [ Css.fontWeight Css.bold ]
 
     -- Media queries to set all font sizes accross all devices.
     , Css.Global.html <| fontMediaStyles base
