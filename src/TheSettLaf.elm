@@ -35,7 +35,7 @@ printBlack =
 sm : DeviceStyle
 sm =
     { device = Sm
-    , baseFontSize = 14.0
+    , baseFontSize = 16.0
     , breakWidth = 480
     , wrapperWidth = 608
     }
@@ -44,7 +44,7 @@ sm =
 md : DeviceStyle
 md =
     { device = Md
-    , baseFontSize = 15.0
+    , baseFontSize = 17.0
     , breakWidth = 768
     , wrapperWidth = 792
     }
@@ -53,7 +53,7 @@ md =
 lg : DeviceStyle
 lg =
     { device = Lg
-    , baseFontSize = 16.0
+    , baseFontSize = 18.0
     , breakWidth = 992
     , wrapperWidth = 920
     }
@@ -62,7 +62,7 @@ lg =
 xl : DeviceStyle
 xl =
     { device = Xl
-    , baseFontSize = 17.0
+    , baseFontSize = 19.0
     , breakWidth = 1200
     , wrapperWidth = 1040
     }
@@ -169,7 +169,7 @@ style devs =
 wrapper : ResponsiveStyle -> Css.Style
 wrapper devs =
     [ Css.margin2 (Css.px 0) Css.auto
-    , Css.padding2 (Css.px 0) (Css.px 5)
+    , Css.padding2 (Css.px 0) (Css.vw 5)
     , Responsive.deviceStyle devs <|
         \deviceProps ->
             Css.maxWidth (Css.px deviceProps.wrapperWidth)
