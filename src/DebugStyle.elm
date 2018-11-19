@@ -15,19 +15,19 @@ The vertical rhtythm is also drawn in as fitn background lines.
 import Css
 import Css.Global
 import Html.Styled exposing (Html)
-import Responsive exposing (BaseStyle, DeviceStyles, rhythm)
+import Responsive exposing (DeviceStyle, ResponsiveStyle, rhythm)
 
 
 {-| The CSS as an HTML <style> element.
 -}
-style : DeviceStyles -> Html msg
+style : ResponsiveStyle -> Html msg
 style devices =
     Css.Global.global <| debug devices
 
 
 {-| The debug CSS.
 -}
-debug : DeviceStyles -> List Css.Global.Snippet
+debug : ResponsiveStyle -> List Css.Global.Snippet
 debug devices =
     [ Css.Global.each
         [ Css.Global.h1
@@ -79,7 +79,7 @@ debug devices =
         , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
         , Css.backgroundRepeat Css.repeat
         , Responsive.deviceStyle devices <|
-            \deviceProps -> Css.backgroundSize2 (rhythm deviceProps 1) (rhythm deviceProps 1)
+            \device -> Css.backgroundSize2 (rhythm devices.commonStyle device 1) (rhythm devices.commonStyle device 1)
         ]
     ]
 

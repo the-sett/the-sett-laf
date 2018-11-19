@@ -8,15 +8,15 @@ styling can be applied.
 -}
 
 import Html.Styled exposing (Html)
-import Responsive exposing (DeviceStyles)
+import Responsive exposing (ResponsiveStyle)
 
 
 {-| Defines the type of a template. A template takes a link builder, an editor and
 some content and produces Html.
 -}
 type Template msg model
-    = Dynamic (DeviceStyles -> model -> Html msg)
-    | Static (DeviceStyles -> Html Never)
+    = Dynamic (ResponsiveStyle -> model -> Html msg)
+    | Static (ResponsiveStyle -> Html Never)
 
 
 {-| Defines the type of a layout. A layout is a higher level template; it takes a

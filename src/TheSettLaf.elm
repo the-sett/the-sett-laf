@@ -12,7 +12,7 @@ import Grid
 import Html.Styled exposing (Html, node)
 import Html.Styled.Attributes exposing (attribute, href, name, rel)
 import Reset exposing (reset)
-import Responsive exposing (BaseStyle, Device(..), DeviceStyles, baseSpacing, mapMixins, mediaMixins)
+import Responsive exposing (Device(..), DeviceStyle, ResponsiveStyle, baseSpacing, mapMixins, mediaMixins)
 import TypeScale exposing (TypeScale, base, fontSizeMixin, h1, h2, h3, h4, majorThird)
 
 
@@ -28,54 +28,53 @@ greyDark =
 -- Device Configurations
 
 
-sm : BaseStyle
+sm : DeviceStyle
 sm =
     { device = Sm
     , baseFontSize = 14.0
     , breakWidth = 480
-    , lineHeightRatio = 1.6
     , wrapperWidth = 768
     }
 
 
-md : BaseStyle
+md : DeviceStyle
 md =
     { device = Md
     , baseFontSize = 15.0
     , breakWidth = 768
-    , lineHeightRatio = 1.6
     , wrapperWidth = 992
     }
 
 
-lg : BaseStyle
+lg : DeviceStyle
 lg =
     { device = Lg
     , baseFontSize = 16.0
     , breakWidth = 992
-    , lineHeightRatio = 1.6
     , wrapperWidth = 970
     }
 
 
-xl : BaseStyle
+xl : DeviceStyle
 xl =
     { device = Xl
     , baseFontSize = 17.0
     , breakWidth = 1200
-    , lineHeightRatio = 1.6
     , wrapperWidth = 1170
     }
 
 
 {-| The responsive device configuration.
 -}
-devices : DeviceStyles
+devices : ResponsiveStyle
 devices =
-    { sm = sm
-    , md = md
-    , lg = lg
-    , xl = xl
+    { commonStyle = { lineHeightRatio = 1.6 }
+    , deviceStyles =
+        { sm = sm
+        , md = md
+        , lg = lg
+        , xl = xl
+        }
     }
 
 
@@ -103,11 +102,15 @@ fonts =
 
 {-| Responsive typography to fit all devices.
 -}
-typography : DeviceStyles -> TypeScale -> List Css.Global.Snippet
+typography : ResponsiveStyle -> TypeScale -> List Css.Global.Snippet
 typography deviceStyles scale =
     let
         fontMediaStyles fontSizeLevel =
-            mapMixins (mediaMixins deviceStyles (fontSizeMixin scale fontSizeLevel)) []
+            mapMixins
+                (mediaMixins deviceStyles
+                    (fontSizeMixin scale fontSizeLevel devices.commonStyle)
+                )
+                []
     in
     [ -- Base font.
       Css.Global.each
@@ -148,7 +151,7 @@ typography deviceStyles scale =
 
 {-| The global CSS.
 -}
-responsive : TypeScale -> DeviceStyles -> List Css.Global.Snippet
+responsive : TypeScale -> ResponsiveStyle -> List Css.Global.Snippet
 responsive scale deviceStyles =
     baseSpacing devices
         ++ typography deviceStyles scale
@@ -156,7 +159,7 @@ responsive scale deviceStyles =
 
 {-| The CSS as an HTML <style> element.
 -}
-style : DeviceStyles -> Html msg
+style : ResponsiveStyle -> Html msg
 style devs =
     Css.Global.global <|
         reset
@@ -165,7 +168,7 @@ style devs =
 
 {-| A responsive wrapper div.
 -}
-wrapper : DeviceStyles -> Css.Style
+wrapper : ResponsiveStyle -> Css.Style
 wrapper devs =
     [ Css.margin2 (Css.px 0) Css.auto
     , Css.padding2 (Css.px 0) (Css.px 5)

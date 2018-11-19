@@ -6,7 +6,7 @@ import Html.Styled exposing (Html, a, button, div, input, li, nav, node, styled,
 import Html.Styled.Attributes exposing (attribute, checked, class, href, id, type_)
 import Html.Styled.Events exposing (onClick)
 import Logo
-import Responsive exposing (DeviceStyles)
+import Responsive exposing (ResponsiveStyle)
 import ResponsiveDSL exposing (md, sm)
 import State exposing (Model, Msg(..))
 import Structure exposing (Layout, Template(..))
@@ -38,7 +38,7 @@ pageBody template =
         |> Dynamic
 
 
-topHeader : DeviceStyles -> Model -> Html Msg
+topHeader : ResponsiveStyle -> Model -> Html Msg
 topHeader devices model =
     styled div
         [ Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 6) (Css.px 0) (Css.rgba 0 0 0 0.75)
@@ -49,7 +49,7 @@ topHeader devices model =
                 [ ResponsiveDSL.styles
                     [ wrapper devices
                     , Responsive.deviceStyle devices <|
-                        \deviceProps -> Css.height (Responsive.rhythm deviceProps 3)
+                        \device -> Css.height (Responsive.rhythm devices.commonStyle device 3)
                     ]
                 ]
             ]
@@ -62,9 +62,9 @@ topHeader devices model =
                         [ Grid.columns 1
                         , ResponsiveDSL.styles
                             [ Responsive.deviceStyles devices <|
-                                \deviceProps ->
-                                    [ Css.height (Responsive.rhythm deviceProps 3)
-                                    , Css.width (Responsive.rhythm deviceProps 3)
+                                \device ->
+                                    [ Css.height (Responsive.rhythm devices.commonStyle device 3)
+                                    , Css.width (Responsive.rhythm devices.commonStyle device 3)
                                     ]
                             ]
                         ]
@@ -113,9 +113,9 @@ debugToggle devices model =
     styled div
         [ Css.position Css.fixed
         , Responsive.deviceStyles devices <|
-            \deviceProps ->
-                [ Css.right (Responsive.rhythm deviceProps 2)
-                , Css.top (Responsive.rhythm deviceProps 1)
+            \device ->
+                [ Css.right (Responsive.rhythm devices.commonStyle device 2)
+                , Css.top (Responsive.rhythm devices.commonStyle device 1)
                 ]
         , if model then
             Css.backgroundColor (Css.rgb 50 230 50) |> Css.important
@@ -134,6 +134,6 @@ debugToggle devices model =
         ]
 
 
-footer : DeviceStyles -> Html msg
+footer : ResponsiveStyle -> Html msg
 footer devices =
     node "footer" [ class "thesett-footer mdl-mega-footer" ] []

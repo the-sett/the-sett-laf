@@ -39,10 +39,11 @@ import Css
 import Html.Styled exposing (Attribute, Html, div, styled, text)
 import Responsive
     exposing
-        ( BaseStyle
+        ( CommonStyle
         , Device(..)
         , DeviceSpec
-        , DeviceStyles
+        , DeviceStyle
+        , ResponsiveStyle
         , deviceStyle
         , deviceStyles
         , mapMaybeDeviceSpec
@@ -63,7 +64,7 @@ type Compatible
 {-| A builder for a device in a DSL context.
 -}
 type Builder a ctx
-    = Builder Device ctx (ctx -> BaseStyle -> List Css.Style)
+    = Builder Device ctx (ctx -> CommonStyle -> DeviceStyle -> List Css.Style)
 
 
 {-| Builds a container of Elements. This can be styled per device.
@@ -71,8 +72,8 @@ type Builder a ctx
 type alias ContainerBuilder a ctx msg =
     List (List (ctx -> Builder a ctx))
     -> List (Attribute msg)
-    -> List (DeviceStyles -> Html msg)
-    -> DeviceStyles
+    -> List (ResponsiveStyle -> Html msg)
+    -> ResponsiveStyle
     -> Html msg
 
 
@@ -82,7 +83,7 @@ type alias ElementBuilder a ctx msg =
     List (List (ctx -> Builder a ctx))
     -> List (Attribute msg)
     -> List (Html msg)
-    -> DeviceStyles
+    -> ResponsiveStyle
     -> Html msg
 
 
@@ -102,7 +103,7 @@ type alias StyleBuilder a ctx =
 -}
 styles : List Css.Style -> Device -> ctx -> Builder a ctx
 styles styleList device ctx =
-    Builder device ctx (always2 styleList)
+    Builder device ctx (always3 styleList)
 
 
 {-| Applies a responsive device to a list of StyleBuilders.
@@ -114,14 +115,14 @@ applyDevice device builders =
 
 {-| Applies a set of responsive device specifications to a list of builders, in any context.
 -}
-applyDevicesToBuilders : List (Builder a ctx) -> DeviceStyles -> Css.Style
+applyDevicesToBuilders : List (Builder a ctx) -> ResponsiveStyle -> Css.Style
 applyDevicesToBuilders buildersList devices =
     deviceStyles devices
-        (\baseStyle ->
+        (\device ->
             List.map
-                (\(Builder device grd fn) ->
-                    if device == baseStyle.device then
-                        fn grd baseStyle
+                (\(Builder dev ctx fn) ->
+                    if dev == device.device then
+                        fn ctx devices.commonStyle device
 
                     else
                         []
@@ -135,7 +136,7 @@ applyDevicesToBuilders buildersList devices =
 -}
 empty : StyleBuilder a ctx
 empty =
-    \device ctx -> Builder device ctx (always2 [])
+    \device ctx -> Builder device ctx (always3 [])
 
 
 {-| Small device grid property builder.
@@ -166,5 +167,5 @@ xl builders =
     applyDevice Xl builders
 
 
-always2 =
-    always >> always
+always3 =
+    always >> always >> always

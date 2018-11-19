@@ -1,5 +1,5 @@
 module Responsive exposing
-    ( BaseStyle, Device(..), DeviceSpec, DeviceStyles
+    ( CommonStyle, DeviceStyle, Device(..), DeviceSpec, ResponsiveStyle
     , baseSpacing, lineHeight, rhythm, rhythmEm, deviceStyle, deviceStyles, mapMaybeDeviceSpec
     , Mixin, mapMixins, mediaMixins, styleAsMixin
     )
@@ -10,7 +10,7 @@ and for applying those to create CSS with media queries.
 
 # Models for specifying devices and their basic responsive properties.
 
-@docs BaseStyle, Device, DeviceSpec, DeviceStyles
+@docs CommonStyle, DeviceStyle, Device, DeviceSpec, ResponsiveStyle
 
 
 # Responsive helper functions.
@@ -44,21 +44,6 @@ type Device
     | Xl
 
 
-{-| Defines the font size, line height, device break point width, and wrapper size, for a device.
-
-TODO: line height ratio is a derived property. Should really hide derived props behind a type
-definition, so they cannot be set up wrongly.
-
--}
-type alias BaseStyle =
-    { device : Device
-    , baseFontSize : Float
-    , breakWidth : Float
-    , lineHeightRatio : Float
-    , wrapperWidth : Float
-    }
-
-
 {-| Defines a mapping from devices to something else, that must always include a definition
 for each device size.
 -}
@@ -70,10 +55,29 @@ type alias DeviceSpec a =
     }
 
 
+{-| Defines the style parameters that are common accross all devices.
+-}
+type alias CommonStyle =
+    { lineHeightRatio : Float
+    }
+
+
+{-| Defines the style parameters that are device specific.
+-}
+type alias DeviceStyle =
+    { device : Device
+    , baseFontSize : Float
+    , breakWidth : Float
+    , wrapperWidth : Float
+    }
+
+
 {-| Specifies the base styling properties accross all devices.
 -}
-type alias DeviceStyles =
-    DeviceSpec BaseStyle
+type alias ResponsiveStyle =
+    { commonStyle : CommonStyle
+    , deviceStyles : DeviceSpec DeviceStyle
+    }
 
 
 {-| Maps a device spec with optional values into a list, where the list only contains values
@@ -95,9 +99,9 @@ mapMaybeDeviceSpec fn spec =
 
 {-| Calculates the line height for a base styling.
 -}
-lineHeight : BaseStyle -> Float
-lineHeight deviceProps =
-    (deviceProps.lineHeightRatio * deviceProps.baseFontSize)
+lineHeight : Float -> DeviceStyle -> Float
+lineHeight lineHeightRatio deviceProps =
+    (lineHeightRatio * deviceProps.baseFontSize)
         |> floor
         |> toFloat
 
@@ -107,9 +111,9 @@ lineHeight deviceProps =
 This produces a result in px, which works the most accurately.
 
 -}
-rhythm : BaseStyle -> Float -> Css.Px
-rhythm deviceProps n =
-    Css.px <| n * lineHeight deviceProps
+rhythm : CommonStyle -> DeviceStyle -> Float -> Css.Px
+rhythm common device n =
+    Css.px <| n * lineHeight common.lineHeightRatio device
 
 
 {-| Calculates a multiple of the line height for a base styling.
@@ -118,9 +122,9 @@ This produces a result in em, which is not as accurate as px. Sometimes
 expressing in em is easier, as that adapts.
 
 -}
-rhythmEm : BaseStyle -> Float -> Css.Em
-rhythmEm deviceProps n =
-    Css.em <| n * deviceProps.lineHeightRatio
+rhythmEm : CommonStyle -> Float -> Css.Em
+rhythmEm common n =
+    Css.em <| n * common.lineHeightRatio
 
 
 
@@ -130,7 +134,7 @@ rhythmEm deviceProps n =
 {-| Creates a single CSS property with media queries. Media queries will be
 generated for each of the devices specified.
 -}
-deviceStyle : DeviceStyles -> (BaseStyle -> Css.Style) -> Css.Style
+deviceStyle : ResponsiveStyle -> (DeviceStyle -> Css.Style) -> Css.Style
 deviceStyle devices styleFn =
     mapMixins (mediaMixins devices (styleFn >> styleAsMixin)) []
         |> Css.batch
@@ -139,7 +143,7 @@ deviceStyle devices styleFn =
 {-| Creates a set of CSS properties with media queries. Media queries will be
 generated for each of the devices specified.
 -}
-deviceStyles : DeviceStyles -> (BaseStyle -> List Css.Style) -> Css.Style
+deviceStyles : ResponsiveStyle -> (DeviceStyle -> List Css.Style) -> Css.Style
 deviceStyles devices styleFn =
     mapMixins (mediaMixins devices (styleFn >> stylesAsMixin)) []
         |> Css.batch
@@ -197,7 +201,7 @@ media2x styles =
 
 {-| Creates a media query that has its min width set to the break point for a device style.
 -}
-mediaMinWidthMixin : BaseStyle -> Mixin
+mediaMinWidthMixin : DeviceStyle -> Mixin
 mediaMinWidthMixin { breakWidth } =
     Css.Media.withMedia [ Css.Media.all [ Css.Media.minWidth <| Css.px breakWidth ] ]
         >> List.singleton
@@ -213,9 +217,12 @@ In this way, a mixin that is dependant on device properties can be applied accro
 all device. Use `mapMixins` to apply the list of mixins over a list of base styles.
 
 -}
-mediaMixins : DeviceStyles -> (BaseStyle -> Mixin) -> List Mixin
-mediaMixins { sm, md, lg, xl } devMixin =
+mediaMixins : ResponsiveStyle -> (DeviceStyle -> Mixin) -> List Mixin
+mediaMixins responsive devMixin =
     let
+        { sm, md, lg, xl } =
+            responsive.deviceStyles
+
         minWidthDevices =
             [ xl, lg, md ]
 
@@ -240,7 +247,7 @@ mediaMixins { sm, md, lg, xl } devMixin =
 {-| A globaal CSS style sheet that sets up basic spaing for text, with single
 direction margins.
 -}
-baseSpacing : DeviceStyles -> List Css.Global.Snippet
+baseSpacing : ResponsiveStyle -> List Css.Global.Snippet
 baseSpacing devices =
     [ -- No margins on headings, the line spacing of the heading is sufficient.
       Css.Global.each
@@ -266,7 +273,7 @@ baseSpacing devices =
         , Css.Global.hr
         ]
         [ deviceStyle devices <|
-            \deviceProps -> Css.margin3 (Css.px 0) (Css.px 0) (rhythm deviceProps 1)
+            \device -> Css.margin3 (Css.px 0) (Css.px 0) (rhythm devices.commonStyle device 1)
         ]
 
     -- Consistent indenting for lists.
@@ -276,6 +283,6 @@ baseSpacing devices =
         , Css.Global.ul
         ]
         [ deviceStyle devices <|
-            \deviceProps -> Css.margin2 (rhythm deviceProps 1) (rhythm deviceProps 1)
+            \device -> Css.margin2 (rhythm devices.commonStyle device 1) (rhythm devices.commonStyle device 1)
         ]
     ]

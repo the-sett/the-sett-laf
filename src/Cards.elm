@@ -18,10 +18,10 @@ import Html.Styled exposing (Attribute, Html, a, div, h1, h4, i, img, p, styled,
 import Html.Styled.Attributes as Attributes exposing (class, id, name, title)
 import Responsive
     exposing
-        ( BaseStyle
-        , Device(..)
+        ( Device(..)
         , DeviceSpec
-        , DeviceStyles
+        , DeviceStyle
+        , ResponsiveStyle
         , deviceStyle
         , deviceStyles
         , mapMaybeDeviceSpec
@@ -87,7 +87,7 @@ image builders attributes innerHtml devices =
 
 {-| Creates a title on the card.
 -}
-title : String -> DeviceStyles -> Html msg
+title : String -> ResponsiveStyle -> Html msg
 title titleText _ =
     styled div
         [ Css.paddingLeft (Css.rem 1.5)
@@ -101,7 +101,7 @@ title titleText _ =
 
 {-| Defines the body of the card.
 -}
-body : List (Html msg) -> DeviceStyles -> Html msg
+body : List (Html msg) -> ResponsiveStyle -> Html msg
 body innerHtml _ =
     styled div
         [ Css.paddingLeft (Css.rem 1)
@@ -113,7 +113,7 @@ body innerHtml _ =
 
 {-| Defines the controls on the card
 -}
-controls : List (Html msg) -> DeviceStyles -> Html msg
+controls : List (Html msg) -> ResponsiveStyle -> Html msg
 controls innerHtml _ =
     styled div
         [ Css.paddingLeft (Css.rem 1)
@@ -129,8 +129,8 @@ height : Float -> StyleBuilder { a | card : Never } Card
 height n device ctx =
     Builder device
         ctx
-        (\_ baseProps ->
-            [ Css.height <| rhythmEm baseProps n ]
+        (\_ common _ ->
+            [ Css.height <| rhythmEm common n ]
         )
 
 

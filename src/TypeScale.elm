@@ -22,7 +22,18 @@ module TypeScale exposing
 
 import Css
 import Css.Global
-import Responsive exposing (BaseStyle, DeviceStyles, Mixin, lineHeight, mapMixins, mediaMixins, rhythm, styleAsMixin)
+import Responsive
+    exposing
+        ( CommonStyle
+        , DeviceStyle
+        , Mixin
+        , ResponsiveStyle
+        , lineHeight
+        , mapMixins
+        , mediaMixins
+        , rhythm
+        , styleAsMixin
+        )
 
 
 
@@ -127,25 +138,25 @@ h4 =
         }
 
 
-fontSizePx : TypeScale -> BaseStyle -> FontSizeLevel -> Float
+fontSizePx : TypeScale -> DeviceStyle -> FontSizeLevel -> Float
 fontSizePx scale { baseFontSize } (FontSizeLevel sizeLevel) =
     (scale sizeLevel.level * baseFontSize)
         |> floor
         |> toFloat
 
 
-fontSizeMixin : TypeScale -> FontSizeLevel -> BaseStyle -> Mixin
-fontSizeMixin scale (FontSizeLevel sizeLevel) deviceProps =
+fontSizeMixin : TypeScale -> FontSizeLevel -> CommonStyle -> DeviceStyle -> Mixin
+fontSizeMixin scale (FontSizeLevel sizeLevel) common device =
     let
         pxVal =
-            fontSizePx scale deviceProps (FontSizeLevel sizeLevel)
+            fontSizePx scale device (FontSizeLevel sizeLevel)
 
         numLines =
             max sizeLevel.minLines
-                (ceiling (pxVal / lineHeight deviceProps))
+                (ceiling (pxVal / lineHeight common.lineHeightRatio device))
     in
     Css.batch
         [ Css.fontSize (Css.px pxVal)
-        , Css.lineHeight (rhythm deviceProps (toFloat numLines))
+        , Css.lineHeight (rhythm common device (toFloat numLines))
         ]
         |> styleAsMixin

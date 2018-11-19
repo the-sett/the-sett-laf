@@ -68,10 +68,10 @@ import Css
 import Html.Styled exposing (Attribute, Html, div, styled, text)
 import Responsive
     exposing
-        ( BaseStyle
-        , Device(..)
+        ( Device(..)
         , DeviceSpec
-        , DeviceStyles
+        , DeviceStyle
+        , ResponsiveStyle
         , deviceStyle
         , deviceStyles
         , mapMaybeDeviceSpec
@@ -272,7 +272,7 @@ around =
 reverse : StyleBuilder { a | grid : Never } Grid
 reverse device grd =
     Builder device grd <|
-        \ctx _ ->
+        \ctx _ _ ->
             case ctx of
                 Row ->
                     [ flexDirection rowReverse ]
