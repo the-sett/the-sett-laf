@@ -62,7 +62,7 @@ if (isDev) {
     mode: 'development',
 
     entry: [
-      'webpack-dev-server/client?http://localhost:9071',
+      'webpack-dev-server/client?http://0.0.0.0:9071',
       entryPath,
     ],
 
@@ -89,7 +89,8 @@ if (isDev) {
       contentBase: './src',
       inline: true,
       stats: 'errors-only',
-      port: 9071
+      port: 9071,
+      disableHostCheck: true
     }
   });
 }
