@@ -56,10 +56,8 @@ button builders attributes innerHtml devices =
         , Css.outline Css.none
         , Css.textAlign Css.center
         , Css.verticalAlign Css.middle
+        , Css.batch <| Responsive.fontMediaStyles TypeScale.milli devices
 
-        --, Css.batch [ TypeScale.fontMediaStyles devices scale TypeScale.milli ]
-        -- , Css.fontSize <| Css.em 1.0
-        -- , Css.lineHeight <| Css.em devices.commonStyle.lineHeightRatio -- * (1.0 / 0.7))
         -- Raised
         , Css.backgroundColor <| Css.rgba 158 158 158 0.2
         , Css.property "box-shadow" "0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12)"
