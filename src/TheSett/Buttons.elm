@@ -34,6 +34,7 @@ import ResponsiveDSL
         , applyDevice
         , applyDevicesToBuilders
         )
+import Styles
 import TypeScale
 
 
@@ -45,7 +46,7 @@ type Button
 
 {-| Creates a button.
 -}
-button : ElementBuilder { a | image : Compatible } Button msg
+button : ElementBuilder { a | button : Compatible } Button msg
 button builders attributes innerHtml devices =
     let
         flatBuilders =
@@ -71,3 +72,11 @@ button builders attributes innerHtml devices =
         ]
         attributes
         innerHtml
+
+
+raised : StyleBuilder { a | button : Compatible } Button
+raised =
+    Styles.styles
+        [ Css.backgroundColor <| Css.rgba 158 158 158 0.2
+        , Css.property "box-shadow" "0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12)"
+        ]
