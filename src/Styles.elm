@@ -24,7 +24,7 @@ import ResponsiveDSL exposing (Builder(..), DeviceBuilder, StyleBuilder, applyDe
 
 {-| Adds any CSS style you like to a grid element.
 -}
-styles : List Css.Style -> Device -> ctx -> Builder a ctx
+styles : List Css.Style -> StyleBuilder a ctx
 styles styleList device ctx =
     Builder device ctx (always3 styleList)
 
