@@ -137,8 +137,8 @@ typography respStyle =
     -- Media queries to set all font sizes accross all devices.
     , Css.Global.html <| fontMediaStyles base respStyle
     , Css.Global.h1 <| fontMediaStyles h1 respStyle
-    , Css.Global.h3 <| fontMediaStyles h2 respStyle
-    , Css.Global.h2 <| fontMediaStyles h3 respStyle
+    , Css.Global.h2 <| fontMediaStyles h2 respStyle
+    , Css.Global.h3 <| fontMediaStyles h3 respStyle
     , Css.Global.h4 <| fontMediaStyles h4 respStyle
     ]
 
