@@ -1,7 +1,6 @@
 module ResponsiveDSL exposing
     ( Compatible(..)
     , Builder(..), ContainerBuilder, DeviceBuilder, ElementBuilder, StyleBuilder
-    , sm, md, lg, xl
     , styles, empty
     , applyDevice, applyDevicesToBuilders
     )
@@ -17,11 +16,6 @@ module ResponsiveDSL exposing
 # Builder types.
 
 @docs Builder, ContainerBuilder, DeviceBuilder, ElementBuilder, StyleBuilder
-
-
-# Device builders
-
-@docs sm, md, lg, xl
 
 
 # Injecting CSS styles
@@ -137,34 +131,6 @@ applyDevicesToBuilders buildersList devices =
 empty : StyleBuilder a ctx
 empty =
     \device ctx -> Builder device ctx (always3 [])
-
-
-{-| Small device grid property builder.
--}
-sm : DeviceBuilder a ctx
-sm builders =
-    applyDevice Sm builders
-
-
-{-| Medium device grid property builder.
--}
-md : DeviceBuilder a ctx
-md builders =
-    applyDevice Md builders
-
-
-{-| Large device grid property builder.
--}
-lg : DeviceBuilder a ctx
-lg builders =
-    applyDevice Lg builders
-
-
-{-| Extra large device grid property builder.
--}
-xl : DeviceBuilder a ctx
-xl builders =
-    applyDevice Xl builders
 
 
 always3 =

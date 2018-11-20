@@ -65,6 +65,7 @@ import Css
         , textAlign
         , wrap
         )
+import Devices exposing (lg, md, sm, xl)
 import Html.Styled exposing (Attribute, Html, div, styled, text)
 import Responsive
     exposing
@@ -88,11 +89,7 @@ import ResponsiveDSL
         , applyDevice
         , applyDevicesToBuilders
         , empty
-        , lg
-        , md
-        , sm
         , styles
-        , xl
         )
 
 
