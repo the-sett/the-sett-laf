@@ -5,6 +5,7 @@
     "license": "BSD-3-Clause",
     "version": "3.0.0",
     "exposed-modules": [
+        "Buttons",
         "Cards",
         "DebugStyle",
         "Grid",

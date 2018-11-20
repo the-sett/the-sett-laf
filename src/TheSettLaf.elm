@@ -6,6 +6,7 @@ module TheSettLaf exposing (style, fonts, responsiveMeta, devices, wrapper)
 
 -}
 
+import Buttons
 import Css
 import Css.Global
 import Grid
