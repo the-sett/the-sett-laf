@@ -12,8 +12,8 @@ import Css.Global
 import Grid
 import Html.Styled exposing (Html, node)
 import Html.Styled.Attributes exposing (attribute, href, name, rel)
-import Reset exposing (reset)
-import Responsive exposing (Device(..), DeviceStyle, ResponsiveStyle, baseSpacing, mapMixins, mediaMixins)
+import Reset
+import Responsive exposing (Device(..), DeviceStyle, ResponsiveStyle, mapMixins, mediaMixins)
 import TypeScale exposing (TypeScale, base, fontMediaStyles, fontSizeMixin, h1, h2, h3, h4, majorThird)
 
 
@@ -144,7 +144,8 @@ typography respStyle scale =
 -}
 responsive : TypeScale -> ResponsiveStyle -> List Css.Global.Snippet
 responsive scale respStyle =
-    baseSpacing respStyle
+    Reset.global
+        ++ Responsive.global respStyle
         ++ typography respStyle scale
 
 
@@ -153,7 +154,7 @@ responsive scale respStyle =
 style : ResponsiveStyle -> Html msg
 style devs =
     Css.Global.global <|
-        reset
+        Reset.global
             ++ responsive majorThird devs
 
 

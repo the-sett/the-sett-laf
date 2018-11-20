@@ -1,11 +1,17 @@
 module Responsive exposing
-    ( CommonStyle, DeviceStyle, Device(..), DeviceSpec, ResponsiveStyle
-    , baseSpacing, lineHeight, rhythm, rhythmEm, deviceStyle, deviceStyles, mapMaybeDeviceSpec
+    ( global
+    , CommonStyle, DeviceStyle, Device(..), DeviceSpec, ResponsiveStyle
+    , lineHeight, rhythm, rhythmEm, deviceStyle, deviceStyles, mapMaybeDeviceSpec
     , Mixin, mapMixins, mediaMixins, styleAsMixin
     )
 
 {-| The Responsive module provides a way of specifying sizing configurations for different devices,
 and for applying those to create CSS with media queries.
+
+
+# Global Style Snippet
+
+@docs global
 
 
 # Models for specifying devices and their basic responsive properties.
@@ -15,7 +21,7 @@ and for applying those to create CSS with media queries.
 
 # Responsive helper functions.
 
-@docs baseSpacing, lineHeight, rhythm, rhythmEm, deviceStyle, deviceStyles, mapMaybeDeviceSpec
+@docs lineHeight, rhythm, rhythmEm, deviceStyle, deviceStyles, mapMaybeDeviceSpec
 
 
 # Mixins
@@ -247,8 +253,8 @@ mediaMixins responsive devMixin =
 {-| A globaal CSS style sheet that sets up basic spaing for text, with single
 direction margins.
 -}
-baseSpacing : ResponsiveStyle -> List Css.Global.Snippet
-baseSpacing devices =
+global : ResponsiveStyle -> List Css.Global.Snippet
+global devices =
     [ -- No margins on headings, the line spacing of the heading is sufficient.
       Css.Global.each
         [ Css.Global.h1

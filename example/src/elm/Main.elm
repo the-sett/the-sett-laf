@@ -3,6 +3,7 @@ module Main exposing (main)
 import Body
 import Browser
 import Browser.Dom exposing (getViewportOf, setViewportOf)
+import Css.Global
 import DebugStyle
 import Demo.Buttons
 import Demo.Cards
@@ -85,7 +86,8 @@ styledView model =
             ]
 
         debugStyle =
-            DebugStyle.style TheSettLaf.devices
+            Css.Global.global <|
+                DebugStyle.global TheSettLaf.devices
     in
     case model of
         True ->

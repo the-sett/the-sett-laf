@@ -1,4 +1,4 @@
-module Reset exposing (reset)
+module Reset exposing (global)
 
 {-| Provides a standard CSS reset stylesheet, aimed at getting consitent
 behaviour accross browsers.
@@ -13,8 +13,8 @@ import Css.Global
 
 {-| The CSS reset.
 -}
-reset : List Css.Global.Snippet
-reset =
+global : List Css.Global.Snippet
+global =
     [ -- Ensures <code> elements do not add extra height.
       Css.Global.each
         [ Css.Global.code ]
