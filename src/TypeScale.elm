@@ -3,6 +3,7 @@ module TypeScale exposing
     , TypeScale
     , augmentedFourth
     , base
+    , fontMediaStyles
     , fontSizeMixin
     , fontSizePx
     , goldenRatio
@@ -160,3 +161,15 @@ fontSizeMixin scale (FontSizeLevel sizeLevel) common device =
         , Css.lineHeight (rhythm common device (toFloat numLines))
         ]
         |> styleAsMixin
+
+
+{-| Creates font-size and line-height accross all media devices using media queries,
+for a supplied font size level.
+-}
+fontMediaStyles : ResponsiveStyle -> TypeScale -> FontSizeLevel -> List Css.Style
+fontMediaStyles responsive scale level =
+    mapMixins
+        (mediaMixins responsive
+            (fontSizeMixin scale level responsive.commonStyle)
+        )
+        []

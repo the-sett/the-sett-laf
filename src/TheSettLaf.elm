@@ -14,7 +14,7 @@ import Html.Styled exposing (Html, node)
 import Html.Styled.Attributes exposing (attribute, href, name, rel)
 import Reset exposing (reset)
 import Responsive exposing (Device(..), DeviceStyle, ResponsiveStyle, baseSpacing, mapMixins, mediaMixins)
-import TypeScale exposing (TypeScale, base, fontSizeMixin, h1, h2, h3, h4, majorThird)
+import TypeScale exposing (TypeScale, base, fontMediaStyles, fontSizeMixin, h1, h2, h3, h4, majorThird)
 
 
 
@@ -110,15 +110,7 @@ fonts =
 {-| Responsive typography to fit all devices.
 -}
 typography : ResponsiveStyle -> TypeScale -> List Css.Global.Snippet
-typography deviceStyles scale =
-    let
-        fontMediaStyles fontSizeLevel =
-            mapMixins
-                (mediaMixins deviceStyles
-                    (fontSizeMixin scale fontSizeLevel devices.commonStyle)
-                )
-                []
-    in
+typography respStyle scale =
     [ -- Base font.
       Css.Global.each
         [ Css.Global.html ]
@@ -140,20 +132,20 @@ typography deviceStyles scale =
         ]
 
     -- Media queries to set all font sizes accross all devices.
-    , Css.Global.html <| fontMediaStyles base
-    , Css.Global.h1 <| fontMediaStyles h1
-    , Css.Global.h2 <| fontMediaStyles h2
-    , Css.Global.h3 <| fontMediaStyles h3
-    , Css.Global.h4 <| fontMediaStyles h4
+    , Css.Global.html <| fontMediaStyles respStyle scale base
+    , Css.Global.h1 <| fontMediaStyles respStyle scale h1
+    , Css.Global.h2 <| fontMediaStyles respStyle scale h2
+    , Css.Global.h3 <| fontMediaStyles respStyle scale h3
+    , Css.Global.h4 <| fontMediaStyles respStyle scale h4
     ]
 
 
 {-| The global CSS.
 -}
 responsive : TypeScale -> ResponsiveStyle -> List Css.Global.Snippet
-responsive scale deviceStyles =
-    baseSpacing devices
-        ++ typography deviceStyles scale
+responsive scale respStyle =
+    baseSpacing respStyle
+        ++ typography respStyle scale
 
 
 {-| The CSS as an HTML <style> element.

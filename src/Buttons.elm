@@ -27,6 +27,7 @@ import ResponsiveDSL
         , empty
         , styles
         )
+import TypeScale
 
 
 {-| The button styling context.
@@ -50,13 +51,14 @@ button builders attributes innerHtml devices =
         , Css.borderRadius <| Css.px 2
         , Css.color <| Css.rgb 0 0 0
         , Css.margin <| Css.px 24
-        , Css.padding2 (Css.px 0) (Css.px 16)
+        , Css.padding2 (Css.px 0) (Css.em 1)
         , Css.textTransform Css.uppercase
         , Css.overflow Css.hidden
         , Css.outline Css.none
         , Css.textAlign Css.center
         , Css.verticalAlign Css.middle
 
+        --, Css.batch [ TypeScale.fontMediaStyles devices scale TypeScale.milli ]
         -- Raised
         , Css.backgroundColor <| Css.rgba 158 158 158 0.2
         , Css.property "box-shadow" "0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12)"
