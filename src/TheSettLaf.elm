@@ -73,7 +73,10 @@ xl =
 -}
 devices : ResponsiveStyle
 devices =
-    { commonStyle = { lineHeightRatio = 1.4 }
+    { commonStyle =
+        { lineHeightRatio = 1.4
+        , typeScale = majorThird
+        }
     , deviceStyles =
         { sm = sm
         , md = md
@@ -109,8 +112,8 @@ fonts =
 
 {-| Responsive typography to fit all devices.
 -}
-typography : ResponsiveStyle -> TypeScale -> List Css.Global.Snippet
-typography respStyle scale =
+typography : ResponsiveStyle -> List Css.Global.Snippet
+typography respStyle =
     [ -- Base font.
       Css.Global.each
         [ Css.Global.html ]
@@ -132,11 +135,11 @@ typography respStyle scale =
         ]
 
     -- Media queries to set all font sizes accross all devices.
-    , Css.Global.html <| fontMediaStyles respStyle scale base
-    , Css.Global.h1 <| fontMediaStyles respStyle scale h1
-    , Css.Global.h2 <| fontMediaStyles respStyle scale h2
-    , Css.Global.h3 <| fontMediaStyles respStyle scale h3
-    , Css.Global.h4 <| fontMediaStyles respStyle scale h4
+    , Css.Global.html <| fontMediaStyles base respStyle
+    , Css.Global.h1 <| fontMediaStyles h1 respStyle
+    , Css.Global.h3 <| fontMediaStyles h2 respStyle
+    , Css.Global.h2 <| fontMediaStyles h3 respStyle
+    , Css.Global.h4 <| fontMediaStyles h4 respStyle
     ]
 
 
@@ -146,7 +149,7 @@ responsive : TypeScale -> ResponsiveStyle -> List Css.Global.Snippet
 responsive scale respStyle =
     Reset.global
         ++ Responsive.global respStyle
-        ++ typography respStyle scale
+        ++ typography respStyle
 
 
 {-| The CSS as an HTML <style> element.

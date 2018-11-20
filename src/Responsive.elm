@@ -72,6 +72,7 @@ type alias DeviceSpec a =
 -}
 type alias CommonStyle =
     { lineHeightRatio : Float
+    , typeScale : TypeScale
     }
 
 
@@ -257,8 +258,8 @@ mediaMixins responsive devMixin =
 -- Functions for generating responsive type scales.
 
 
-fontSizePx : TypeScale -> DeviceStyle -> FontSizeLevel -> Float
-fontSizePx scale { baseFontSize } (FontSizeLevel sizeLevel) =
+fontSizePx : TypeScale -> FontSizeLevel -> DeviceStyle -> Float
+fontSizePx scale (FontSizeLevel sizeLevel) { baseFontSize } =
     (scale sizeLevel.level * baseFontSize)
         |> floor
         |> toFloat
@@ -267,11 +268,11 @@ fontSizePx scale { baseFontSize } (FontSizeLevel sizeLevel) =
 {-| A mixin that for a given type scale and font size level, creates font-size
 and line-height properties in keeping with the vertical rhythm.
 -}
-fontSizeMixin : TypeScale -> FontSizeLevel -> CommonStyle -> DeviceStyle -> Mixin
-fontSizeMixin scale (FontSizeLevel sizeLevel) common device =
+fontSizeMixin : FontSizeLevel -> CommonStyle -> DeviceStyle -> Mixin
+fontSizeMixin (FontSizeLevel sizeLevel) common device =
     let
         pxVal =
-            fontSizePx scale device (FontSizeLevel sizeLevel)
+            fontSizePx common.typeScale (FontSizeLevel sizeLevel) device
 
         numLines =
             max sizeLevel.minLines
@@ -288,11 +289,11 @@ fontSizeMixin scale (FontSizeLevel sizeLevel) common device =
 for a supplied font size level. These font sizings will be in keeping with the
 vertical rhythm.
 -}
-fontMediaStyles : ResponsiveStyle -> TypeScale -> FontSizeLevel -> List Css.Style
-fontMediaStyles responsive scale level =
+fontMediaStyles : FontSizeLevel -> ResponsiveStyle -> List Css.Style
+fontMediaStyles level responsive =
     mapMixins
         (mediaMixins responsive
-            (fontSizeMixin scale level responsive.commonStyle)
+            (fontSizeMixin level responsive.commonStyle)
         )
         []
 
