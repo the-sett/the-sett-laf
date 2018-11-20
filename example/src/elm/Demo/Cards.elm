@@ -1,5 +1,6 @@
 module Demo.Cards exposing (view)
 
+import Buttons
 import Cards
 import Css
 import Grid
@@ -60,6 +61,6 @@ card devices title imageUrl =
             []
         , Cards.title title
         , Cards.body [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " ]
-        , Cards.controls [ text "Button" ]
+        , Cards.controls [ Buttons.button [] [] [ text "Button" ] devices ]
         ]
         devices

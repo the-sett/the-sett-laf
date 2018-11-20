@@ -4,6 +4,7 @@ import Body
 import Browser
 import Browser.Dom exposing (getViewportOf, setViewportOf)
 import DebugStyle
+import Demo.Buttons
 import Demo.Cards
 import Demo.Grid
 import Demo.MkDown
@@ -70,6 +71,7 @@ styledView model =
                 Layout.layout <|
                     Body.view
                         [ Demo.Typography.view
+                        , Demo.Buttons.view
                         , Demo.Grid.view
                         , Demo.Cards.view
                         , Demo.MkDown.view

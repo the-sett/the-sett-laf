@@ -92,6 +92,10 @@ topHeader devices model =
                         , styled li
                             [ Css.display Css.inline ]
                             []
+                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| ScrollTo "buttons" ] [ text "Buttons" ] ]
+                        , styled li
+                            [ Css.display Css.inline ]
+                            []
                             [ styled a [ Css.padding (Css.px 10) ] [ onClick <| ScrollTo "grids" ] [ text "Grids" ] ]
                         , styled li
                             [ Css.display Css.inline ]
