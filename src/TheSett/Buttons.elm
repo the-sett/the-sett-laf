@@ -1,5 +1,14 @@
 module TheSett.Buttons exposing (button)
 
+{-| Defines some button styles.
+
+
+# Button constructors.
+
+@docs button
+
+-}
+
 import Css
 import Html.Styled as Html exposing (Attribute, Html, a, div, h1, h4, i, img, p, styled, text, toUnstyled)
 import Html.Styled.Attributes as Attributes exposing (class, id, name, title)

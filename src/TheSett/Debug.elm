@@ -8,7 +8,10 @@ are rendered at (as setting a border 1px would do).
 
 The vertical rhtythm is also drawn in as fitn background lines.
 
-@docs style, debug
+
+# The CSS snippet to add to the global style.
+
+@docs global
 
 -}
 

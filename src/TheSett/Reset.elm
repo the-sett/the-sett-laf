@@ -3,7 +3,10 @@ module TheSett.Reset exposing (global)
 {-| Provides a standard CSS reset stylesheet, aimed at getting consitent
 behaviour accross browsers.
 
-@docs reset
+
+# The CSS snippet to add to the global style.
+
+@docs global
 
 -}
 
