@@ -3,6 +3,7 @@ module Responsive exposing
     , CommonStyle, DeviceStyle, Device(..), DeviceSpec, ResponsiveStyle
     , lineHeight, rhythm, rhythmEm, deviceStyle, deviceStyles, mapMaybeDeviceSpec
     , Mixin, mapMixins, mediaMixins, styleAsMixin
+    , fontSizeMixin, fontMediaStyles
     )
 
 {-| The Responsive module provides a way of specifying sizing configurations for different devices,
@@ -28,6 +29,11 @@ and for applying those to create CSS with media queries.
 
 @docs Mixin, mapMixins, mediaMixins, styleAsMixin
 
+
+# Functions for responsively scaling fonts.
+
+@docs fontSizeMixin, fontMediaStyles
+
 -}
 
 import Array exposing (Array)
@@ -35,6 +41,7 @@ import Css
 import Css.Global
 import Css.Media
 import Maybe.Extra
+import TypeScale exposing (FontSizeLevel(..), TypeScale)
 
 
 
@@ -244,6 +251,50 @@ mediaMixins responsive devMixin =
                 :: minWidthMixins deviceMixin
     in
     allMixins devMixin
+
+
+
+-- Functions for generating responsive type scales.
+
+
+fontSizePx : TypeScale -> DeviceStyle -> FontSizeLevel -> Float
+fontSizePx scale { baseFontSize } (FontSizeLevel sizeLevel) =
+    (scale sizeLevel.level * baseFontSize)
+        |> floor
+        |> toFloat
+
+
+{-| A mixin that for a given type scale and font size level, creates font-size
+and line-height properties in keeping with the vertical rhythm.
+-}
+fontSizeMixin : TypeScale -> FontSizeLevel -> CommonStyle -> DeviceStyle -> Mixin
+fontSizeMixin scale (FontSizeLevel sizeLevel) common device =
+    let
+        pxVal =
+            fontSizePx scale device (FontSizeLevel sizeLevel)
+
+        numLines =
+            max sizeLevel.minLines
+                (ceiling (pxVal / lineHeight common.lineHeightRatio device))
+    in
+    Css.batch
+        [ Css.fontSize (Css.px pxVal)
+        , Css.lineHeight (rhythm common device (toFloat numLines))
+        ]
+        |> styleAsMixin
+
+
+{-| Creates font-size and line-height accross all media devices using media queries,
+for a supplied font size level. These font sizings will be in keeping with the
+vertical rhythm.
+-}
+fontMediaStyles : ResponsiveStyle -> TypeScale -> FontSizeLevel -> List Css.Style
+fontMediaStyles responsive scale level =
+    mapMixins
+        (mediaMixins responsive
+            (fontSizeMixin scale level responsive.commonStyle)
+        )
+        []
 
 
 

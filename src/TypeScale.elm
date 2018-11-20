@@ -1,42 +1,29 @@
 module TypeScale exposing
-    ( FontSizeLevel(..)
-    , TypeScale
-    , augmentedFourth
-    , base
-    , fontMediaStyles
-    , fontSizeMixin
-    , fontSizePx
-    , goldenRatio
-    , h1
-    , h2
-    , h3
-    , h4
-    , majorSecond
-    , majorThird
-    , milli
-    , minorSecond
-    , minorThird
-    , perfectFifth
-    , perfectFourth
-    , typeScale
+    ( TypeScale, FontSizeLevel(..), typeScale
+    , minorSecond, majorSecond, minorThird, majorThird, perfectFourth, augmentedFourth
+    , perfectFifth, goldenRatio
+    , milli, base, h1, h2, h3, h4
     )
 
-import Css
-import Css.Global
-import Responsive
-    exposing
-        ( CommonStyle
-        , DeviceStyle
-        , Mixin
-        , ResponsiveStyle
-        , lineHeight
-        , mapMixins
-        , mediaMixins
-        , rhythm
-        , styleAsMixin
-        )
+{-|
 
 
+# For specifying the type scale and descibing font sizes in levels.
+
+@docs TypeScale, FontSizeLevel, typeScale
+
+
+# Type scales.
+
+@docs minorSecond, majorSecond, minorThird, majorThird, perfectFourth, augmentedFourth
+@docs perfectFifth, goldenRatio
+
+
+# Font size levels.
+
+@docs milli, base, h1, h2, h3, h4
+
+-}
 
 -- Type Scales.
 
@@ -137,39 +124,3 @@ h4 =
         { level = 2
         , minLines = 2
         }
-
-
-fontSizePx : TypeScale -> DeviceStyle -> FontSizeLevel -> Float
-fontSizePx scale { baseFontSize } (FontSizeLevel sizeLevel) =
-    (scale sizeLevel.level * baseFontSize)
-        |> floor
-        |> toFloat
-
-
-fontSizeMixin : TypeScale -> FontSizeLevel -> CommonStyle -> DeviceStyle -> Mixin
-fontSizeMixin scale (FontSizeLevel sizeLevel) common device =
-    let
-        pxVal =
-            fontSizePx scale device (FontSizeLevel sizeLevel)
-
-        numLines =
-            max sizeLevel.minLines
-                (ceiling (pxVal / lineHeight common.lineHeightRatio device))
-    in
-    Css.batch
-        [ Css.fontSize (Css.px pxVal)
-        , Css.lineHeight (rhythm common device (toFloat numLines))
-        ]
-        |> styleAsMixin
-
-
-{-| Creates font-size and line-height accross all media devices using media queries,
-for a supplied font size level.
--}
-fontMediaStyles : ResponsiveStyle -> TypeScale -> FontSizeLevel -> List Css.Style
-fontMediaStyles responsive scale level =
-    mapMixins
-        (mediaMixins responsive
-            (fontSizeMixin scale level responsive.commonStyle)
-        )
-        []

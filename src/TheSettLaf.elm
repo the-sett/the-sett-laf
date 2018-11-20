@@ -13,8 +13,8 @@ import Grid
 import Html.Styled exposing (Html, node)
 import Html.Styled.Attributes exposing (attribute, href, name, rel)
 import Reset
-import Responsive exposing (Device(..), DeviceStyle, ResponsiveStyle, mapMixins, mediaMixins)
-import TypeScale exposing (TypeScale, base, fontMediaStyles, fontSizeMixin, h1, h2, h3, h4, majorThird)
+import Responsive exposing (Device(..), DeviceStyle, ResponsiveStyle, fontMediaStyles, fontSizeMixin, mapMixins, mediaMixins)
+import TypeScale exposing (TypeScale, base, h1, h2, h3, h4, majorThird)
 
 
 
