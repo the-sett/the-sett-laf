@@ -5,8 +5,8 @@ import Grid
 import Html.Styled exposing (div, h1, h4, styled, text)
 import Html.Styled.Attributes exposing (id)
 import Html.Styled.Lazy exposing (lazy)
-import ResponsiveDSL exposing (lg, md, sm, styles, xl)
 import Structure exposing (Template(..))
+import Styles exposing (lg, md, sm, xl)
 
 
 view : Template msg model
@@ -38,7 +38,7 @@ view =
 
 
 cellStyle =
-    styles
+    Styles.styles
         [ Css.backgroundColor <| Css.rgba 150 100 100 0.3
         , Css.property "box-shadow" "0 0 0 1px black inset"
         ]

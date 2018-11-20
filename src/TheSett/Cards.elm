@@ -37,9 +37,8 @@ import ResponsiveDSL
         , StyleBuilder
         , applyDevice
         , applyDevicesToBuilders
-        , empty
-        , styles
         )
+import Styles
 
 
 {-| The card styling context.
@@ -138,4 +137,4 @@ height n device ctx =
 -}
 src : String -> StyleBuilder { a | card : Never } Card
 src imageUrl =
-    styles [ Css.backgroundImage (Css.url imageUrl) ]
+    Styles.styles [ Css.backgroundImage (Css.url imageUrl) ]

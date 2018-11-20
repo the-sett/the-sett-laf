@@ -7,7 +7,7 @@
     "exposed-modules": [
         "Grid",
         "Responsive",
-        "ResponsiveDSL",
+        "Styles",
         "TypeScale",
         "TheSett.Buttons",
         "TheSett.Cards",

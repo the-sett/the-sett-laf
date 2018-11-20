@@ -65,7 +65,6 @@ import Css
         , textAlign
         , wrap
         )
-import Devices exposing (lg, md, sm, xl)
 import Html.Styled exposing (Attribute, Html, div, styled, text)
 import Responsive
     exposing
@@ -88,9 +87,8 @@ import ResponsiveDSL
         , StyleBuilder
         , applyDevice
         , applyDevicesToBuilders
-        , empty
-        , styles
         )
+import Styles exposing (lg, md, sm, xl)
 
 
 
@@ -187,13 +185,13 @@ total available.
 columns : Float -> StyleBuilder { a | row : Never } Grid
 columns n =
     if n > 0 then
-        styles
+        Styles.styles
             [ flexBasis (pct (n / 12 * 100))
             , maxWidth (pct (n / 12 * 100))
             ]
 
     else
-        styles
+        Styles.styles
             [ flexBasis (pct (n / 12 * 100))
             , maxWidth (pct 100)
             , flexGrow (num 1)
@@ -205,11 +203,11 @@ columns n =
 offset : Float -> StyleBuilder { a | grid : Never, row : Never } Grid
 offset n =
     if n > 0 then
-        styles
+        Styles.styles
             [ marginLeft (pct (n / 12 * 100)) ]
 
     else
-        empty
+        Styles.empty
 
 
 
@@ -220,7 +218,7 @@ offset n =
 -}
 start : StyleBuilder { a | grid : Never } Grid
 start =
-    styles
+    Styles.styles
         [ justifyContent flexStart
         , textAlign Css.start
         ]
@@ -230,7 +228,7 @@ start =
 -}
 end : StyleBuilder { a | grid : Never } Grid
 end =
-    styles
+    Styles.styles
         [ justifyContent flexEnd
         , textAlign Css.end
         ]
@@ -240,7 +238,7 @@ end =
 -}
 center : StyleBuilder { a | grid : Never } Grid
 center =
-    styles
+    Styles.styles
         [ justifyContent Css.center
         , textAlign Css.center
         ]
@@ -250,14 +248,14 @@ center =
 -}
 between : StyleBuilder { a | grid : Never, col : Never } Grid
 between =
-    styles [ justifyContent spaceBetween ]
+    Styles.styles [ justifyContent spaceBetween ]
 
 
 {-| Pad spacing around items in a row, with space on the left and right hand sides.
 -}
 around : StyleBuilder { a | grid : Never, col : Never } Grid
 around =
-    styles [ justifyContent spaceAround ]
+    Styles.styles [ justifyContent spaceAround ]
 
 
 
@@ -289,35 +287,35 @@ reverse device grd =
 -}
 top : StyleBuilder { a | grid : Never, column : Never } Grid
 top =
-    styles [ alignItems flexStart ]
+    Styles.styles [ alignItems flexStart ]
 
 
 {-| Aligns items in the middle of a row.
 -}
 middle : StyleBuilder { a | grid : Never, column : Never } Grid
 middle =
-    styles [ alignItems Css.center ]
+    Styles.styles [ alignItems Css.center ]
 
 
 {-| Aligns items at the bottom of a row.
 -}
 bottom : StyleBuilder { a | grid : Never, column : Never } Grid
 bottom =
-    styles [ alignItems flexEnd ]
+    Styles.styles [ alignItems flexEnd ]
 
 
 {-| Stretches items to fill the row height-wise.
 -}
 stretch : StyleBuilder { a | grid : Never, column : Never } Grid
 stretch =
-    styles [ alignItems Css.stretch ]
+    Styles.styles [ alignItems Css.stretch ]
 
 
 {-| Aligns items so their balines align at the top of a row.
 -}
 baseline : StyleBuilder { a | grid : Never, column : Never } Grid
 baseline =
-    styles [ alignItems Css.baseline ]
+    Styles.styles [ alignItems Css.baseline ]
 
 
 
@@ -328,11 +326,11 @@ baseline =
 -}
 first : StyleBuilder { a | grid : Never } Grid
 first =
-    styles [ order (num -1) ]
+    Styles.styles [ order (num -1) ]
 
 
 {-| Orders a row or column so it comes last.
 -}
 last : StyleBuilder { a | grid : Never } Grid
 last =
-    styles [ order (num 1) ]
+    Styles.styles [ order (num 1) ]

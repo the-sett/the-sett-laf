@@ -1,12 +1,12 @@
 module Demo.Cards exposing (view)
 
 import Css
-import Devices exposing (lg, md, sm, xl)
 import Grid
 import Html.Styled exposing (div, h1, styled, text)
 import Html.Styled.Attributes exposing (id)
 import Html.Styled.Lazy exposing (lazy)
 import Structure exposing (Template(..))
+import Styles exposing (lg, md, sm, xl)
 import TheSett.Buttons as Buttons
 import TheSett.Cards as Cards
 

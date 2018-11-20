@@ -24,8 +24,6 @@ import ResponsiveDSL
         , StyleBuilder
         , applyDevice
         , applyDevicesToBuilders
-        , empty
-        , styles
         )
 import TypeScale
 

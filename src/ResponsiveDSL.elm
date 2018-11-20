@@ -1,7 +1,6 @@
 module ResponsiveDSL exposing
     ( Compatible(..)
     , Builder(..), ContainerBuilder, DeviceBuilder, ElementBuilder, StyleBuilder
-    , styles, empty
     , applyDevice, applyDevicesToBuilders
     )
 
@@ -16,11 +15,6 @@ module ResponsiveDSL exposing
 # Builder types.
 
 @docs Builder, ContainerBuilder, DeviceBuilder, ElementBuilder, StyleBuilder
-
-
-# Injecting CSS styles
-
-@docs styles, empty
 
 
 # For applying responsive devices.
@@ -93,13 +87,6 @@ type alias StyleBuilder a ctx =
     Device -> ctx -> Builder a ctx
 
 
-{-| Adds any CSS style you like to a grid element.
--}
-styles : List Css.Style -> Device -> ctx -> Builder a ctx
-styles styleList device ctx =
-    Builder device ctx (always3 styleList)
-
-
 {-| Applies a responsive device to a list of StyleBuilders.
 -}
 applyDevice : Device -> List (Device -> ctx -> Builder a ctx) -> List (ctx -> Builder a ctx)
@@ -124,14 +111,3 @@ applyDevicesToBuilders buildersList devices =
                 buildersList
                 |> List.concat
         )
-
-
-{-| An empty style, for convenience when sketching out DSLs.
--}
-empty : StyleBuilder a ctx
-empty =
-    \device ctx -> Builder device ctx (always3 [])
-
-
-always3 =
-    always >> always >> always
