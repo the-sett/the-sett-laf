@@ -1,7 +1,5 @@
 module Demo.Cards exposing (view)
 
-import Buttons
-import Cards
 import Css
 import Grid
 import Html.Styled exposing (div, h1, styled, text)
@@ -9,6 +7,8 @@ import Html.Styled.Attributes exposing (id)
 import Html.Styled.Lazy exposing (lazy)
 import ResponsiveDSL exposing (lg, md, sm, xl)
 import Structure exposing (Template(..))
+import TheSett.Buttons as Buttons
+import TheSett.Cards as Cards
 
 
 view : Template msg model

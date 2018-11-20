@@ -1,4 +1,4 @@
-module Buttons exposing (button)
+module TheSett.Buttons exposing (button)
 
 import Css
 import Html.Styled as Html exposing (Attribute, Html, a, div, h1, h4, i, img, p, styled, text, toUnstyled)

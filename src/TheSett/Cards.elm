@@ -1,4 +1,4 @@
-module Cards exposing
+module TheSett.Cards exposing
     ( card, image, title, body, controls
     , src, height
     )

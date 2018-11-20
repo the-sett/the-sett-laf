@@ -1,6 +1,5 @@
 module Demo.Buttons exposing (view)
 
-import Buttons
 import Css
 import Grid
 import Html.Styled exposing (div, h1, styled, text)
@@ -8,6 +7,7 @@ import Html.Styled.Attributes exposing (id)
 import Html.Styled.Lazy exposing (lazy)
 import ResponsiveDSL exposing (lg, md, sm, xl)
 import Structure exposing (Template(..))
+import TheSett.Buttons as Buttons
 
 
 view : Template msg model

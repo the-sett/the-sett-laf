@@ -4,7 +4,6 @@ import Body
 import Browser
 import Browser.Dom exposing (getViewportOf, setViewportOf)
 import Css.Global
-import DebugStyle
 import Demo.Buttons
 import Demo.Cards
 import Demo.Grid
@@ -14,11 +13,12 @@ import Html.Styled exposing (div, input, text, toUnstyled)
 import Html.Styled.Attributes exposing (checked, type_)
 import Html.Styled.Events exposing (onCheck)
 import Layout
-import Logo
 import State exposing (Model, Msg(..))
 import Structure exposing (Template(..))
 import Task
-import TheSettLaf
+import TheSett.Debug
+import TheSett.Laf as Laf
+import TheSett.Logo
 
 
 main =
@@ -65,9 +65,9 @@ view model =
 styledView model =
     let
         innerView =
-            [ TheSettLaf.responsiveMeta
-            , TheSettLaf.fonts
-            , TheSettLaf.style TheSettLaf.devices
+            [ Laf.responsiveMeta
+            , Laf.fonts
+            , Laf.style Laf.devices
             , case
                 Layout.layout <|
                     Body.view
@@ -79,15 +79,15 @@ styledView model =
                         ]
               of
                 Dynamic fn ->
-                    fn TheSettLaf.devices model
+                    fn Laf.devices model
 
                 Static fn ->
-                    Html.Styled.map never <| fn TheSettLaf.devices
+                    Html.Styled.map never <| fn Laf.devices
             ]
 
         debugStyle =
             Css.Global.global <|
-                DebugStyle.global TheSettLaf.devices
+                TheSett.Debug.global Laf.devices
     in
     case model of
         True ->

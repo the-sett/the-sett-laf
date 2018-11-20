@@ -1,4 +1,4 @@
-module DebugStyle exposing (global)
+module TheSett.Debug exposing (global)
 
 {-| DebugStyle provides a debug stylesheet.
 

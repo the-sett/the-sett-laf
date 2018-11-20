@@ -1,4 +1,4 @@
-module Reset exposing (global)
+module TheSett.Reset exposing (global)
 
 {-| Provides a standard CSS reset stylesheet, aimed at getting consitent
 behaviour accross browsers.

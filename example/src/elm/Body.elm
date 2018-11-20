@@ -3,14 +3,14 @@ module Body exposing (view)
 import Html.Styled exposing (div, styled)
 import Html.Styled.Attributes exposing (class, title)
 import Structure exposing (Template(..))
-import TheSettLaf
+import TheSett.Laf as Laf
 
 
 view : List (Template msg model) -> Template msg model
 view templates =
     (\devices model ->
         styled div
-            [ TheSettLaf.wrapper devices ]
+            [ Laf.wrapper devices ]
             []
             (List.map
                 (\template ->

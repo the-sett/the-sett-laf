@@ -1,4 +1,4 @@
-module Logo exposing (logo)
+module TheSett.Logo exposing (logo)
 
 {-| The Sett logo as SVG.
 
