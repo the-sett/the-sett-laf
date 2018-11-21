@@ -25,12 +25,12 @@ view =
                 [ sm [ Grid.columns 12 ] ]
                 []
                 [ Grid.row
-                    []
+                    [ sm [ Grid.center ] ]
                     []
                     [ Grid.col
                         [ sm [ Grid.columns 12 ]
-                        , md [ Grid.columns 5, Grid.offset 1 ]
-                        , lg [ Grid.columns 4, Grid.offset 2 ]
+                        , md [ Grid.columns 5 ]
+                        , lg [ Grid.columns 4 ]
                         ]
                         []
                         [ card devices "Card1" "images/more-from-4.png" ]

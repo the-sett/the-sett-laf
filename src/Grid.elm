@@ -284,7 +284,6 @@ start : StyleBuilder { a | grid : Never } Grid
 start =
     Styles.styles
         [ justifyContent flexStart
-        , textAlign Css.start
         ]
 
 
@@ -294,7 +293,6 @@ end : StyleBuilder { a | grid : Never } Grid
 end =
     Styles.styles
         [ justifyContent flexEnd
-        , textAlign Css.end
         ]
 
 
@@ -304,7 +302,6 @@ center : StyleBuilder { a | grid : Never } Grid
 center =
     Styles.styles
         [ justifyContent Css.center
-        , textAlign Css.center
         ]
 
 

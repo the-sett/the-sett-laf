@@ -24,7 +24,7 @@ view =
             , h4 [] [ text "Column Offsets" ]
             , gridn devices offsets
             , h4 [] [ text "Centered" ]
-            , gridn devices centecellStyle
+            , gridn devices centered
             , h4 [] [ text "End" ]
             , gridn devices end
             , h4 [] [ text "Auto Width" ]
@@ -60,7 +60,7 @@ offsets n =
         [ Grid.col [ sm [ Grid.columns <| 13 - n, Grid.offset <| n - 1, cellStyle ] ] [] [ text "cell" ] ]
 
 
-centecellStyle n =
+centered n =
     Grid.row [ sm [ Grid.center ] ]
         []
         [ Grid.col [ sm [ Grid.columns n, cellStyle ] ] [] [ text "cell" ] ]
