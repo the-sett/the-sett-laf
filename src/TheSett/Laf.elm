@@ -102,8 +102,9 @@ responsiveMeta =
 fonts : Html msg
 fonts =
     node "link"
-        [ href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700"
+        [ href "https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700"
 
+        --href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700"
         --, href "https://fonts.googleapis.com/css?family=Nobile:300,400,500,700"
         , rel "stylesheet"
         ]
@@ -117,7 +118,7 @@ typography respStyle =
     [ -- Base font.
       Css.Global.each
         [ Css.Global.html ]
-        [ Css.fontFamilies [ "Open Sans", "Helvetica" ]
+        [ Css.fontFamilies [ "Source Sans Pro", "Helvetica" ]
         , Css.fontWeight <| Css.int 400
         , Css.textRendering Css.optimizeLegibility
         , Css.color printBlack |> Css.important
