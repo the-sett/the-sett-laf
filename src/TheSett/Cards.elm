@@ -25,7 +25,7 @@ import Responsive
         , deviceStyle
         , deviceStyles
         , mapMaybeDeviceSpec
-        , rhythmEm
+        , rhythm
         )
 import ResponsiveDSL
     exposing
@@ -122,15 +122,22 @@ controls innerHtml _ =
         innerHtml
 
 
+
+-- height : Float -> StyleBuilder { a | card : Never } Card
+-- height n device ctx =
+--     Builder device
+--         ctx
+--         (\_ common responsive ->
+--             [ Css.height <| rhythmEm n common responsive ]
+--         )
+
+
 {-| Sets the height of the image, in rhythm units.
 -}
-height : Float -> StyleBuilder { a | card : Never } Card
-height n device ctx =
-    Builder device
-        ctx
-        (\_ common responsive ->
-            [ Css.height <| rhythmEm n common responsive ]
-        )
+height : Float -> List (ctx -> Builder a ctx)
+height n =
+    [ \ctx -> Builder Sm ctx (\_ -> \common device -> [ Css.height <| rhythm n common device ])
+    ]
 
 
 {-| Sets the URL of the image.
