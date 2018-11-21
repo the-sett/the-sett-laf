@@ -61,6 +61,6 @@ card devices title imageUrl =
             []
         , Cards.title title
         , Cards.body [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " ]
-        , Cards.controls [ Buttons.button [] [] [ text "Button" ] devices ]
+        , Cards.controls [ Buttons.button [ sm [ Buttons.raised ] ] [] [ text "Button" ] devices ]
         ]
         devices

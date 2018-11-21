@@ -27,11 +27,13 @@ view =
                     []
                     []
                     [ Grid.col
-                        [ sm [ Grid.columns 6 ]
-                        , md [ Grid.columns 4, Grid.offset 2 ]
-                        ]
+                        []
                         []
                         [ Buttons.button [] [] [ text "Button" ] devices ]
+                    , Grid.col
+                        []
+                        []
+                        [ Buttons.button [ sm [ Buttons.raised ] ] [] [ text "Button" ] devices ]
                     ]
                 ]
                 devices

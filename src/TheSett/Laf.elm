@@ -102,7 +102,7 @@ responsiveMeta =
 fonts : Html msg
 fonts =
     node "link"
-        [ href "https://fonts.googleapis.com/css?family=Open+Sans:400,700"
+        [ href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700"
 
         --, href "https://fonts.googleapis.com/css?family=Nobile:300,400,500,700"
         , rel "stylesheet"
