@@ -83,6 +83,7 @@ import ResponsiveDSL
         , ConstDeviceBuilder
         , ContainerBuilder
         , ElementBuilder
+        , OuterBuilder
         , StyleBuilder
         , applyDevicesToBuilders
         )
@@ -93,10 +94,19 @@ import Styles exposing (lg, md, sm, xl)
 {- The grid styling context. -}
 
 
+type alias ColumnProps =
+    { numColumns : Float
+    }
+
+
+defaultColumnProps =
+    { numColumns = 12 }
+
+
 type Grid
-    = Grid
-    | Row
-    | Column
+    = Grid ColumnProps
+    | Row ColumnProps
+    | Column ColumnProps
 
 
 
@@ -105,12 +115,15 @@ type Grid
 
 {-| The outer builder of a responsive grid.
 -}
-grid : ContainerBuilder { a | grid : Compatible } Grid msg
+grid : OuterBuilder { a | grid : Compatible } Grid msg
 grid builders attributes innerHtml responsive =
     let
+        ctx =
+            Grid defaultColumnProps
+
         flatBuilders =
             List.concat builders
-                |> List.map (\gridFn -> gridFn Column)
+                |> List.map (\gridFn -> gridFn ctx)
     in
     styled div
         [ marginRight Css.auto
@@ -118,17 +131,20 @@ grid builders attributes innerHtml responsive =
         , applyDevicesToBuilders flatBuilders responsive
         ]
         attributes
-        (List.map (\deviceStyleFn -> deviceStyleFn responsive) innerHtml)
+        (List.map (\contentFn -> contentFn ctx responsive) innerHtml)
 
 
 {-| The row builder for a responsive grid, on which row compatible properties can be defined.
 -}
 row : ContainerBuilder { a | row : Compatible } Grid msg
-row builders attributes innerHtml responsive =
+row builders attributes innerHtml parentCtx responsive =
     let
+        ctx =
+            Row defaultColumnProps
+
         flatBuilders =
             List.concat builders
-                |> List.map (\gridFn -> gridFn Column)
+                |> List.map (\gridFn -> gridFn ctx)
     in
     styled div
         [ boxSizing borderBox
@@ -139,17 +155,20 @@ row builders attributes innerHtml responsive =
         , applyDevicesToBuilders flatBuilders responsive
         ]
         attributes
-        (List.map (\deviceStyleFn -> deviceStyleFn responsive) innerHtml)
+        (List.map (\contentFn -> contentFn ctx responsive) innerHtml)
 
 
 {-| The column builder for a responsive grid, on which column compatible properties can be defined.
 -}
 col : ElementBuilder { a | col : Compatible } Grid msg
-col builders attributes innerHtml responsive =
+col builders attributes innerHtml parentCtx responsive =
     let
+        ctx =
+            Column defaultColumnProps
+
         flatBuilders =
             List.concat builders
-                |> List.map (\gridFn -> gridFn Column)
+                |> List.map (\gridFn -> gridFn ctx)
     in
     styled div
         [ boxSizing borderBox
@@ -183,9 +202,9 @@ total available.
 columns : Float -> StyleBuilder { a | row : Never } Grid
 columns n device ctx =
     case ctx of
-        Column ->
+        Column props ->
             if n > 0 then
-                ConstForDevice device ctx <|
+                ConstForDevice device (Column props) <|
                     always
                         [ flexBasis (pct (n / 12 * 100))
                         , maxWidth (pct (n / 12 * 100))
@@ -199,11 +218,11 @@ columns n device ctx =
                         , flexGrow (num 1)
                         ]
 
-        Row ->
-            ConstForDevice device ctx <| always []
+        Row props ->
+            ConstForDevice device (Row props) <| always []
 
-        Grid ->
-            ConstForDevice device ctx <| always []
+        Grid props ->
+            ConstForDevice device (Grid props) <| always []
 
 
 {-| Defines how many column widths a column is offset from the left hand side by.
@@ -277,10 +296,10 @@ reverse device grd =
     ConstForDevice device grd <|
         \ctx ->
             case ctx of
-                Row ->
+                Row _ ->
                     [ flexDirection rowReverse ]
 
-                Column ->
+                Column _ ->
                     [ flexDirection columnReverse ]
 
                 _ ->

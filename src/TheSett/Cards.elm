@@ -31,8 +31,8 @@ import ResponsiveDSL
         ( Builder(..)
         , Compatible(..)
         , ConstDeviceBuilder
-        , ContainerBuilder
         , ElementBuilder
+        , OuterBuilder
         , StyleBuilder
         , applyDevicesToBuilders
         )
@@ -48,7 +48,7 @@ type Card
 
 {-| Creates a Card container.
 -}
-card : ContainerBuilder { a | card : Compatible } Card msg
+card : OuterBuilder { a | card : Compatible } Card msg
 card builders attributes innerHtml responsive =
     let
         flatBuilders =
@@ -64,13 +64,13 @@ card builders attributes innerHtml responsive =
         , applyDevicesToBuilders flatBuilders responsive
         ]
         attributes
-        (List.map (\deviceStyleFn -> deviceStyleFn responsive) innerHtml)
+        (List.map (\contentFn -> contentFn Card responsive) innerHtml)
 
 
 {-| Creates an image on the card.
 -}
 image : ElementBuilder { a | image : Compatible } Card msg
-image builders attributes innerHtml responsive =
+image builders attributes innerHtml parentCtx responsive =
     let
         flatBuilders =
             List.concat builders
@@ -85,8 +85,8 @@ image builders attributes innerHtml responsive =
 
 {-| Creates a title on the card.
 -}
-title : String -> ResponsiveStyle -> Html msg
-title titleText _ =
+title : String -> Card -> ResponsiveStyle -> Html msg
+title titleText _ _ =
     styled div
         [ Css.paddingLeft (Css.rem 1.5)
         , Css.paddingRight (Css.rem 1)
@@ -99,8 +99,8 @@ title titleText _ =
 
 {-| Defines the body of the card.
 -}
-body : List (Html msg) -> ResponsiveStyle -> Html msg
-body innerHtml _ =
+body : List (Html msg) -> Card -> ResponsiveStyle -> Html msg
+body innerHtml _ _ =
     styled div
         [ Css.paddingLeft (Css.rem 1)
         , Css.paddingRight (Css.rem 1)
@@ -111,8 +111,8 @@ body innerHtml _ =
 
 {-| Defines the controls on the card
 -}
-controls : List (Html msg) -> ResponsiveStyle -> Html msg
-controls innerHtml _ =
+controls : List (Html msg) -> Card -> ResponsiveStyle -> Html msg
+controls innerHtml _ _ =
     styled div
         [ Css.paddingLeft (Css.rem 1)
         , Css.paddingRight (Css.rem 1)

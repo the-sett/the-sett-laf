@@ -1,6 +1,7 @@
 module ResponsiveDSL exposing
     ( Compatible(..)
-    , Builder(..), ByDeviceBuilder, ContainerBuilder, ConstDeviceBuilder, ElementBuilder, StyleBuilder
+    , Builder(..), ByDeviceBuilder, ContainerBuilder, ConstDeviceBuilder
+    , ElementBuilder, StyleBuilder, OuterBuilder, SimpleElementBuilder
     , applyDevicesToBuilders
     )
 
@@ -14,7 +15,8 @@ module ResponsiveDSL exposing
 
 # Builder types.
 
-@docs Builder, ByDeviceBuilder, ContainerBuilder, ConstDeviceBuilder, ElementBuilder, StyleBuilder
+@docs Builder, ByDeviceBuilder, ContainerBuilder, ConstDeviceBuilder
+@docs ElementBuilder, StyleBuilder, OuterBuilder, SimpleElementBuilder
 
 
 # For applying responsive devices.
@@ -56,19 +58,41 @@ type Builder a ctx
     | ByDeviceProps ctx (ctx -> ResponsiveFn (List Css.Style))
 
 
-{-| Builds a container of Elements. This can be styled per device.
+{-| Builds an outer container of Containers or Elements.
 -}
-type alias ContainerBuilder a ctx msg =
+type alias OuterBuilder a ctx msg =
     List (List (ctx -> Builder a ctx))
     -> List (Attribute msg)
-    -> List (ResponsiveStyle -> Html msg)
+    -> List (ctx -> ResponsiveStyle -> Html msg)
     -> ResponsiveStyle
     -> Html msg
 
 
-{-| Builds an Element. This can be styled per device.
+{-| Builds a container of Elements.
+-}
+type alias ContainerBuilder a ctx msg =
+    List (List (ctx -> Builder a ctx))
+    -> List (Attribute msg)
+    -> List (ctx -> ResponsiveStyle -> Html msg)
+    -> ctx
+    -> ResponsiveStyle
+    -> Html msg
+
+
+{-| Builds an Element with a parent context.
 -}
 type alias ElementBuilder a ctx msg =
+    List (List (ctx -> Builder a ctx))
+    -> List (Attribute msg)
+    -> List (Html msg)
+    -> ctx
+    -> ResponsiveStyle
+    -> Html msg
+
+
+{-| Builds an Element without a parent context.
+-}
+type alias SimpleElementBuilder a ctx msg =
     List (List (ctx -> Builder a ctx))
     -> List (Attribute msg)
     -> List (Html msg)

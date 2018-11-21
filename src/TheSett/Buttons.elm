@@ -36,8 +36,7 @@ import ResponsiveDSL
         ( Builder(..)
         , Compatible(..)
         , ConstDeviceBuilder
-        , ContainerBuilder
-        , ElementBuilder
+        , SimpleElementBuilder
         , StyleBuilder
         , applyDevicesToBuilders
         )
@@ -53,7 +52,7 @@ type Button
 
 {-| Creates a button.
 -}
-button : ElementBuilder { a | button : Compatible } Button msg
+button : SimpleElementBuilder { a | button : Compatible } Button msg
 button builders attributes innerHtml responsive =
     let
         flatBuilders =
