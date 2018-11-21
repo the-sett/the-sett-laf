@@ -24,7 +24,7 @@ import Responsive
         , ResponsiveStyle
         , deviceStyle
         , deviceStyles
-        , rhythm
+        , rhythmSplit
         )
 import ResponsiveDSL
     exposing
@@ -89,35 +89,3 @@ raised =
         [ Css.backgroundColor <| Css.rgba 158 158 158 0.2
         , Css.property "box-shadow" "0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12)"
         ]
-
-
-{-| This function helps to get the vertical rhythm for buttons right, as browsers
-render buttons differently and tend to insert some extra space on top of the line-height
-around a button.
-
-Instead of setting a line-height for the button, the requested rhythm is split into a
-height and a maring which together add up to the correct size.
-
--}
-rhythmSplit : Float -> Float -> ResponsiveFn (List Css.Style)
-rhythmSplit ratio n common device =
-    let
-        r1 =
-            rhythm n common device
-
-        mt =
-            r1 * ratio / 2
-
-        hPlusMt =
-            r1 * (ratio / 2 + (1 - ratio))
-
-        h =
-            hPlusMt - mt
-
-        mb =
-            r1 - hPlusMt
-    in
-    [ Css.marginTop (Css.px mt)
-    , Css.height <| Css.px h
-    , Css.marginBottom (Css.px mb)
-    ]

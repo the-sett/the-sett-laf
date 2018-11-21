@@ -2,7 +2,7 @@ module Responsive exposing
     ( global
     , CommonStyle, DeviceStyle, Device(..), DeviceSpec, ResponsiveStyle
     , ResponsiveFn, deviceStyle, deviceStyles
-    , rhythm, rhythmPx
+    , rhythmPx, rhythmSplit
     , fontMediaStyles
     )
 
@@ -27,7 +27,7 @@ and for applying those to create CSS with media queries.
 
 # Vertical rhythm
 
-@docs rhythm, rhythmPx
+@docs rhythmPx, rhythmSplit
 
 
 # Functions for responsively scaling fonts
@@ -154,6 +154,38 @@ This produces a float which is the size in pixels.
 rhythm : Float -> ResponsiveFn Float
 rhythm n common device =
     n * lineHeight common.lineHeightRatio device
+
+
+{-| This function helps to get the vertical rhythm right in situations where
+rounding errors are not allowing things to be positioned accurately, or where browsers
+insert extra padding around certain elements, such as buttons.
+
+Instead of setting a line-height for the rhythm, the requested rhythm is split into a
+height and a margin which together add up to the correct size.
+
+-}
+rhythmSplit : Float -> Float -> ResponsiveFn (List Css.Style)
+rhythmSplit ratio n common device =
+    let
+        r1 =
+            rhythm n common device
+
+        mt =
+            r1 * ratio / 2
+
+        hPlusMt =
+            r1 * (ratio / 2 + (1 - ratio))
+
+        h =
+            hPlusMt - mt
+
+        mb =
+            r1 - hPlusMt
+    in
+    [ Css.marginTop (Css.px mt)
+    , Css.height <| Css.px h
+    , Css.marginBottom (Css.px mb)
+    ]
 
 
 
