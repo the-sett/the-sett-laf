@@ -1,24 +1,30 @@
 module Styles exposing
     ( styles, empty
     , sm, md, lg, xl
+    , height
     )
 
 {-| The Devices module provides device specific styling builders.
 
 
-# Injecting CSS styles
+# Injecting constant CSS styles
 
 @docs styles, empty
 
 
-# By-device style builders.
+# Constant by device style builders
 
 @docs sm, md, lg, xl
+
+
+# Responsive by device properties style builders.
+
+@docs height
 
 -}
 
 import Css
-import Responsive exposing (Device(..))
+import Responsive exposing (Device(..), rhythm)
 import ResponsiveDSL exposing (Builder(..), DeviceBuilder, StyleBuilder, applyDevice)
 
 
@@ -62,3 +68,11 @@ lg builders =
 xl : DeviceBuilder a ctx
 xl builders =
     applyDevice Xl builders
+
+
+{-| Sets the height property in rhythm units.
+-}
+height : Float -> List (ctx -> Builder a ctx)
+height n =
+    [ \ctx -> ByDeviceProps ctx (\_ -> \common device -> [ Css.height <| rhythm n common device ])
+    ]

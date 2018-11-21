@@ -1,6 +1,6 @@
 module TheSett.Cards exposing
     ( card, image, title, body, controls
-    , src, height
+    , src
     )
 
 {-| For building parts of a card:
@@ -9,7 +9,7 @@ module TheSett.Cards exposing
 
 For styling parts of a card:
 
-@docs src, height
+@docs src
 
 -}
 
@@ -120,24 +120,6 @@ controls innerHtml _ =
         ]
         []
         innerHtml
-
-
-
--- height : Float -> StyleBuilder { a | card : Never } Card
--- height n device ctx =
---     Builder device
---         ctx
---         (\_ common responsive ->
---             [ Css.height <| rhythmEm n common responsive ]
---         )
-
-
-{-| Sets the height of the image, in rhythm units.
--}
-height : Float -> List (ctx -> Builder a ctx)
-height n =
-    [ \ctx -> ByDeviceProps ctx (\_ -> \common device -> [ Css.height <| rhythm n common device ])
-    ]
 
 
 {-| Sets the URL of the image.
