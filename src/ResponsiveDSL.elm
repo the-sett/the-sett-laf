@@ -1,7 +1,7 @@
 module ResponsiveDSL exposing
     ( Compatible(..)
     , Builder(..), ByDeviceBuilder, ContainerBuilder, ConstDeviceBuilder, ElementBuilder, StyleBuilder
-    , applyDevice, applyDevicesToBuilders
+    , applyDevicesToBuilders
     )
 
 {-|
@@ -19,7 +19,7 @@ module ResponsiveDSL exposing
 
 # For applying responsive devices.
 
-@docs applyDevice, applyDevicesToBuilders
+@docs applyDevicesToBuilders
 
 -}
 
@@ -92,13 +92,6 @@ type alias ByDeviceBuilder a ctx =
 -}
 type alias StyleBuilder a ctx =
     Device -> ctx -> Builder a ctx
-
-
-{-| Applies a responsive device to a list of StyleBuilders.
--}
-applyDevice : Device -> List (Device -> ctx -> Builder a ctx) -> List (ctx -> Builder a ctx)
-applyDevice device builders =
-    List.map (\buildFn -> buildFn device) builders
 
 
 {-| Applies a set of responsive device specifications to a list of builders, in any context.

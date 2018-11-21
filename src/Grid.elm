@@ -84,7 +84,6 @@ import ResponsiveDSL
         , ContainerBuilder
         , ElementBuilder
         , StyleBuilder
-        , applyDevice
         , applyDevicesToBuilders
         )
 import Styles exposing (lg, md, sm, xl)

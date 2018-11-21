@@ -35,11 +35,10 @@ import ResponsiveDSL
     exposing
         ( Builder(..)
         , Compatible(..)
-        , ContainerBuilder
         , ConstDeviceBuilder
+        , ContainerBuilder
         , ElementBuilder
         , StyleBuilder
-        , applyDevice
         , applyDevicesToBuilders
         )
 import Styles

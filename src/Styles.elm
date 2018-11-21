@@ -31,7 +31,6 @@ import ResponsiveDSL
         , ByDeviceBuilder
         , ConstDeviceBuilder
         , StyleBuilder
-        , applyDevice
         )
 
 
@@ -47,6 +46,13 @@ styles styleList device ctx =
 empty : StyleBuilder a ctx
 empty =
     \device ctx -> ConstForDevice device ctx (always [])
+
+
+{-| Applies a responsive device to a list of StyleBuilders.
+-}
+applyDevice : Device -> List (Device -> ctx -> Builder a ctx) -> List (ctx -> Builder a ctx)
+applyDevice device builders =
+    List.map (\buildFn -> buildFn device) builders
 
 
 {-| Small device grid property builder.
