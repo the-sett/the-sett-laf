@@ -1,4 +1,4 @@
-module State exposing (Model, Msg(..))
+module State exposing (Model, Msg(..), Page(..))
 
 {-| Keeping the update structure flat for this simple application.
 -}
@@ -6,9 +6,19 @@ module State exposing (Model, Msg(..))
 
 type Msg
     = Toggle Bool
-    | ScrollTo String
+    | SwitchTo Page
     | NoOp
 
 
+type Page
+    = Typography
+    | Buttons
+    | Grid
+    | Cards
+    | Markdown
+
+
 type alias Model =
-    Bool
+    { debug : Bool
+    , page : Page
+    }

@@ -13,7 +13,7 @@ import Html.Styled exposing (div, input, text, toUnstyled)
 import Html.Styled.Attributes exposing (checked, type_)
 import Html.Styled.Events exposing (onCheck)
 import Layout
-import State exposing (Model, Msg(..))
+import State exposing (Model, Msg(..), Page(..))
 import Structure exposing (Template(..))
 import Task
 import TheSett.Debug
@@ -31,20 +31,21 @@ main =
 
 
 init () =
-    ( False, Cmd.none )
+    ( { debug = False, page = Typography }, Cmd.none )
 
 
 subscriptions _ =
     Sub.none
 
 
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case Debug.log "update" msg of
         Toggle state ->
-            ( state, Cmd.none )
+            ( { model | debug = state }, Cmd.none )
 
-        ScrollTo id ->
-            ( model, jumpToId id )
+        SwitchTo page ->
+            ( { model | page = page }, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )
@@ -62,6 +63,7 @@ view model =
         |> toUnstyled
 
 
+styledView : Model -> Html.Styled.Html Msg
 styledView model =
     let
         innerView =
@@ -69,14 +71,7 @@ styledView model =
             , Laf.fonts
             , Laf.style Laf.devices
             , case
-                Layout.layout <|
-                    Body.view
-                        [ Demo.Typography.view
-                        , Demo.Buttons.view
-                        , Demo.Grid.view
-                        , Demo.Cards.view
-                        , Demo.MkDown.view
-                        ]
+                Layout.layout <| Body.view (viewForPage model.page)
               of
                 Dynamic fn ->
                     fn Laf.devices model
@@ -89,9 +84,28 @@ styledView model =
             Css.Global.global <|
                 TheSett.Debug.global Laf.devices
     in
-    case model of
+    case model.debug of
         True ->
             div [] (debugStyle :: innerView)
 
         False ->
             div [] innerView
+
+
+viewForPage : Page -> Template Msg Model
+viewForPage page =
+    case page of
+        Typography ->
+            Demo.Typography.view
+
+        Buttons ->
+            Demo.Buttons.view
+
+        Grid ->
+            Demo.Grid.view
+
+        Cards ->
+            Demo.Cards.view
+
+        Markdown ->
+            Demo.MkDown.view

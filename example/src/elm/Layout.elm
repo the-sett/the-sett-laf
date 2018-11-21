@@ -6,7 +6,7 @@ import Html.Styled exposing (Html, a, button, div, input, li, nav, node, styled,
 import Html.Styled.Attributes exposing (attribute, checked, class, href, id, type_)
 import Html.Styled.Events exposing (onClick)
 import Responsive exposing (ResponsiveStyle)
-import State exposing (Model, Msg(..))
+import State exposing (Model, Msg(..), Page(..))
 import Structure exposing (Layout, Template(..))
 import Styles exposing (md, sm)
 import Svg.Styled
@@ -88,23 +88,23 @@ topHeader devices model =
                         [ styled li
                             [ Css.display Css.inline ]
                             []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| ScrollTo "typography" ] [ text "Typography" ] ]
+                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Typography ] [ text "Typography" ] ]
                         , styled li
                             [ Css.display Css.inline ]
                             []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| ScrollTo "buttons" ] [ text "Buttons" ] ]
+                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Buttons ] [ text "Buttons" ] ]
                         , styled li
                             [ Css.display Css.inline ]
                             []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| ScrollTo "grids" ] [ text "Grids" ] ]
+                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Grid ] [ text "Grids" ] ]
                         , styled li
                             [ Css.display Css.inline ]
                             []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| ScrollTo "cards" ] [ text "Cards" ] ]
+                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Cards ] [ text "Cards" ] ]
                         , styled li
                             [ Css.display Css.inline ]
                             []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| ScrollTo "markdown" ] [ text "Markdown" ] ]
+                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Markdown ] [ text "Markdown" ] ]
                         ]
                     ]
                 ]
@@ -121,7 +121,7 @@ debugToggle devices model =
                 [ Css.right (Responsive.rhythm devices.commonStyle device 2)
                 , Css.top (Responsive.rhythm devices.commonStyle device 1)
                 ]
-        , if model then
+        , if model.debug then
             Css.backgroundColor (Css.rgb 50 230 50) |> Css.important
 
           else
@@ -133,7 +133,7 @@ debugToggle devices model =
         , Css.borderRadius (Css.px 4)
         , Css.property "user-select" "none"
         ]
-        [ onClick <| Toggle (not model) ]
+        [ onClick <| Toggle (not model.debug) ]
         [ text "grid"
         ]
 

@@ -6,22 +6,18 @@ import Structure exposing (Template(..))
 import TheSett.Laf as Laf
 
 
-view : List (Template msg model) -> Template msg model
-view templates =
+view : Template msg model -> Template msg model
+view template =
     (\devices model ->
         styled div
             [ Laf.wrapper devices ]
             []
-            (List.map
-                (\template ->
-                    case template of
-                        Dynamic fn ->
-                            fn devices model
+            [ case template of
+                Dynamic fn ->
+                    fn devices model
 
-                        Static fn ->
-                            Html.Styled.map never <| fn devices
-                )
-                templates
-            )
+                Static fn ->
+                    Html.Styled.map never <| fn devices
+            ]
     )
         |> Dynamic
