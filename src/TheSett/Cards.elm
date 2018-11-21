@@ -24,7 +24,7 @@ import Responsive
         , ResponsiveStyle
         , deviceStyle
         , deviceStyles
-        , rhythm
+        , rhythmPx
         )
 import ResponsiveDSL
     exposing
@@ -116,6 +116,8 @@ controls innerHtml _ =
     styled div
         [ Css.paddingLeft (Css.rem 1)
         , Css.paddingRight (Css.rem 1)
+        , Css.paddingTop (Css.px 13)
+        , Css.paddingBottom (Css.px 13)
         ]
         []
         innerHtml

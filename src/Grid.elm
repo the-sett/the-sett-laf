@@ -74,7 +74,7 @@ import Responsive
         , ResponsiveStyle
         , deviceStyle
         , deviceStyles
-        , rhythm
+        , rhythmPx
         )
 import ResponsiveDSL
     exposing

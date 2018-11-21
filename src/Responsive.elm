@@ -2,7 +2,7 @@ module Responsive exposing
     ( global
     , CommonStyle, DeviceStyle, Device(..), DeviceSpec, ResponsiveStyle
     , ResponsiveFn, deviceStyle, deviceStyles
-    , rhythm
+    , rhythmPx
     , fontMediaStyles
     )
 
@@ -27,7 +27,7 @@ and for applying those to create CSS with media queries.
 
 # Vertical rhythm
 
-@docs rhythm
+@docs rhythmPx
 
 
 # Functions for responsively scaling fonts
@@ -141,12 +141,15 @@ lineHeight lineHeightRatio device =
 This produces a result in px, which works the most accurately.
 
 -}
-rhythm : Float -> ResponsiveFn Css.Px
-rhythm n common device =
+rhythmPx : Float -> ResponsiveFn Css.Px
+rhythmPx n common device =
     Css.px <| n * lineHeight common.lineHeightRatio device
 
 
 
+-- rhythm : Float -> Float
+-- rhythm n common device =
+--     n * lineHeight common.lineHeightRatio device
 -- Mixins
 
 
@@ -263,7 +266,7 @@ fontSizeMixin (FontSizeLevel sizeLevel) common device =
     in
     Css.batch
         [ Css.fontSize (Css.px pxVal)
-        , Css.lineHeight (rhythm (toFloat numLines) common device)
+        , Css.lineHeight (rhythmPx (toFloat numLines) common device)
         ]
         |> styleAsMixin
 
@@ -314,7 +317,7 @@ global responsive =
         , Css.Global.hr
         ]
         [ deviceStyle responsive <|
-            \common device -> Css.margin3 (Css.px 0) (Css.px 0) (rhythm 1 common device)
+            \common device -> Css.margin3 (Css.px 0) (Css.px 0) (rhythmPx 1 common device)
         ]
 
     -- Consistent indenting for lists.
@@ -324,6 +327,6 @@ global responsive =
         , Css.Global.ul
         ]
         [ deviceStyle responsive <|
-            \common device -> Css.margin2 (rhythm 1 common device) (rhythm 1 common device)
+            \common device -> Css.margin2 (rhythmPx 1 common device) (rhythmPx 1 common device)
         ]
     ]

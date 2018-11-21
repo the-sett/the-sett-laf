@@ -49,7 +49,7 @@ topHeader responsive model =
                 [ Styles.styles
                     [ wrapper responsive
                     , Responsive.deviceStyle responsive <|
-                        \common device -> Css.height (Responsive.rhythm 3 common device)
+                        \common device -> Css.height (Responsive.rhythmPx 3 common device)
                     ]
                 ]
             ]
@@ -63,8 +63,8 @@ topHeader responsive model =
                         , Styles.styles
                             [ Responsive.deviceStyles responsive <|
                                 \common device ->
-                                    [ Css.height (Responsive.rhythm 3 common device)
-                                    , Css.width (Responsive.rhythm 3 common device)
+                                    [ Css.height (Responsive.rhythmPx 3 common device)
+                                    , Css.width (Responsive.rhythmPx 3 common device)
                                     ]
                             ]
                         ]
@@ -118,8 +118,8 @@ debugToggle responsive model =
         [ Css.position Css.fixed
         , Responsive.deviceStyles responsive <|
             \common device ->
-                [ Css.right (Responsive.rhythm 2 common device)
-                , Css.top (Responsive.rhythm 1 common device)
+                [ Css.right (Responsive.rhythmPx 2 common device)
+                , Css.top (Responsive.rhythmPx 1 common device)
                 ]
         , if model.debug then
             Css.backgroundColor (Css.rgb 50 230 50) |> Css.important

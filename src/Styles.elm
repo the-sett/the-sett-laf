@@ -24,7 +24,7 @@ module Styles exposing
 -}
 
 import Css
-import Responsive exposing (Device(..), rhythm)
+import Responsive exposing (Device(..), rhythmPx)
 import ResponsiveDSL exposing (Builder(..), DeviceBuilder, StyleBuilder, applyDevice)
 
 
@@ -74,5 +74,5 @@ xl builders =
 -}
 height : Float -> List (ctx -> Builder a ctx)
 height n =
-    [ \ctx -> ByDeviceProps ctx (\_ -> \common device -> [ Css.height <| rhythm n common device ])
+    [ \ctx -> ByDeviceProps ctx (\_ -> \common device -> [ Css.height <| rhythmPx n common device ])
     ]

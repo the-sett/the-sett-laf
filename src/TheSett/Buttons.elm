@@ -20,6 +20,7 @@ import Responsive
         ( Device(..)
         , DeviceSpec
         , DeviceStyle
+        , ResponsiveFn
         , ResponsiveStyle
         , deviceStyle
         , deviceStyles
@@ -67,8 +68,12 @@ button builders attributes innerHtml devices =
         , Css.verticalAlign Css.middle
         , Css.batch <| Responsive.fontMediaStyles TypeScale.milli devices
         , Css.cursor Css.pointer
-        , Css.property "will-change" "box-shadow"
-        , Css.property "transition" "box-shadow .2s cubic-bezier(.4,0,1,1),background-color .2s cubic-bezier(.4,0,.2,1),color .2s cubic-bezier(.4,0,.2,1)"
+
+        -- Getting vertical rhythm right.
+        , Responsive.deviceStyles devices (rhythmSplit 0.5 3)
+
+        -- , Css.property "will-change" "box-shadow"
+        -- , Css.property "transition" "box-shadow .2s cubic-bezier(.4,0,1,1),background-color .2s cubic-bezier(.4,0,.2,1),color .2s cubic-bezier(.4,0,.2,1)"
         , Css.fontWeight <| Css.int 600
         ]
         attributes
@@ -83,3 +88,12 @@ raised =
         [ Css.backgroundColor <| Css.rgba 158 158 158 0.2
         , Css.property "box-shadow" "0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12)"
         ]
+
+
+{-| -}
+rhythmSplit : Float -> Float -> ResponsiveFn (List Css.Style)
+rhythmSplit ratio n common device =
+    [ -- Getting vertical rhythm right.
+      Css.margin2 (Css.px 8) (Css.px 0)
+    , Css.height <| Css.px 36
+    ]

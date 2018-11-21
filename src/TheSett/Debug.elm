@@ -18,7 +18,7 @@ The vertical rhtythm is also drawn in as fitn background lines.
 import Css
 import Css.Global
 import Html.Styled exposing (Html)
-import Responsive exposing (DeviceStyle, ResponsiveStyle, rhythm)
+import Responsive exposing (DeviceStyle, ResponsiveStyle, rhythmPx)
 
 
 {-| The debug CSS.
@@ -75,7 +75,7 @@ global responsive =
         , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
         , Css.backgroundRepeat Css.repeat
         , Responsive.deviceStyle responsive <|
-            \common device -> Css.backgroundSize2 (rhythm 1 common device) (rhythm 1 common device)
+            \common device -> Css.backgroundSize2 (rhythmPx 1 common device) (rhythmPx 1 common device)
         ]
     ]
 
