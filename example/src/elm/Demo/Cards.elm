@@ -52,12 +52,8 @@ card devices title imageUrl =
     Cards.card []
         []
         [ Cards.image
-            [ Styles.height 4
+            [ Styles.height 5
             , sm [ Cards.src imageUrl ]
-
-            -- , md [ Cards.height 5 ]
-            -- , lg [ Cards.height 6 ]
-            -- , xl [ Cards.height 7 ]
             ]
             []
             []
