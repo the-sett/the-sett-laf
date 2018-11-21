@@ -2,7 +2,7 @@ module Responsive exposing
     ( global
     , CommonStyle, DeviceStyle, Device(..), DeviceSpec, ResponsiveStyle
     , mapMaybeDeviceSpec
-    , deviceStyle, deviceStyles
+    , ResponsiveFn, deviceStyle, deviceStyles
     , rhythm, rhythmEm
     , fontMediaStyles
     )

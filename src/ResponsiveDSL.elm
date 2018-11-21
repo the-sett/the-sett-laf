@@ -31,6 +31,7 @@ import Responsive
         , Device(..)
         , DeviceSpec
         , DeviceStyle
+        , ResponsiveFn
         , ResponsiveStyle
         , deviceStyle
         , deviceStyles
@@ -52,7 +53,7 @@ type Compatible
 {-| A builder for a device in a DSL context.
 -}
 type Builder a ctx
-    = Builder Device ctx (ctx -> CommonStyle -> DeviceStyle -> List Css.Style)
+    = Builder Device ctx (ctx -> ResponsiveFn (List Css.Style))
 
 
 {-| Builds a container of Elements. This can be styled per device.
