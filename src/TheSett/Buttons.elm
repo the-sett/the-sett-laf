@@ -91,7 +91,13 @@ raised =
         ]
 
 
-{-| Getting vertical rhythm right.
+{-| This function helps to get the vertical rhythm for buttons right, as browsers
+render buttons differently and tend to insert some extra space on top of the line-height
+around a button.
+
+Instead of setting a line-height for the button, the requested rhythm is split into a
+height and a maring which together add up to the correct size.
+
 -}
 rhythmSplit : Float -> Float -> ResponsiveFn (List Css.Style)
 rhythmSplit ratio n common device =
