@@ -23,7 +23,7 @@ view =
             , gridn devices widths
             , h4 [] [ text "Column Offsets" ]
             , gridn devices offsets
-            , h4 [] [ text "CentecellStyle" ]
+            , h4 [] [ text "Centered" ]
             , gridn devices centecellStyle
             , h4 [] [ text "End" ]
             , gridn devices end

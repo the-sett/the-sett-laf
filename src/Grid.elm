@@ -80,8 +80,8 @@ import ResponsiveDSL
     exposing
         ( Builder(..)
         , Compatible(..)
-        , ContainerBuilder
         , ConstDeviceBuilder
+        , ContainerBuilder
         , ElementBuilder
         , StyleBuilder
         , applyDevice
@@ -182,19 +182,29 @@ total available.
 
 -}
 columns : Float -> StyleBuilder { a | row : Never } Grid
-columns n =
-    if n > 0 then
-        Styles.styles
-            [ flexBasis (pct (n / 12 * 100))
-            , maxWidth (pct (n / 12 * 100))
-            ]
+columns n device ctx =
+    case ctx of
+        Column ->
+            if n > 0 then
+                ConstForDevice device ctx <|
+                    always
+                        [ flexBasis (pct (n / 12 * 100))
+                        , maxWidth (pct (n / 12 * 100))
+                        ]
 
-    else
-        Styles.styles
-            [ flexBasis (pct (n / 12 * 100))
-            , maxWidth (pct 100)
-            , flexGrow (num 1)
-            ]
+            else
+                ConstForDevice device ctx <|
+                    always
+                        [ flexBasis (pct (n / 12 * 100))
+                        , maxWidth (pct 100)
+                        , flexGrow (num 1)
+                        ]
+
+        Row ->
+            ConstForDevice device ctx <| always []
+
+        Grid ->
+            ConstForDevice device ctx <| always []
 
 
 {-| Defines how many column widths a column is offset from the left hand side by.
