@@ -266,7 +266,7 @@ around =
 -}
 reverse : StyleBuilder { a | grid : Never } Grid
 reverse device grd =
-    Builder device grd <|
+    ConstForDevice device grd <|
         \ctx _ _ ->
             case ctx of
                 Row ->

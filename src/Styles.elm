@@ -26,14 +26,14 @@ import ResponsiveDSL exposing (Builder(..), DeviceBuilder, StyleBuilder, applyDe
 -}
 styles : List Css.Style -> StyleBuilder a ctx
 styles styleList device ctx =
-    Builder device ctx (always3 styleList)
+    ConstForDevice device ctx (always3 styleList)
 
 
 {-| An empty style, for convenience when sketching out DSLs.
 -}
 empty : StyleBuilder a ctx
 empty =
-    \device ctx -> Builder device ctx (always3 [])
+    \device ctx -> ConstForDevice device ctx (always3 [])
 
 
 always3 =

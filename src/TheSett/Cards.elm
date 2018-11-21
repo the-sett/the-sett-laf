@@ -136,7 +136,7 @@ controls innerHtml _ =
 -}
 height : Float -> List (ctx -> Builder a ctx)
 height n =
-    [ \ctx -> Builder Sm ctx (\_ -> \common device -> [ Css.height <| rhythm n common device ])
+    [ \ctx -> ByDeviceProps ctx (\_ -> \common device -> [ Css.height <| rhythm n common device ])
     ]
 
 

@@ -53,7 +53,8 @@ type Compatible
 {-| A builder for a device in a DSL context.
 -}
 type Builder a ctx
-    = Builder Device ctx (ctx -> ResponsiveFn (List Css.Style))
+    = ConstForDevice Device ctx (ctx -> ResponsiveFn (List Css.Style))
+    | ByDeviceProps ctx (ctx -> ResponsiveFn (List Css.Style))
 
 
 {-| Builds a container of Elements. This can be styled per device.
@@ -102,12 +103,17 @@ applyDevicesToBuilders buildersList responsive =
     deviceStyles responsive
         (\common device ->
             List.map
-                (\(Builder dev ctx fn) ->
-                    if dev == device.device then
-                        fn ctx common device
+                (\builder ->
+                    case builder of
+                        ConstForDevice dev ctx fn ->
+                            if dev == device.device then
+                                fn ctx common device
 
-                    else
-                        []
+                            else
+                                []
+
+                        ByDeviceProps ctx fn ->
+                            fn ctx common device
                 )
                 buildersList
                 |> List.concat
