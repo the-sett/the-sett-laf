@@ -61,6 +61,7 @@ card builders attributes innerHtml devices =
         , Css.property "box-shadow" "rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px"
         , Css.marginLeft (Css.rem 0.5)
         , Css.marginRight (Css.rem 0.5)
+        , Css.overflow Css.hidden
         , applyDevicesToBuilders flatBuilders devices
         ]
         attributes
