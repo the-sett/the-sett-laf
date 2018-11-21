@@ -6,12 +6,14 @@ module TheSett.Laf exposing (style, fonts, responsiveMeta, devices, wrapper)
 
 -}
 
+--exposing (Device(..), DeviceStyle, ResponsiveStyle, fontMediaStyles, fontSizeMixin, mapMixins, mediaMixins)
+
 import Css
 import Css.Global
 import Grid
 import Html.Styled exposing (Html, node)
 import Html.Styled.Attributes exposing (attribute, href, name, rel)
-import Responsive exposing (Device(..), DeviceStyle, ResponsiveStyle, fontMediaStyles, fontSizeMixin, mapMixins, mediaMixins)
+import Responsive exposing (Device(..), DeviceStyle, ResponsiveStyle, fontMediaStyles)
 import TheSett.Buttons as Buttons
 import TheSett.Reset as Reset
 import TypeScale exposing (TypeScale, base, h1, h2, h3, h4, majorThird)

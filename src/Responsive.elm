@@ -1,9 +1,10 @@
 module Responsive exposing
     ( global
     , CommonStyle, DeviceStyle, Device(..), DeviceSpec, ResponsiveStyle
-    , lineHeight, rhythm, rhythmEm, deviceStyle, deviceStyles, mapMaybeDeviceSpec
-    , Mixin, mapMixins, mediaMixins, styleAsMixin
-    , fontSizeMixin, fontMediaStyles
+    , mapMaybeDeviceSpec
+    , deviceStyle, deviceStyles
+    , rhythm, rhythmEm
+    , fontMediaStyles
     )
 
 {-| The Responsive module provides a way of specifying sizing configurations for different devices,
@@ -18,21 +19,22 @@ and for applying those to create CSS with media queries.
 # Models for specifying devices and their basic responsive properties.
 
 @docs CommonStyle, DeviceStyle, Device, DeviceSpec, ResponsiveStyle
+@docs mapMaybeDeviceSpec
 
 
-# Responsive helper functions.
+# Device dependant styling functions.
 
-@docs lineHeight, rhythm, rhythmEm, deviceStyle, deviceStyles, mapMaybeDeviceSpec
-
-
-# Mixins
-
-@docs Mixin, mapMixins, mediaMixins, styleAsMixin
+@docs ResponsiveFn, deviceStyle, deviceStyles
 
 
-# Functions for responsively scaling fonts.
+# Vertical rhythm
 
-@docs fontSizeMixin, fontMediaStyles
+@docs rhythm, rhythmEm
+
+
+# Functions for responsively scaling fonts
+
+@docs fontMediaStyles
 
 -}
 
@@ -108,6 +110,35 @@ mapMaybeDeviceSpec fn spec =
 
 
 
+-- Device Dependant Styling functions.
+
+
+{-| A responsive styling function takes the common style properties and the style
+properties that are specific to a device, and produces some style related value.
+-}
+type alias ResponsiveFn a =
+    CommonStyle -> DeviceStyle -> a
+
+
+{-| Creates a single CSS property with media queries. Media queries will be
+generated for each of the devices specified.
+-}
+deviceStyle : ResponsiveStyle -> (DeviceStyle -> Css.Style) -> Css.Style
+deviceStyle devices styleFn =
+    mapMixins (mediaMixins devices (styleFn >> styleAsMixin)) []
+        |> Css.batch
+
+
+{-| Creates a set of CSS properties with media queries. Media queries will be
+generated for each of the devices specified.
+-}
+deviceStyles : ResponsiveStyle -> (DeviceStyle -> List Css.Style) -> Css.Style
+deviceStyles devices styleFn =
+    mapMixins (mediaMixins devices (styleFn >> stylesAsMixin)) []
+        |> Css.batch
+
+
+
 -- Vertical rhythm.
 
 
@@ -139,28 +170,6 @@ expressing in em is easier, as that adapts.
 rhythmEm : Float -> CommonStyle -> Css.Em
 rhythmEm n common =
     Css.em <| n * common.lineHeightRatio
-
-
-
--- Device Dependant Styling
-
-
-{-| Creates a single CSS property with media queries. Media queries will be
-generated for each of the devices specified.
--}
-deviceStyle : ResponsiveStyle -> (DeviceStyle -> Css.Style) -> Css.Style
-deviceStyle devices styleFn =
-    mapMixins (mediaMixins devices (styleFn >> styleAsMixin)) []
-        |> Css.batch
-
-
-{-| Creates a set of CSS properties with media queries. Media queries will be
-generated for each of the devices specified.
--}
-deviceStyles : ResponsiveStyle -> (DeviceStyle -> List Css.Style) -> Css.Style
-deviceStyles devices styleFn =
-    mapMixins (mediaMixins devices (styleFn >> stylesAsMixin)) []
-        |> Css.batch
 
 
 
@@ -302,7 +311,7 @@ fontMediaStyles level responsive =
 -- Responsive Spacing
 
 
-{-| A globaal CSS style sheet that sets up basic spaing for text, with single
+{-| A global CSS style sheet that sets up basic spaing for text, with single
 direction margins.
 -}
 global : ResponsiveStyle -> List Css.Global.Snippet
