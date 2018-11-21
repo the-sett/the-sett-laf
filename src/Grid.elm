@@ -109,6 +109,48 @@ type Grid
     | Column ColumnProps
 
 
+columnProps : Grid -> ColumnProps
+columnProps gridCtx =
+    case gridCtx of
+        Grid props ->
+            props
+
+        Row props ->
+            props
+
+        Column props ->
+            props
+
+
+{-| Takes an initial context and passes it down a list of contextual style builders, each of which may
+modify the context.
+
+The result is a pair containing the list of style builders, and the context output from the last
+contextual style builder in the list.
+
+-}
+chainCtxAcrossBuilders : ctx -> List (List (ctx -> Builder a ctx)) -> ( List (Builder a ctx), ctx )
+chainCtxAcrossBuilders initialCtx builders =
+    List.concat builders
+        |> List.foldl
+            (\styleFn ( accum, inCtx ) ->
+                let
+                    responsiveBuilder =
+                        styleFn inCtx
+
+                    nextCtx =
+                        case responsiveBuilder of
+                            ConstForDevice _ newCtx _ ->
+                                newCtx
+
+                            ByDeviceProps newCtx _ ->
+                                newCtx
+                in
+                ( responsiveBuilder :: accum, nextCtx )
+            )
+            ( [], initialCtx )
+
+
 
 -- Grid constructors
 
@@ -118,12 +160,11 @@ type Grid
 grid : OuterBuilder { a | grid : Compatible } Grid msg
 grid builders attributes innerHtml responsive =
     let
-        ctx =
+        initialCtx =
             Grid defaultColumnProps
 
-        flatBuilders =
-            List.concat builders
-                |> List.map (\gridFn -> gridFn ctx)
+        ( flatBuilders, ctx ) =
+            chainCtxAcrossBuilders initialCtx builders
     in
     styled div
         [ marginRight Css.auto
@@ -139,12 +180,11 @@ grid builders attributes innerHtml responsive =
 row : ContainerBuilder { a | row : Compatible } Grid msg
 row builders attributes innerHtml parentCtx responsive =
     let
-        ctx =
-            Row defaultColumnProps
+        initialCtx =
+            Row <| columnProps parentCtx
 
-        flatBuilders =
-            List.concat builders
-                |> List.map (\gridFn -> gridFn ctx)
+        ( flatBuilders, ctx ) =
+            chainCtxAcrossBuilders initialCtx builders
     in
     styled div
         [ boxSizing borderBox
@@ -164,7 +204,7 @@ col : ElementBuilder { a | col : Compatible } Grid msg
 col builders attributes innerHtml parentCtx responsive =
     let
         ctx =
-            Column defaultColumnProps
+            Column <| columnProps parentCtx
 
         flatBuilders =
             List.concat builders
