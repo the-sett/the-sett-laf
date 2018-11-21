@@ -24,7 +24,6 @@ import Responsive
         , deviceStyle
         , deviceStyles
         , mapMaybeDeviceSpec
-        , rhythmEm
         )
 import ResponsiveDSL
     exposing

@@ -3,7 +3,7 @@ module Responsive exposing
     , CommonStyle, DeviceStyle, Device(..), DeviceSpec, ResponsiveStyle
     , mapMaybeDeviceSpec
     , ResponsiveFn, deviceStyle, deviceStyles
-    , rhythm, rhythmEm
+    , rhythm
     , fontMediaStyles
     )
 
@@ -29,7 +29,7 @@ and for applying those to create CSS with media queries.
 
 # Vertical rhythm
 
-@docs rhythm, rhythmEm
+@docs rhythm
 
 
 # Functions for responsively scaling fonts
@@ -159,17 +159,6 @@ This produces a result in px, which works the most accurately.
 rhythm : Float -> ResponsiveFn Css.Px
 rhythm n common device =
     Css.px <| n * lineHeight common.lineHeightRatio device
-
-
-{-| Calculates a multiple of the line height for a base styling.
-
-This produces a result in em, which is not as accurate as px. Sometimes
-expressing in em is easier, as that adapts.
-
--}
-rhythmEm : Float -> ResponsiveFn Css.Em
-rhythmEm n common device =
-    Css.em <| n * common.lineHeightRatio
 
 
 
