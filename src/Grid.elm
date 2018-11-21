@@ -273,19 +273,9 @@ offset n device ctx =
         props =
             columnProps ctx
     in
-    if n > 0 then
-        ConstForDevice device ctx <|
-            always
-                [ marginLeft (pct (n / props.numColumns * 100)) ]
-
-    else
-        ConstForDevice device ctx <|
-            always
-                []
-
-
-
--- Justify Content
+    ConstForDevice device ctx <|
+        always
+            [ marginLeft (pct (n / props.numColumns * 100)) ]
 
 
 {-| Puts the content of a row or column at the start.

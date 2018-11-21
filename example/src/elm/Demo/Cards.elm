@@ -28,14 +28,14 @@ view =
                     []
                     []
                     [ Grid.col
-                        [ sm [ Grid.columns 6 ]
+                        [ sm [ Grid.columns 6, Grid.offset 3 ]
                         , md [ Grid.columns 4, Grid.offset 2 ]
                         ]
                         []
                         [ card devices "Card1" "images/more-from-4.png" ]
                     , Grid.col
-                        [ sm [ Grid.columns 6 ]
-                        , md [ Grid.columns 4 ]
+                        [ sm [ Grid.columns 6, Grid.offset 3 ]
+                        , md [ Grid.columns 4, Grid.offset 0 ]
                         ]
                         []
                         [ card devices "Card2" "images/more-from-3.png" ]
