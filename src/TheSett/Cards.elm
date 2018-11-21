@@ -58,8 +58,13 @@ card builders attributes innerHtml responsive =
     styled div
         [ Css.borderRadius (Css.px 2)
         , Css.property "box-shadow" "rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px"
-        , Css.marginLeft (Css.rem 0.5)
-        , Css.marginRight (Css.rem 0.5)
+        , Responsive.deviceStyles responsive
+            (\common device ->
+                [ Css.marginLeft <| Responsive.rhythmPx 0.5 common device
+                , Css.marginRight <| Responsive.rhythmPx 0.5 common device
+                , Css.marginBottom <| Responsive.rhythmPx 1.0 common device
+                ]
+            )
         , Css.overflow Css.hidden
         , applyDevicesToBuilders flatBuilders responsive
         ]
