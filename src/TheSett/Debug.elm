@@ -75,7 +75,7 @@ global devices =
         , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
         , Css.backgroundRepeat Css.repeat
         , Responsive.deviceStyle devices <|
-            \device -> Css.backgroundSize2 (rhythm devices.commonStyle device 1) (rhythm devices.commonStyle device 1)
+            \device -> Css.backgroundSize2 (rhythm 1 devices.commonStyle device) (rhythm 1 devices.commonStyle device)
         ]
     ]
 

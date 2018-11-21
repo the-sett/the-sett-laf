@@ -49,7 +49,7 @@ topHeader devices model =
                 [ Styles.styles
                     [ wrapper devices
                     , Responsive.deviceStyle devices <|
-                        \device -> Css.height (Responsive.rhythm devices.commonStyle device 3)
+                        \device -> Css.height (Responsive.rhythm 3 devices.commonStyle device)
                     ]
                 ]
             ]
@@ -63,8 +63,8 @@ topHeader devices model =
                         , Styles.styles
                             [ Responsive.deviceStyles devices <|
                                 \device ->
-                                    [ Css.height (Responsive.rhythm devices.commonStyle device 3)
-                                    , Css.width (Responsive.rhythm devices.commonStyle device 3)
+                                    [ Css.height (Responsive.rhythm 3 devices.commonStyle device)
+                                    , Css.width (Responsive.rhythm 3 devices.commonStyle device)
                                     ]
                             ]
                         ]
@@ -118,8 +118,8 @@ debugToggle devices model =
         [ Css.position Css.fixed
         , Responsive.deviceStyles devices <|
             \device ->
-                [ Css.right (Responsive.rhythm devices.commonStyle device 2)
-                , Css.top (Responsive.rhythm devices.commonStyle device 1)
+                [ Css.right (Responsive.rhythm 2 devices.commonStyle device)
+                , Css.top (Responsive.rhythm 1 devices.commonStyle device)
                 ]
         , if model.debug then
             Css.backgroundColor (Css.rgb 50 230 50) |> Css.important

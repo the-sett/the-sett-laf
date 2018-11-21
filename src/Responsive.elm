@@ -125,8 +125,8 @@ lineHeight lineHeightRatio deviceProps =
 This produces a result in px, which works the most accurately.
 
 -}
-rhythm : CommonStyle -> DeviceStyle -> Float -> Css.Px
-rhythm common device n =
+rhythm : Float -> CommonStyle -> DeviceStyle -> Css.Px
+rhythm n common device =
     Css.px <| n * lineHeight common.lineHeightRatio device
 
 
@@ -136,8 +136,8 @@ This produces a result in em, which is not as accurate as px. Sometimes
 expressing in em is easier, as that adapts.
 
 -}
-rhythmEm : CommonStyle -> Float -> Css.Em
-rhythmEm common n =
+rhythmEm : Float -> CommonStyle -> Css.Em
+rhythmEm n common =
     Css.em <| n * common.lineHeightRatio
 
 
@@ -280,7 +280,7 @@ fontSizeMixin (FontSizeLevel sizeLevel) common device =
     in
     Css.batch
         [ Css.fontSize (Css.px pxVal)
-        , Css.lineHeight (rhythm common device (toFloat numLines))
+        , Css.lineHeight (rhythm (toFloat numLines) common device)
         ]
         |> styleAsMixin
 
@@ -331,7 +331,7 @@ global devices =
         , Css.Global.hr
         ]
         [ deviceStyle devices <|
-            \device -> Css.margin3 (Css.px 0) (Css.px 0) (rhythm devices.commonStyle device 1)
+            \device -> Css.margin3 (Css.px 0) (Css.px 0) (rhythm 1 devices.commonStyle device)
         ]
 
     -- Consistent indenting for lists.
@@ -341,6 +341,6 @@ global devices =
         , Css.Global.ul
         ]
         [ deviceStyle devices <|
-            \device -> Css.margin2 (rhythm devices.commonStyle device 1) (rhythm devices.commonStyle device 1)
+            \device -> Css.margin2 (rhythm 1 devices.commonStyle device) (rhythm 1 devices.commonStyle device)
         ]
     ]
