@@ -53,7 +53,7 @@ type Compatible
 {-| A builder for a device in a DSL context.
 -}
 type Builder a ctx
-    = ConstForDevice Device ctx (ctx -> ResponsiveFn (List Css.Style))
+    = ConstForDevice Device ctx (ctx -> List Css.Style)
     | ByDeviceProps ctx (ctx -> ResponsiveFn (List Css.Style))
 
 
@@ -107,7 +107,7 @@ applyDevicesToBuilders buildersList responsive =
                     case builder of
                         ConstForDevice dev ctx fn ->
                             if dev == device.device then
-                                fn ctx common device
+                                fn ctx
 
                             else
                                 []
