@@ -28,16 +28,16 @@ view =
                     [ sm [ Grid.center ] ]
                     []
                     [ Grid.col
-                        [ sm [ Grid.columns 12 ]
-                        , md [ Grid.columns 5 ]
-                        , lg [ Grid.columns 4 ]
+                        [-- sm [ Grid.columns 12 ]
+                         -- , md [ Grid.columns 5 ]
+                         -- , lg [ Grid.columns 4 ]
                         ]
                         []
                         [ card devices "Card1" "images/more-from-4.png" ]
                     , Grid.col
-                        [ sm [ Grid.columns 12 ]
-                        , md [ Grid.columns 5 ]
-                        , lg [ Grid.columns 4 ]
+                        [--  sm [ Grid.columns 12 ]
+                         -- , md [ Grid.columns 5 ]
+                         -- , lg [ Grid.columns 4 ]
                         ]
                         []
                         [ card devices "Card2" "images/more-from-3.png" ]
@@ -51,7 +51,13 @@ view =
 
 
 card devices title imageUrl =
-    Cards.card []
+    Cards.card
+        [ sm
+            [ Styles.styles
+                [ Css.maxWidth <| Css.px 350
+                ]
+            ]
+        ]
         []
         [ Cards.image
             [ Styles.height 5
