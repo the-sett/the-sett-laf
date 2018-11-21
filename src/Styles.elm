@@ -25,7 +25,14 @@ module Styles exposing
 
 import Css
 import Responsive exposing (Device(..), rhythmPx)
-import ResponsiveDSL exposing (Builder(..), DeviceBuilder, StyleBuilder, applyDevice)
+import ResponsiveDSL
+    exposing
+        ( Builder(..)
+        , ByDeviceBuilder
+        , ConstDeviceBuilder
+        , StyleBuilder
+        , applyDevice
+        )
 
 
 {-| Adds any CSS style you like to a grid element.
@@ -44,35 +51,35 @@ empty =
 
 {-| Small device grid property builder.
 -}
-sm : DeviceBuilder a ctx
+sm : ConstDeviceBuilder a ctx
 sm builders =
     applyDevice Sm builders
 
 
 {-| Medium device grid property builder.
 -}
-md : DeviceBuilder a ctx
+md : ConstDeviceBuilder a ctx
 md builders =
     applyDevice Md builders
 
 
 {-| Large device grid property builder.
 -}
-lg : DeviceBuilder a ctx
+lg : ConstDeviceBuilder a ctx
 lg builders =
     applyDevice Lg builders
 
 
 {-| Extra large device grid property builder.
 -}
-xl : DeviceBuilder a ctx
+xl : ConstDeviceBuilder a ctx
 xl builders =
     applyDevice Xl builders
 
 
 {-| Sets the height property in rhythm units.
 -}
-height : Float -> List (ctx -> Builder a ctx)
+height : Float -> ByDeviceBuilder a ctx
 height n =
     [ \ctx -> ByDeviceProps ctx (\_ -> \common device -> [ Css.height <| rhythmPx n common device ])
     ]

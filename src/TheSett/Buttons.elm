@@ -36,7 +36,7 @@ import ResponsiveDSL
         ( Builder(..)
         , Compatible(..)
         , ContainerBuilder
-        , DeviceBuilder
+        , ConstDeviceBuilder
         , ElementBuilder
         , StyleBuilder
         , applyDevice

@@ -1,6 +1,6 @@
 module ResponsiveDSL exposing
     ( Compatible(..)
-    , Builder(..), ContainerBuilder, DeviceBuilder, ElementBuilder, StyleBuilder
+    , Builder(..), ByDeviceBuilder, ContainerBuilder, ConstDeviceBuilder, ElementBuilder, StyleBuilder
     , applyDevice, applyDevicesToBuilders
     )
 
@@ -14,7 +14,7 @@ module ResponsiveDSL exposing
 
 # Builder types.
 
-@docs Builder, ContainerBuilder, DeviceBuilder, ElementBuilder, StyleBuilder
+@docs Builder, ByDeviceBuilder, ContainerBuilder, ConstDeviceBuilder, ElementBuilder, StyleBuilder
 
 
 # For applying responsive devices.
@@ -76,10 +76,16 @@ type alias ElementBuilder a ctx msg =
     -> Html msg
 
 
-{-| Builds styles per responsive Device.
+{-| Builds constant styles explicitly for a responsive Device.
 -}
-type alias DeviceBuilder a ctx =
+type alias ConstDeviceBuilder a ctx =
     List (Device -> ctx -> Builder a ctx) -> List (ctx -> Builder a ctx)
+
+
+{-| Build responsive styles by device properties.
+-}
+type alias ByDeviceBuilder a ctx =
+    List (ctx -> Builder a ctx)
 
 
 {-| Builds a style within a Context.
