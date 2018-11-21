@@ -54,14 +54,14 @@ type Button
 {-| Creates a button.
 -}
 button : ElementBuilder { a | button : Compatible } Button msg
-button builders attributes innerHtml devices =
+button builders attributes innerHtml responsive =
     let
         flatBuilders =
             List.concat builders
                 |> List.map (\ctxFn -> ctxFn Button)
     in
     styled Html.button
-        [ applyDevicesToBuilders flatBuilders devices
+        [ applyDevicesToBuilders flatBuilders responsive
         , Css.borderStyle Css.none
         , Css.borderRadius <| Css.px 2
         , Css.color <| Css.rgb 0 0 0
@@ -71,11 +71,11 @@ button builders attributes innerHtml devices =
         , Css.outline Css.none
         , Css.textAlign Css.center
         , Css.verticalAlign Css.middle
-        , Css.batch <| Responsive.fontMediaStyles TypeScale.milli devices
+        , Css.batch <| Responsive.fontMediaStyles TypeScale.milli responsive
         , Css.cursor Css.pointer
 
         -- Getting vertical rhythm right.
-        , Responsive.deviceStyles devices (rhythmSplit 0.3 2)
+        , Responsive.deviceStyles responsive (rhythmSplit 0.3 2)
 
         -- , Css.property "will-change" "box-shadow"
         -- , Css.property "transition" "box-shadow .2s cubic-bezier(.4,0,1,1),background-color .2s cubic-bezier(.4,0,.2,1),color .2s cubic-bezier(.4,0,.2,1)"

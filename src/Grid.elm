@@ -106,7 +106,7 @@ type Grid
 {-| The outer builder of a responsive grid.
 -}
 grid : ContainerBuilder { a | grid : Compatible } Grid msg
-grid builders attributes innerHtml devices =
+grid builders attributes innerHtml responsive =
     let
         flatBuilders =
             List.concat builders
@@ -115,16 +115,16 @@ grid builders attributes innerHtml devices =
     styled div
         [ marginRight Css.auto
         , marginLeft Css.auto
-        , applyDevicesToBuilders flatBuilders devices
+        , applyDevicesToBuilders flatBuilders responsive
         ]
         attributes
-        (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
+        (List.map (\deviceStyleFn -> deviceStyleFn responsive) innerHtml)
 
 
 {-| The row builder for a responsive grid, on which row compatible properties can be defined.
 -}
 row : ContainerBuilder { a | row : Compatible } Grid msg
-row builders attributes innerHtml devices =
+row builders attributes innerHtml responsive =
     let
         flatBuilders =
             List.concat builders
@@ -136,16 +136,16 @@ row builders attributes innerHtml devices =
         , property "flex" "0 1 auto"
         , flexDirection Css.row
         , flexWrap wrap
-        , applyDevicesToBuilders flatBuilders devices
+        , applyDevicesToBuilders flatBuilders responsive
         ]
         attributes
-        (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
+        (List.map (\deviceStyleFn -> deviceStyleFn responsive) innerHtml)
 
 
 {-| The column builder for a responsive grid, on which column compatible properties can be defined.
 -}
 col : ElementBuilder { a | col : Compatible } Grid msg
-col builders attributes innerHtml devices =
+col builders attributes innerHtml responsive =
     let
         flatBuilders =
             List.concat builders
@@ -155,7 +155,7 @@ col builders attributes innerHtml devices =
         [ boxSizing borderBox
         , flexShrink (num 0)
         , flexGrow (num 0)
-        , applyDevicesToBuilders flatBuilders devices
+        , applyDevicesToBuilders flatBuilders responsive
         ]
         attributes
         innerHtml

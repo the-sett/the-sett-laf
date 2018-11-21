@@ -49,7 +49,7 @@ type Card
 {-| Creates a Card container.
 -}
 card : ContainerBuilder { a | card : Compatible } Card msg
-card builders attributes innerHtml devices =
+card builders attributes innerHtml responsive =
     let
         flatBuilders =
             List.concat builders
@@ -61,23 +61,23 @@ card builders attributes innerHtml devices =
         , Css.marginLeft (Css.rem 0.5)
         , Css.marginRight (Css.rem 0.5)
         , Css.overflow Css.hidden
-        , applyDevicesToBuilders flatBuilders devices
+        , applyDevicesToBuilders flatBuilders responsive
         ]
         attributes
-        (List.map (\deviceStyleFn -> deviceStyleFn devices) innerHtml)
+        (List.map (\deviceStyleFn -> deviceStyleFn responsive) innerHtml)
 
 
 {-| Creates an image on the card.
 -}
 image : ElementBuilder { a | image : Compatible } Card msg
-image builders attributes innerHtml devices =
+image builders attributes innerHtml responsive =
     let
         flatBuilders =
             List.concat builders
                 |> List.map (\gridFn -> gridFn Image)
     in
     styled div
-        [ applyDevicesToBuilders flatBuilders devices
+        [ applyDevicesToBuilders flatBuilders responsive
         ]
         attributes
         innerHtml
