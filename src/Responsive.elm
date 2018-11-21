@@ -1,7 +1,6 @@
 module Responsive exposing
     ( global
     , CommonStyle, DeviceStyle, Device(..), DeviceSpec, ResponsiveStyle
-    , mapMaybeDeviceSpec
     , ResponsiveFn, deviceStyle, deviceStyles
     , rhythm
     , fontMediaStyles
@@ -19,7 +18,6 @@ and for applying those to create CSS with media queries.
 # Models for specifying devices and their basic responsive properties.
 
 @docs CommonStyle, DeviceStyle, Device, DeviceSpec, ResponsiveStyle
-@docs mapMaybeDeviceSpec
 
 
 # Device dependant styling functions.
@@ -94,19 +92,6 @@ type alias ResponsiveStyle =
     { commonStyle : CommonStyle
     , deviceStyles : DeviceSpec DeviceStyle
     }
-
-
-{-| Maps a device spec with optional values into a list, where the list only contains values
-for the device specs that were actually defined.
--}
-mapMaybeDeviceSpec : (a -> b) -> DeviceSpec (Maybe a) -> List b
-mapMaybeDeviceSpec fn spec =
-    [ Maybe.map fn spec.sm
-    , Maybe.map fn spec.md
-    , Maybe.map fn spec.lg
-    , Maybe.map fn spec.xl
-    ]
-        |> Maybe.Extra.values
 
 
 

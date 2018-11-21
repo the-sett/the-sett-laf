@@ -23,7 +23,6 @@ import Responsive
         , ResponsiveStyle
         , deviceStyle
         , deviceStyles
-        , mapMaybeDeviceSpec
         )
 import ResponsiveDSL
     exposing

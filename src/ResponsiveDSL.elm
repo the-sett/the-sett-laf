@@ -35,7 +35,6 @@ import Responsive
         , ResponsiveStyle
         , deviceStyle
         , deviceStyles
-        , mapMaybeDeviceSpec
         , rhythm
         )
 

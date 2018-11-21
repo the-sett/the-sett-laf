@@ -74,7 +74,6 @@ import Responsive
         , ResponsiveStyle
         , deviceStyle
         , deviceStyles
-        , mapMaybeDeviceSpec
         , rhythm
         )
 import ResponsiveDSL
