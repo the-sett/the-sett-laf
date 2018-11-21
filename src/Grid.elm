@@ -246,35 +246,42 @@ columns n device ctx =
             if n > 0 then
                 ConstForDevice device (Column props) <|
                     always
-                        [ flexBasis (pct (n / 12 * 100))
-                        , maxWidth (pct (n / 12 * 100))
+                        [ flexBasis (pct (n / props.numColumns * 100))
+                        , maxWidth (pct (n / props.numColumns * 100))
                         ]
 
             else
                 ConstForDevice device ctx <|
                     always
-                        [ flexBasis (pct (n / 12 * 100))
+                        [ flexBasis (pct (n / props.numColumns * 100))
                         , maxWidth (pct 100)
                         , flexGrow (num 1)
                         ]
 
         Row props ->
-            ConstForDevice device (Row props) <| always []
+            ConstForDevice device (Row { props | numColumns = n }) <| always []
 
         Grid props ->
-            ConstForDevice device (Grid props) <| always []
+            ConstForDevice device (Grid { props | numColumns = n }) <| always []
 
 
 {-| Defines how many column widths a column is offset from the left hand side by.
 -}
 offset : Float -> StyleBuilder { a | grid : Never, row : Never } Grid
-offset n =
+offset n device ctx =
+    let
+        props =
+            columnProps ctx
+    in
     if n > 0 then
-        Styles.styles
-            [ marginLeft (pct (n / 12 * 100)) ]
+        ConstForDevice device ctx <|
+            always
+                [ marginLeft (pct (n / props.numColumns * 100)) ]
 
     else
-        Styles.empty
+        ConstForDevice device ctx <|
+            always
+                []
 
 
 
