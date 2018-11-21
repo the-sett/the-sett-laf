@@ -128,8 +128,8 @@ height : Float -> StyleBuilder { a | card : Never } Card
 height n device ctx =
     Builder device
         ctx
-        (\_ common _ ->
-            [ Css.height <| rhythmEm n common ]
+        (\_ common responsive ->
+            [ Css.height <| rhythmEm n common responsive ]
         )
 
 

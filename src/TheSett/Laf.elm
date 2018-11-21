@@ -148,8 +148,8 @@ typography respStyle =
 
 {-| The global CSS.
 -}
-responsive : TypeScale -> ResponsiveStyle -> List Css.Global.Snippet
-responsive scale respStyle =
+global : TypeScale -> ResponsiveStyle -> List Css.Global.Snippet
+global scale respStyle =
     Reset.global
         ++ Responsive.global respStyle
         ++ typography respStyle
@@ -161,17 +161,17 @@ style : ResponsiveStyle -> Html msg
 style devs =
     Css.Global.global <|
         Reset.global
-            ++ responsive majorThird devs
+            ++ global majorThird devs
 
 
 {-| A responsive wrapper div.
 -}
 wrapper : ResponsiveStyle -> Css.Style
-wrapper devs =
+wrapper responsive =
     [ Css.margin2 (Css.px 0) Css.auto
     , Css.padding2 (Css.px 0) (Css.vw 5)
-    , Responsive.deviceStyle devs <|
-        \deviceProps ->
-            Css.maxWidth (Css.px deviceProps.wrapperWidth)
+    , Responsive.deviceStyle responsive <|
+        \common device ->
+            Css.maxWidth (Css.px device.wrapperWidth)
     ]
         |> Css.batch

@@ -39,7 +39,7 @@ pageBody template =
 
 
 topHeader : ResponsiveStyle -> Model -> Html Msg
-topHeader devices model =
+topHeader responsive model =
     styled div
         [ Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 6) (Css.px 0) (Css.rgba 0 0 0 0.75)
         ]
@@ -47,9 +47,9 @@ topHeader devices model =
         [ Grid.grid
             [ sm
                 [ Styles.styles
-                    [ wrapper devices
-                    , Responsive.deviceStyle devices <|
-                        \device -> Css.height (Responsive.rhythm 3 devices.commonStyle device)
+                    [ wrapper responsive
+                    , Responsive.deviceStyle responsive <|
+                        \common device -> Css.height (Responsive.rhythm 3 common device)
                     ]
                 ]
             ]
@@ -61,10 +61,10 @@ topHeader devices model =
                     [ sm
                         [ Grid.columns 1
                         , Styles.styles
-                            [ Responsive.deviceStyles devices <|
-                                \device ->
-                                    [ Css.height (Responsive.rhythm 3 devices.commonStyle device)
-                                    , Css.width (Responsive.rhythm 3 devices.commonStyle device)
+                            [ Responsive.deviceStyles responsive <|
+                                \common device ->
+                                    [ Css.height (Responsive.rhythm 3 common device)
+                                    , Css.width (Responsive.rhythm 3 common device)
                                     ]
                             ]
                         ]
@@ -109,17 +109,17 @@ topHeader devices model =
                     ]
                 ]
             ]
-            devices
+            responsive
         ]
 
 
-debugToggle devices model =
+debugToggle responsive model =
     styled div
         [ Css.position Css.fixed
-        , Responsive.deviceStyles devices <|
-            \device ->
-                [ Css.right (Responsive.rhythm 2 devices.commonStyle device)
-                , Css.top (Responsive.rhythm 1 devices.commonStyle device)
+        , Responsive.deviceStyles responsive <|
+            \common device ->
+                [ Css.right (Responsive.rhythm 2 common device)
+                , Css.top (Responsive.rhythm 1 common device)
                 ]
         , if model.debug then
             Css.backgroundColor (Css.rgb 50 230 50) |> Css.important

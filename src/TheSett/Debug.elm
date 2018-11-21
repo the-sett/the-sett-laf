@@ -24,7 +24,7 @@ import Responsive exposing (DeviceStyle, ResponsiveStyle, rhythm)
 {-| The debug CSS.
 -}
 global : ResponsiveStyle -> List Css.Global.Snippet
-global devices =
+global responsive =
     [ Css.Global.each
         [ Css.Global.h1
         , Css.Global.h2
@@ -74,8 +74,8 @@ global devices =
         [ Css.property "background-image" (lines "hsla(200, 100%, 50%, .2)")
         , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
         , Css.backgroundRepeat Css.repeat
-        , Responsive.deviceStyle devices <|
-            \device -> Css.backgroundSize2 (rhythm 1 devices.commonStyle device) (rhythm 1 devices.commonStyle device)
+        , Responsive.deviceStyle responsive <|
+            \common device -> Css.backgroundSize2 (rhythm 1 common device) (rhythm 1 common device)
         ]
     ]
 

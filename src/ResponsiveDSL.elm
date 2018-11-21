@@ -97,13 +97,13 @@ applyDevice device builders =
 {-| Applies a set of responsive device specifications to a list of builders, in any context.
 -}
 applyDevicesToBuilders : List (Builder a ctx) -> ResponsiveStyle -> Css.Style
-applyDevicesToBuilders buildersList devices =
-    deviceStyles devices
-        (\device ->
+applyDevicesToBuilders buildersList responsive =
+    deviceStyles responsive
+        (\common device ->
             List.map
                 (\(Builder dev ctx fn) ->
                     if dev == device.device then
-                        fn ctx devices.commonStyle device
+                        fn ctx common device
 
                     else
                         []

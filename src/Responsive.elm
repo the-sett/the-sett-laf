@@ -123,18 +123,18 @@ type alias ResponsiveFn a =
 {-| Creates a single CSS property with media queries. Media queries will be
 generated for each of the devices specified.
 -}
-deviceStyle : ResponsiveStyle -> (DeviceStyle -> Css.Style) -> Css.Style
-deviceStyle devices styleFn =
-    mapMixins (mediaMixins devices (styleFn >> styleAsMixin)) []
+deviceStyle : ResponsiveStyle -> ResponsiveFn Css.Style -> Css.Style
+deviceStyle responsive styleFn =
+    mapMixins (mediaMixins responsive (styleFn responsive.commonStyle >> styleAsMixin)) []
         |> Css.batch
 
 
 {-| Creates a set of CSS properties with media queries. Media queries will be
 generated for each of the devices specified.
 -}
-deviceStyles : ResponsiveStyle -> (DeviceStyle -> List Css.Style) -> Css.Style
-deviceStyles devices styleFn =
-    mapMixins (mediaMixins devices (styleFn >> stylesAsMixin)) []
+deviceStyles : ResponsiveStyle -> ResponsiveFn (List Css.Style) -> Css.Style
+deviceStyles responsive styleFn =
+    mapMixins (mediaMixins responsive (styleFn responsive.commonStyle >> stylesAsMixin)) []
         |> Css.batch
 
 
@@ -145,8 +145,8 @@ deviceStyles devices styleFn =
 {-| Calculates the line height for a base styling.
 -}
 lineHeight : Float -> DeviceStyle -> Float
-lineHeight lineHeightRatio deviceProps =
-    (lineHeightRatio * deviceProps.baseFontSize)
+lineHeight lineHeightRatio device =
+    (lineHeightRatio * device.baseFontSize)
         |> floor
         |> toFloat
 
@@ -156,7 +156,7 @@ lineHeight lineHeightRatio deviceProps =
 This produces a result in px, which works the most accurately.
 
 -}
-rhythm : Float -> CommonStyle -> DeviceStyle -> Css.Px
+rhythm : Float -> ResponsiveFn Css.Px
 rhythm n common device =
     Css.px <| n * lineHeight common.lineHeightRatio device
 
@@ -167,8 +167,8 @@ This produces a result in em, which is not as accurate as px. Sometimes
 expressing in em is easier, as that adapts.
 
 -}
-rhythmEm : Float -> CommonStyle -> Css.Em
-rhythmEm n common =
+rhythmEm : Float -> ResponsiveFn Css.Em
+rhythmEm n common device =
     Css.em <| n * common.lineHeightRatio
 
 
@@ -315,7 +315,7 @@ fontMediaStyles level responsive =
 direction margins.
 -}
 global : ResponsiveStyle -> List Css.Global.Snippet
-global devices =
+global responsive =
     [ -- No margins on headings, the line spacing of the heading is sufficient.
       Css.Global.each
         [ Css.Global.h1
@@ -339,8 +339,8 @@ global devices =
         , Css.Global.ul
         , Css.Global.hr
         ]
-        [ deviceStyle devices <|
-            \device -> Css.margin3 (Css.px 0) (Css.px 0) (rhythm 1 devices.commonStyle device)
+        [ deviceStyle responsive <|
+            \common device -> Css.margin3 (Css.px 0) (Css.px 0) (rhythm 1 common device)
         ]
 
     -- Consistent indenting for lists.
@@ -349,7 +349,7 @@ global devices =
         , Css.Global.ol
         , Css.Global.ul
         ]
-        [ deviceStyle devices <|
-            \device -> Css.margin2 (rhythm 1 devices.commonStyle device) (rhythm 1 devices.commonStyle device)
+        [ deviceStyle responsive <|
+            \common device -> Css.margin2 (rhythm 1 common device) (rhythm 1 common device)
         ]
     ]
