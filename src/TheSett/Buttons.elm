@@ -24,6 +24,7 @@ import Responsive
         , ResponsiveStyle
         , deviceStyle
         , deviceStyles
+        , rhythm
         )
 import ResponsiveDSL
     exposing
@@ -70,7 +71,7 @@ button builders attributes innerHtml devices =
         , Css.cursor Css.pointer
 
         -- Getting vertical rhythm right.
-        , Responsive.deviceStyles devices (rhythmSplit 0.5 3)
+        , Responsive.deviceStyles devices (rhythmSplit 0.3 2)
 
         -- , Css.property "will-change" "box-shadow"
         -- , Css.property "transition" "box-shadow .2s cubic-bezier(.4,0,1,1),background-color .2s cubic-bezier(.4,0,.2,1),color .2s cubic-bezier(.4,0,.2,1)"
@@ -90,10 +91,27 @@ raised =
         ]
 
 
-{-| -}
+{-| Getting vertical rhythm right.
+-}
 rhythmSplit : Float -> Float -> ResponsiveFn (List Css.Style)
 rhythmSplit ratio n common device =
-    [ -- Getting vertical rhythm right.
-      Css.margin2 (Css.px 8) (Css.px 0)
-    , Css.height <| Css.px 36
+    let
+        r1 =
+            rhythm n common device
+
+        mt =
+            r1 * ratio / 2
+
+        hPlusMt =
+            r1 * (ratio / 2 + (1 - ratio))
+
+        h =
+            hPlusMt - mt
+
+        mb =
+            r1 - hPlusMt
+    in
+    [ Css.marginTop (Css.px mt)
+    , Css.height <| Css.px h
+    , Css.marginBottom (Css.px mb)
     ]

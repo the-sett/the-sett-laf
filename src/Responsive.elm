@@ -2,7 +2,7 @@ module Responsive exposing
     ( global
     , CommonStyle, DeviceStyle, Device(..), DeviceSpec, ResponsiveStyle
     , ResponsiveFn, deviceStyle, deviceStyles
-    , rhythmPx
+    , rhythm, rhythmPx
     , fontMediaStyles
     )
 
@@ -27,7 +27,7 @@ and for applying those to create CSS with media queries.
 
 # Vertical rhythm
 
-@docs rhythmPx
+@docs rhythm, rhythmPx
 
 
 # Functions for responsively scaling fonts
@@ -136,20 +136,27 @@ lineHeight lineHeightRatio device =
         |> toFloat
 
 
-{-| Calculates a multiple of the line height for a base styling.
+{-| Calculates a multiple of the line height for a base font.
 
 This produces a result in px, which works the most accurately.
 
 -}
 rhythmPx : Float -> ResponsiveFn Css.Px
 rhythmPx n common device =
-    Css.px <| n * lineHeight common.lineHeightRatio device
+    Css.px <| rhythm n common device
+
+
+{-| Calculates a multiple of the line height for a base font.
+
+This produces a float which is the size in pixels.
+
+-}
+rhythm : Float -> ResponsiveFn Float
+rhythm n common device =
+    n * lineHeight common.lineHeightRatio device
 
 
 
--- rhythm : Float -> Float
--- rhythm n common device =
---     n * lineHeight common.lineHeightRatio device
 -- Mixins
 
 
