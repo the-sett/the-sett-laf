@@ -10,6 +10,11 @@ module TheSett.Buttons exposing
 
 @docs button
 
+
+# Button stylings
+
+@docs raised
+
 -}
 
 import Css
