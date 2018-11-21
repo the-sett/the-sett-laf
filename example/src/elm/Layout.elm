@@ -72,7 +72,7 @@ topHeader responsive model =
                     []
                     [ styled div
                         [ Css.height (Css.pct 90)
-                        , Css.marginTop (Css.pct 4)
+                        , Css.marginTop (Css.pct 5)
                         ]
                         []
                         [ Svg.Styled.fromUnstyled Logo.logo ]
