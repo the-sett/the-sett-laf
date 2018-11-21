@@ -22,7 +22,7 @@ view =
                 []
                 [ text "Cards" ]
             , Grid.grid
-                []
+                [ sm [ Grid.columns 12 ] ]
                 []
                 [ Grid.row
                     []

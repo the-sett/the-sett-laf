@@ -46,7 +46,8 @@ topHeader responsive model =
         []
         [ Grid.grid
             [ sm
-                [ Styles.styles
+                [ Grid.columns 12
+                , Styles.styles
                     [ wrapper responsive
                     , Responsive.deviceStyle responsive <|
                         \common device -> Css.height (Responsive.rhythmPx 3 common device)

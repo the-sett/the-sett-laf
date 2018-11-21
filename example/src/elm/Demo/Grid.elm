@@ -93,7 +93,7 @@ widthAndAuto n =
 
 gridn devices rowFn =
     Grid.grid
-        []
+        [ sm [ Grid.columns 12 ] ]
         []
         (List.map rowFn <| List.map toFloat <| List.filter (\v -> modBy 3 v == 0) <| List.range 1 12)
         devices

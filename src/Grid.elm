@@ -100,7 +100,7 @@ type alias ColumnProps =
 
 
 defaultColumnProps =
-    { numColumns = 12 }
+    { numColumns = 100 }
 
 
 type Grid
