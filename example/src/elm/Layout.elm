@@ -78,8 +78,8 @@ topHeader responsive model =
                         [ Svg.Styled.fromUnstyled Logo.logo ]
                     ]
                 , Grid.col
-                    [ sm [ Grid.columns 8, Grid.center, Styles.styles [ Css.textAlign Css.center ] ]
-                    , md [ Grid.columns 10, Grid.center ]
+                    [ sm [ Styles.hidden ]
+                    , md [ Styles.visible, Grid.columns 10, Grid.center, Styles.styles [ Css.textAlign Css.center ] ]
                     ]
                     []
                     [ styled ul

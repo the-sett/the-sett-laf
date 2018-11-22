@@ -2,6 +2,7 @@ module Styles exposing
     ( styles, empty
     , sm, md, lg, xl
     , height
+    , visible, hidden
     )
 
 {-| The Devices module provides device specific styling builders.
@@ -20,6 +21,11 @@ module Styles exposing
 # Responsive by device properties style builders.
 
 @docs height
+
+
+# Generic styles
+
+@docs visible, hidden
 
 -}
 
@@ -89,3 +95,17 @@ height : Float -> ByDeviceBuilder a ctx
 height n =
     [ \ctx -> ByDeviceProps ctx (\_ -> \common device -> [ Css.height <| rhythmPx n common device ])
     ]
+
+
+{-| Content is visible.
+-}
+visible : StyleBuilder a ctx
+visible =
+    styles [ Css.visibility Css.visible ]
+
+
+{-| Content is hidden
+-}
+hidden : StyleBuilder a ctx
+hidden =
+    styles [ Css.visibility Css.hidden ]
