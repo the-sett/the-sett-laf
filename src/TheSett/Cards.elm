@@ -82,7 +82,8 @@ image builders attributes innerHtml parentCtx responsive =
                 |> List.map (\gridFn -> gridFn Image)
     in
     styled div
-        [ applyDevicesToBuilders flatBuilders responsive
+        [ Css.backgroundSize Css.cover
+        , applyDevicesToBuilders flatBuilders responsive
         ]
         attributes
         innerHtml
