@@ -101,11 +101,17 @@ height n =
 -}
 visible : StyleBuilder a ctx
 visible =
-    styles [ Css.visibility Css.visible ]
+    styles
+        [ Css.visibility Css.visible
+        , Css.display Css.block
+        ]
 
 
 {-| Content is hidden
 -}
 hidden : StyleBuilder a ctx
 hidden =
-    styles [ Css.visibility Css.hidden ]
+    styles
+        [ Css.visibility Css.hidden
+        , Css.display Css.none
+        ]
