@@ -60,8 +60,7 @@ button builders attributes innerHtml responsive =
                 |> List.map (\ctxFn -> ctxFn Button)
     in
     styled Html.button
-        [ applyDevicesToBuilders flatBuilders responsive
-        , Css.borderStyle Css.none
+        [ Css.borderStyle Css.none
         , Css.borderRadius <| Css.px 2
         , Css.color <| Css.rgb 0 0 0
         , Css.padding2 (Css.px 0) (Css.em 0.8)
@@ -79,6 +78,7 @@ button builders attributes innerHtml responsive =
         -- , Css.property "will-change" "box-shadow"
         -- , Css.property "transition" "box-shadow .2s cubic-bezier(.4,0,1,1),background-color .2s cubic-bezier(.4,0,.2,1),color .2s cubic-bezier(.4,0,.2,1)"
         , Css.fontWeight <| Css.int 600
+        , applyDevicesToBuilders flatBuilders responsive
         ]
         attributes
         innerHtml

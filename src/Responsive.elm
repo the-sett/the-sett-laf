@@ -2,7 +2,7 @@ module Responsive exposing
     ( global
     , CommonStyle, DeviceStyle, Device(..), DeviceSpec, ResponsiveStyle
     , ResponsiveFn, deviceStyle, deviceStyles
-    , rhythmPx, rhythmSplit
+    , rhythm, rhythmPx, rhythmSplit
     , fontMediaStyles
     )
 
@@ -27,7 +27,7 @@ and for applying those to create CSS with media queries.
 
 # Vertical rhythm
 
-@docs rhythmPx, rhythmSplit
+@docs rhythm, rhythmPx, rhythmSplit
 
 
 # Functions for responsively scaling fonts
