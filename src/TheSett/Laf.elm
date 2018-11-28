@@ -16,7 +16,6 @@ import Html.Styled.Attributes exposing (attribute, href, name, rel)
 import Responsive exposing (Device(..), DeviceProps, ResponsiveStyle, fontMediaStyles)
 import TheSett.Buttons as Buttons
 import TheSett.Reset as Reset
-import TheSett.Stateful
 import TheSett.TextField as TextField
 import TypeScale exposing (TypeScale, base, h1, h2, h3, h4, majorThird)
 
@@ -178,3 +177,19 @@ wrapper responsive =
             Css.maxWidth (Css.px device.deviceProps.wrapperWidth)
     ]
         |> Css.batch
+
+
+
+-- update : Msg -> Model -> Model
+-- update msg model =
+--     case msg of
+--         TextFieldMsg tfMsg ->
+--             let
+--                 id =
+--                     TextField.getId tfMsg
+--             in
+--             Dict.get id model.textFields
+--                 |> Maybe.map (TextField.update tfMsg)
+--                 |> Maybe.map (\newModel -> Dict.insert id newModel model.textFields)
+--                 |> Maybe.map (\textFields -> { model | textFields = textFields })
+--                 |> Maybe.withDefault model

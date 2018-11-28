@@ -1,4 +1,4 @@
-module TheSett.TextField exposing (Model, Msg, getId, global, init, textField, update)
+module TheSett.TextField exposing (Model, Msg, global, init, textField, update)
 
 import Css
 import Css.Global
@@ -25,7 +25,7 @@ import ResponsiveDSL
         , applyDevicesToBuilders
         )
 import Styles
-import TheSett.Id exposing (IdPath, pathToId)
+import TheSett.Component exposing (Index, indexAsId)
 
 
 {-| The global snippet for text fields.
@@ -57,18 +57,8 @@ global =
 {-| Events and state needed by text fields.
 -}
 type Msg
-    = Focus IdPath
-    | Unfocus IdPath
-
-
-getId : Msg -> IdPath
-getId msg =
-    case msg of
-        Focus id ->
-            id
-
-        Unfocus id ->
-            id
+    = Focus
+    | Unfocus
 
 
 type alias Model =
@@ -82,10 +72,10 @@ init =
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        Focus _ ->
+        Focus ->
             { model | focus = True }
 
-        Unfocus _ ->
+        Unfocus ->
             { model | focus = False }
 
 
@@ -95,11 +85,11 @@ type TextField
     = TextField
 
 
-textField : IdPath -> SimpleElementBuilder { a | textField : Compatible } TextField msg
-textField idPath builders attributes innerHtml responsive =
+textField : Index -> SimpleElementBuilder { a | textField : Compatible } TextField msg
+textField index builders attributes innerHtml responsive =
     let
         id =
-            pathToId idPath
+            indexAsId index
     in
     styled div
         [ Css.position Css.relative
