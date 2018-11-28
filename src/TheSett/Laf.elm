@@ -172,7 +172,7 @@ wrapper responsive =
     [ Css.margin2 (Css.px 0) Css.auto
     , Css.padding2 (Css.px 0) (Css.vw 5)
     , Responsive.deviceStyle responsive <|
-        \common device ->
-            Css.maxWidth (Css.px device.wrapperWidth)
+        \device ->
+            Css.maxWidth (Css.px device.deviceProps.wrapperWidth)
     ]
         |> Css.batch

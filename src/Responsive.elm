@@ -94,6 +94,14 @@ type alias ResponsiveStyle =
     }
 
 
+{-| Specifies the base styling properties for a single devices.
+-}
+type alias DeviceStyle =
+    { commonStyle : CommonStyle
+    , deviceProps : DeviceProps
+    }
+
+
 
 -- Device Dependant Styling functions.
 
@@ -102,7 +110,7 @@ type alias ResponsiveStyle =
 properties that are specific to a device, and produces some style related value.
 -}
 type alias ResponsiveFn a =
-    CommonStyle -> DeviceProps -> a
+    DeviceStyle -> a
 
 
 {-| Creates a single CSS property with media queries. Media queries will be
@@ -110,7 +118,7 @@ generated for each of the devices specified.
 -}
 deviceStyle : ResponsiveStyle -> ResponsiveFn Css.Style -> Css.Style
 deviceStyle responsive styleFn =
-    mapMixins (mediaMixins responsive (styleFn responsive.commonStyle >> styleAsMixin)) []
+    mapMixins (mediaMixins responsive (styleFn >> styleAsMixin)) []
         |> Css.batch
 
 
@@ -119,7 +127,7 @@ generated for each of the devices specified.
 -}
 deviceStyles : ResponsiveStyle -> ResponsiveFn (List Css.Style) -> Css.Style
 deviceStyles responsive styleFn =
-    mapMixins (mediaMixins responsive (styleFn responsive.commonStyle >> stylesAsMixin)) []
+    mapMixins (mediaMixins responsive (styleFn >> stylesAsMixin)) []
         |> Css.batch
 
 
@@ -142,8 +150,8 @@ This produces a result in px, which works the most accurately.
 
 -}
 rhythmPx : Float -> ResponsiveFn Css.Px
-rhythmPx n common device =
-    Css.px <| rhythm n common device
+rhythmPx n device =
+    Css.px <| rhythm n device
 
 
 {-| Calculates a multiple of the line height for a base font.
@@ -152,8 +160,8 @@ This produces a float which is the size in pixels.
 
 -}
 rhythm : Float -> ResponsiveFn Float
-rhythm n common device =
-    n * lineHeight common.lineHeightRatio device
+rhythm n device =
+    n * lineHeight device.commonStyle.lineHeightRatio device.deviceProps
 
 
 {-| This function helps to get the vertical rhythm right in situations where
@@ -165,10 +173,10 @@ height and a margin which together add up to the correct size.
 
 -}
 rhythmSplit : Float -> Float -> ResponsiveFn (List Css.Style)
-rhythmSplit ratio n common device =
+rhythmSplit ratio n device =
     let
         r1 =
-            rhythm n common device
+            rhythm n device
 
         mt =
             r1 * ratio / 2
@@ -240,9 +248,9 @@ media2x styles =
 
 {-| Creates a media query that has its min width set to the break point for a device style.
 -}
-mediaMinWidthMixin : DeviceProps -> Mixin
-mediaMinWidthMixin { breakWidth } =
-    Css.Media.withMedia [ Css.Media.all [ Css.Media.minWidth <| Css.px breakWidth ] ]
+mediaMinWidthMixin : ResponsiveFn Mixin
+mediaMinWidthMixin device =
+    Css.Media.withMedia [ Css.Media.all [ Css.Media.minWidth <| Css.px device.deviceProps.breakWidth ] ]
         >> List.singleton
 
 
@@ -256,8 +264,8 @@ In this way, a mixin that is dependant on device properties can be applied accro
 all device. Use `mapMixins` to apply the list of mixins over a list of base styles.
 
 -}
-mediaMixins : ResponsiveStyle -> (DeviceProps -> Mixin) -> List Mixin
-mediaMixins responsive devMixin =
+mediaMixins : ResponsiveStyle -> ResponsiveFn Mixin -> List Mixin
+mediaMixins responsive responsiveMixin =
     let
         { sm, md, lg, xl } =
             responsive.deviceStyles
@@ -270,13 +278,14 @@ mediaMixins responsive devMixin =
                 >> mediaMinWidthMixin deviceProps
 
         minWidthMixins deviceMixin =
-            List.map (minWidthMixin deviceMixin) minWidthDevices
+            List.map (minWidthMixin deviceMixin) <|
+                List.map (\dProps -> { commonStyle = responsive.commonStyle, deviceProps = dProps }) minWidthDevices
 
         allMixins deviceMixin =
-            deviceMixin sm
+            deviceMixin { commonStyle = responsive.commonStyle, deviceProps = sm }
                 :: minWidthMixins deviceMixin
     in
-    allMixins devMixin
+    allMixins responsiveMixin
 
 
 
@@ -293,19 +302,19 @@ fontSizePx scale (FontSizeLevel sizeLevel) { baseFontSize } =
 {-| A mixin that for a given type scale and font size level, creates font-size
 and line-height properties in keeping with the vertical rhythm.
 -}
-fontSizeMixin : FontSizeLevel -> CommonStyle -> DeviceProps -> Mixin
-fontSizeMixin (FontSizeLevel sizeLevel) common device =
+fontSizeMixin : FontSizeLevel -> ResponsiveFn Mixin
+fontSizeMixin (FontSizeLevel sizeLevel) device =
     let
         pxVal =
-            fontSizePx common.typeScale (FontSizeLevel sizeLevel) device
+            fontSizePx device.commonStyle.typeScale (FontSizeLevel sizeLevel) device.deviceProps
 
         numLines =
             max sizeLevel.minLines
-                (ceiling (pxVal / lineHeight common.lineHeightRatio device))
+                (ceiling (pxVal / lineHeight device.commonStyle.lineHeightRatio device.deviceProps))
     in
     Css.batch
         [ Css.fontSize (Css.px pxVal)
-        , Css.lineHeight (rhythmPx (toFloat numLines) common device)
+        , Css.lineHeight (rhythmPx (toFloat numLines) device)
         ]
         |> styleAsMixin
 
@@ -318,7 +327,7 @@ fontMediaStyles : FontSizeLevel -> ResponsiveStyle -> List Css.Style
 fontMediaStyles level responsive =
     mapMixins
         (mediaMixins responsive
-            (fontSizeMixin level responsive.commonStyle)
+            (fontSizeMixin level)
         )
         []
 
@@ -356,7 +365,7 @@ global responsive =
         , Css.Global.hr
         ]
         [ deviceStyle responsive <|
-            \common device -> Css.margin3 (Css.px 0) (Css.px 0) (rhythmPx 1 common device)
+            \device -> Css.margin3 (Css.px 0) (Css.px 0) (rhythmPx 1 device)
         ]
 
     -- Consistent indenting for lists.
@@ -366,6 +375,6 @@ global responsive =
         , Css.Global.ul
         ]
         [ deviceStyle responsive <|
-            \common device -> Css.margin2 (rhythmPx 1 common device) (rhythmPx 1 common device)
+            \device -> Css.margin2 (rhythmPx 1 device) (rhythmPx 1 device)
         ]
     ]

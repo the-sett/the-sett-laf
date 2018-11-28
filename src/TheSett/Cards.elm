@@ -19,8 +19,8 @@ import Html.Styled.Attributes as Attributes exposing (class, id, name, title)
 import Responsive
     exposing
         ( Device(..)
-        , DeviceSpec
         , DeviceProps
+        , DeviceSpec
         , ResponsiveStyle
         , deviceStyle
         , deviceStyles
@@ -59,10 +59,10 @@ card builders attributes innerHtml responsive =
         [ Css.borderRadius (Css.px 2)
         , Css.property "box-shadow" "rgba(0, 0, 0, 0.14) 0px 3px 4px 0px, rgba(0, 0, 0, 0.2) 0px 3px 3px -2px, rgba(0, 0, 0, 0.12) 0px 1px 8px 0px"
         , Responsive.deviceStyles responsive
-            (\common device ->
-                [ Css.marginLeft <| Responsive.rhythmPx 0.5 common device
-                , Css.marginRight <| Responsive.rhythmPx 0.5 common device
-                , Css.marginBottom <| Responsive.rhythmPx 1.0 common device
+            (\device ->
+                [ Css.marginLeft <| Responsive.rhythmPx 0.5 device
+                , Css.marginRight <| Responsive.rhythmPx 0.5 device
+                , Css.marginBottom <| Responsive.rhythmPx 1.0 device
                 ]
             )
         , Css.overflow Css.hidden

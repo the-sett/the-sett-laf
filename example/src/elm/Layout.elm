@@ -50,7 +50,7 @@ topHeader responsive model =
                 , Styles.styles
                     [ wrapper responsive
                     , Responsive.deviceStyle responsive <|
-                        \common device -> Css.height (Responsive.rhythmPx 3 common device)
+                        \device -> Css.height (Responsive.rhythmPx 3 device)
                     ]
                 ]
             ]
@@ -63,9 +63,9 @@ topHeader responsive model =
                         [ Grid.columns 1
                         , Styles.styles
                             [ Responsive.deviceStyles responsive <|
-                                \common device ->
-                                    [ Css.height (Responsive.rhythmPx 3 common device)
-                                    , Css.width (Responsive.rhythmPx 3 common device)
+                                \device ->
+                                    [ Css.height (Responsive.rhythmPx 3 device)
+                                    , Css.width (Responsive.rhythmPx 3 device)
                                     ]
                             ]
                         ]
@@ -117,9 +117,9 @@ debugToggle responsive model =
     styled div
         [ Css.position Css.fixed
         , Responsive.deviceStyles responsive <|
-            \common device ->
-                [ Css.right (Responsive.rhythmPx 2 common device)
-                , Css.top (Responsive.rhythmPx 1 common device)
+            \device ->
+                [ Css.right (Responsive.rhythmPx 2 device)
+                , Css.top (Responsive.rhythmPx 1 device)
                 ]
         , if model.debug then
             Css.backgroundColor (Css.rgb 50 230 50) |> Css.important

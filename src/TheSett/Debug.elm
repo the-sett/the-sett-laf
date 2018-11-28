@@ -75,7 +75,7 @@ global responsive =
         , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
         , Css.backgroundRepeat Css.repeat
         , Responsive.deviceStyle responsive <|
-            \common device -> Css.backgroundSize2 (rhythmPx 1 common device) (rhythmPx 1 common device)
+            \device -> Css.backgroundSize2 (rhythmPx 1 device) (rhythmPx 1 device)
         ]
     ]
 

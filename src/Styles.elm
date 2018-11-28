@@ -93,7 +93,7 @@ xl builders =
 -}
 height : Float -> ByDeviceBuilder a ctx
 height n =
-    [ \ctx -> ByDeviceProps ctx (\_ -> \common device -> [ Css.height <| rhythmPx n common device ])
+    [ \ctx -> ByDeviceProps ctx (\_ -> \device -> [ Css.height <| rhythmPx n device ])
     ]
 
 

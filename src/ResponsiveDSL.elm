@@ -31,8 +31,8 @@ import Responsive
     exposing
         ( CommonStyle
         , Device(..)
-        , DeviceSpec
         , DeviceProps
+        , DeviceSpec
         , ResponsiveFn
         , ResponsiveStyle
         , deviceStyle
@@ -123,19 +123,19 @@ type alias StyleBuilder a ctx =
 applyDevicesToBuilders : List (Builder a ctx) -> ResponsiveStyle -> Css.Style
 applyDevicesToBuilders buildersList responsive =
     deviceStyles responsive
-        (\common device ->
+        (\device ->
             List.map
                 (\builder ->
                     case builder of
                         ConstForDevice dev ctx fn ->
-                            if dev == device.device then
+                            if dev == device.deviceProps.device then
                                 fn ctx
 
                             else
                                 []
 
                         ByDeviceProps ctx fn ->
-                            fn ctx common device
+                            fn ctx device
                 )
                 buildersList
                 |> List.concat

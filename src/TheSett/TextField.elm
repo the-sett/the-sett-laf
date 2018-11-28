@@ -46,10 +46,10 @@ input idPath attrs innerHtml responsive =
         [ Css.position Css.relative
         , Css.fontFamilies [ "Helvetica" ]
         , Responsive.deviceStyles responsive
-            (\common device ->
-                [ Css.marginTop <| Responsive.rhythmPx 1 common device
-                , Css.paddingBottom <| Responsive.rhythmPx 1 common device
-                , Css.height <| Responsive.rhythmPx 1 common device
+            (\device ->
+                [ Css.marginTop <| Responsive.rhythmPx 1 device
+                , Css.paddingBottom <| Responsive.rhythmPx 1 device
+                , Css.height <| Responsive.rhythmPx 1 device
                 ]
             )
         ]
