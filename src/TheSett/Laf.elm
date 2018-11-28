@@ -16,7 +16,7 @@ import Html.Styled.Attributes exposing (attribute, href, name, rel)
 import Responsive exposing (Device(..), DeviceProps, ResponsiveStyle, fontMediaStyles)
 import TheSett.Buttons as Buttons
 import TheSett.Reset as Reset
-import TheSett.TextField
+import TheSett.TextField as TextField
 import TypeScale exposing (TypeScale, base, h1, h2, h3, h4, majorThird)
 
 
@@ -154,6 +154,7 @@ global scale respStyle =
     Reset.global
         ++ Responsive.global respStyle
         ++ typography respStyle
+        ++ TextField.global
 
 
 {-| The CSS as an HTML <style> element.
