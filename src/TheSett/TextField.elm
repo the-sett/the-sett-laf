@@ -1,9 +1,10 @@
-module TheSett.TextField exposing (global, textField)
+module TheSett.TextField exposing (Model, Msg, global, textField, update)
 
 import Css
 import Css.Global
 import Html.Styled exposing (div, label, span, styled)
 import Html.Styled.Attributes exposing (for, name)
+import Html.Styled.Events exposing (onBlur, onFocus)
 import Responsive
     exposing
         ( Device(..)
@@ -24,19 +25,7 @@ import ResponsiveDSL
         , applyDevicesToBuilders
         )
 import Styles
-
-
-
--- Stuff for elements with ids and state.
-
-
-type alias IdPath =
-    List Int
-
-
-pathToId path =
-    List.map String.fromInt path
-        |> String.join "-"
+import TheSett.Id exposing (IdPath, pathToId)
 
 
 {-| The global snippet for text fields.
@@ -63,6 +52,27 @@ global =
             ]
         ]
     ]
+
+
+{-| Events and state needed by text fields.
+-}
+type Msg
+    = Focus
+    | Unfocus
+
+
+type alias Model =
+    { focus : Bool }
+
+
+update : Msg -> Model -> Model
+update msg model =
+    case msg of
+        Focus ->
+            { model | focus = True }
+
+        Unfocus ->
+            { model | focus = False }
 
 
 {-| The text field styling context.
@@ -107,7 +117,14 @@ textField idPath builders attributes innerHtml responsive =
             , Css.backgroundColor Css.transparent
             , Css.width <| Css.pct 100
             ]
-            ([ Html.Styled.Attributes.id id, name id ] ++ attributes)
+            ([ Html.Styled.Attributes.id id
+             , name id
+
+             --  , onFocus Focus
+             --  , onBlur Unfocus
+             ]
+                ++ attributes
+            )
             []
         , styled span
             [ Css.position Css.relative
