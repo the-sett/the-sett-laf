@@ -1,10 +1,37 @@
-module TheSett.TextField exposing (global, input)
+module TheSett.TextField exposing (global, textField)
 
 import Css
 import Css.Global
 import Html.Styled exposing (div, label, span, styled)
 import Html.Styled.Attributes exposing (for, name)
-import Responsive exposing (ResponsiveStyle, rhythmPx)
+import Responsive
+    exposing
+        ( Device(..)
+        , DeviceProps
+        , DeviceSpec
+        , ResponsiveFn
+        , ResponsiveStyle
+        , deviceStyle
+        , deviceStyles
+        )
+import ResponsiveDSL
+    exposing
+        ( Builder(..)
+        , Compatible(..)
+        , ConstDeviceBuilder
+        , SimpleElementBuilder
+        , StyleBuilder
+        , applyDevicesToBuilders
+        )
+import Styles
+
+
+
+-- Stuff for elements with ids and state.
+
+
+type alias IdPath =
+    List Int
 
 
 pathToId path =
@@ -12,6 +39,8 @@ pathToId path =
         |> String.join "-"
 
 
+{-| The global snippet for text fields.
+-}
 global =
     [ Css.Global.class "er-textfield--focus-floating"
         [ Css.top <| Css.px -26
@@ -36,8 +65,14 @@ global =
     ]
 
 
-input : List Int -> List (Html.Styled.Attribute msg) -> List (Html.Styled.Html msg) -> ResponsiveStyle -> Html.Styled.Html msg
-input idPath attrs innerHtml responsive =
+{-| The text field styling context.
+-}
+type TextField
+    = TextField
+
+
+textField : IdPath -> SimpleElementBuilder { a | textField : Compatible } TextField msg
+textField idPath builders attributes innerHtml responsive =
     let
         id =
             pathToId idPath
@@ -72,7 +107,7 @@ input idPath attrs innerHtml responsive =
             , Css.backgroundColor Css.transparent
             , Css.width <| Css.pct 100
             ]
-            ([ Html.Styled.Attributes.id id, name id ] ++ attrs)
+            ([ Html.Styled.Attributes.id id, name id ] ++ attributes)
             []
         , styled span
             [ Css.position Css.relative
