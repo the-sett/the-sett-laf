@@ -162,8 +162,7 @@ global scale respStyle =
 style : ResponsiveStyle -> Html msg
 style devs =
     Css.Global.global <|
-        Reset.global
-            ++ global majorThird devs
+        global majorThird devs
 
 
 {-| A responsive wrapper div.
