@@ -6,14 +6,14 @@ module TheSett.Laf exposing (style, fonts, responsiveMeta, devices, wrapper)
 
 -}
 
---exposing (Device(..), DeviceStyle, ResponsiveStyle, fontMediaStyles, fontSizeMixin, mapMixins, mediaMixins)
+--exposing (Device(..), DeviceProps, ResponsiveStyle, fontMediaStyles, fontSizeMixin, mapMixins, mediaMixins)
 
 import Css
 import Css.Global
 import Grid
 import Html.Styled exposing (Html, node)
 import Html.Styled.Attributes exposing (attribute, href, name, rel)
-import Responsive exposing (Device(..), DeviceStyle, ResponsiveStyle, fontMediaStyles)
+import Responsive exposing (Device(..), DeviceProps, ResponsiveStyle, fontMediaStyles)
 import TheSett.Buttons as Buttons
 import TheSett.Reset as Reset
 import TheSett.TextField
@@ -36,7 +36,7 @@ printBlack =
 -- Device Configurations
 
 
-sm : DeviceStyle
+sm : DeviceProps
 sm =
     { device = Sm
     , baseFontSize = 16.0
@@ -45,7 +45,7 @@ sm =
     }
 
 
-md : DeviceStyle
+md : DeviceProps
 md =
     { device = Md
     , baseFontSize = 17.0
@@ -54,7 +54,7 @@ md =
     }
 
 
-lg : DeviceStyle
+lg : DeviceProps
 lg =
     { device = Lg
     , baseFontSize = 18.0
@@ -63,7 +63,7 @@ lg =
     }
 
 
-xl : DeviceStyle
+xl : DeviceProps
 xl =
     { device = Xl
     , baseFontSize = 19.0

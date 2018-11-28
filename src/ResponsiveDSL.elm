@@ -32,7 +32,7 @@ import Responsive
         ( CommonStyle
         , Device(..)
         , DeviceSpec
-        , DeviceStyle
+        , DeviceProps
         , ResponsiveFn
         , ResponsiveStyle
         , deviceStyle

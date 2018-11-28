@@ -20,7 +20,7 @@ import Responsive
     exposing
         ( Device(..)
         , DeviceSpec
-        , DeviceStyle
+        , DeviceProps
         , ResponsiveStyle
         , deviceStyle
         , deviceStyles

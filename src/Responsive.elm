@@ -1,6 +1,6 @@
 module Responsive exposing
     ( global
-    , CommonStyle, DeviceStyle, Device(..), DeviceSpec, ResponsiveStyle
+    , CommonStyle, DeviceProps, Device(..), DeviceSpec, ResponsiveStyle
     , ResponsiveFn, deviceStyle, deviceStyles
     , rhythm, rhythmPx, rhythmSplit
     , fontMediaStyles
@@ -17,7 +17,7 @@ and for applying those to create CSS with media queries.
 
 # Models for specifying devices and their basic responsive properties.
 
-@docs CommonStyle, DeviceStyle, Device, DeviceSpec, ResponsiveStyle
+@docs CommonStyle, DeviceProps, Device, DeviceSpec, ResponsiveStyle
 
 
 # Device dependant styling functions.
@@ -78,7 +78,7 @@ type alias CommonStyle =
 
 {-| Defines the style parameters that are device specific.
 -}
-type alias DeviceStyle =
+type alias DeviceProps =
     { device : Device
     , baseFontSize : Float
     , breakWidth : Float
@@ -90,7 +90,7 @@ type alias DeviceStyle =
 -}
 type alias ResponsiveStyle =
     { commonStyle : CommonStyle
-    , deviceStyles : DeviceSpec DeviceStyle
+    , deviceStyles : DeviceSpec DeviceProps
     }
 
 
@@ -102,7 +102,7 @@ type alias ResponsiveStyle =
 properties that are specific to a device, and produces some style related value.
 -}
 type alias ResponsiveFn a =
-    CommonStyle -> DeviceStyle -> a
+    CommonStyle -> DeviceProps -> a
 
 
 {-| Creates a single CSS property with media queries. Media queries will be
@@ -129,7 +129,7 @@ deviceStyles responsive styleFn =
 
 {-| Calculates the line height for a base styling.
 -}
-lineHeight : Float -> DeviceStyle -> Float
+lineHeight : Float -> DeviceProps -> Float
 lineHeight lineHeightRatio device =
     (lineHeightRatio * device.baseFontSize)
         |> floor
@@ -240,7 +240,7 @@ media2x styles =
 
 {-| Creates a media query that has its min width set to the break point for a device style.
 -}
-mediaMinWidthMixin : DeviceStyle -> Mixin
+mediaMinWidthMixin : DeviceProps -> Mixin
 mediaMinWidthMixin { breakWidth } =
     Css.Media.withMedia [ Css.Media.all [ Css.Media.minWidth <| Css.px breakWidth ] ]
         >> List.singleton
@@ -256,7 +256,7 @@ In this way, a mixin that is dependant on device properties can be applied accro
 all device. Use `mapMixins` to apply the list of mixins over a list of base styles.
 
 -}
-mediaMixins : ResponsiveStyle -> (DeviceStyle -> Mixin) -> List Mixin
+mediaMixins : ResponsiveStyle -> (DeviceProps -> Mixin) -> List Mixin
 mediaMixins responsive devMixin =
     let
         { sm, md, lg, xl } =
@@ -283,7 +283,7 @@ mediaMixins responsive devMixin =
 -- Functions for generating responsive type scales.
 
 
-fontSizePx : TypeScale -> FontSizeLevel -> DeviceStyle -> Float
+fontSizePx : TypeScale -> FontSizeLevel -> DeviceProps -> Float
 fontSizePx scale (FontSizeLevel sizeLevel) { baseFontSize } =
     (scale sizeLevel.level * baseFontSize)
         |> floor
@@ -293,7 +293,7 @@ fontSizePx scale (FontSizeLevel sizeLevel) { baseFontSize } =
 {-| A mixin that for a given type scale and font size level, creates font-size
 and line-height properties in keeping with the vertical rhythm.
 -}
-fontSizeMixin : FontSizeLevel -> CommonStyle -> DeviceStyle -> Mixin
+fontSizeMixin : FontSizeLevel -> CommonStyle -> DeviceProps -> Mixin
 fontSizeMixin (FontSizeLevel sizeLevel) common device =
     let
         pxVal =

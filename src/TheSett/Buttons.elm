@@ -24,7 +24,7 @@ import Responsive
     exposing
         ( Device(..)
         , DeviceSpec
-        , DeviceStyle
+        , DeviceProps
         , ResponsiveFn
         , ResponsiveStyle
         , deviceStyle
