@@ -28,13 +28,17 @@ type alias Model =
 
 
 type Msg
-    = TextFieldMsg IdPath TextField.Msg
+    = TextFieldMsg TextField.Msg
 
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        TextFieldMsg id tfMsg ->
+        TextFieldMsg tfMsg ->
+            let
+                id =
+                    TextField.getId tfMsg
+            in
             Dict.get id model.textFields
                 |> Maybe.map (TextField.update tfMsg)
                 |> Maybe.map (\newModel -> Dict.insert id newModel model.textFields)

@@ -1,4 +1,4 @@
-module TheSett.TextField exposing (Model, Msg, global, textField, update)
+module TheSett.TextField exposing (Model, Msg, getId, global, init, textField, update)
 
 import Css
 import Css.Global
@@ -57,21 +57,35 @@ global =
 {-| Events and state needed by text fields.
 -}
 type Msg
-    = Focus
-    | Unfocus
+    = Focus IdPath
+    | Unfocus IdPath
+
+
+getId : Msg -> IdPath
+getId msg =
+    case msg of
+        Focus id ->
+            id
+
+        Unfocus id ->
+            id
 
 
 type alias Model =
     { focus : Bool }
 
 
+init =
+    { focus = False }
+
+
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        Focus ->
+        Focus _ ->
             { model | focus = True }
 
-        Unfocus ->
+        Unfocus _ ->
             { model | focus = False }
 
 
