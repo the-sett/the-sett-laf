@@ -64,13 +64,65 @@ import TheSett.Component as Component exposing (Index, Indexed, indexAsId)
 -}
 global : ResponsiveStyle -> List Css.Global.Snippet
 global responsive =
-    [ Css.Global.class "er-textfield--focus-floating"
+    [ Css.Global.class "er-textfield"
+        [ Css.position Css.relative
+        , Css.fontFamilies [ "Helvetica" ]
+        , Responsive.deviceStyles responsive
+            (\device ->
+                [ Css.marginTop <| Responsive.rhythmPx 1 device
+                , Css.paddingBottom <| Responsive.rhythmPx 1 device
+                , Css.height <| Responsive.rhythmPx 1 device
+                ]
+            )
+        ]
+    , Css.Global.class "er-textfield--label"
+        [ Css.position Css.absolute
+        , Css.color <| Css.hex "999"
+        , Css.left <| Css.px 0
+        , Css.top <| Css.px 0
+        , Css.property "transition" "all 0.2s ease"
+        , Css.pointerEvents Css.none
+        ]
+    , Css.Global.class "er-textfield--label-floating"
         [ Responsive.deviceStyle responsive
             (\device -> Css.top <| Css.px (-1 * Responsive.rhythm 1 device))
         , Css.transform <| Css.scale 0.66
         , Css.property "transform-origin" "left center"
         , Css.left <| Css.px 0
         , Css.color <| Css.hex "4CAF50"
+        ]
+    , Css.Global.class "er-textfield--input"
+        [ Css.border <| Css.px 0
+        , Css.borderBottom3 (Css.px 1) Css.solid (Css.hex "666")
+        , Css.display Css.block
+        , Css.focus [ Css.outline Css.none ]
+        , Css.backgroundColor Css.transparent
+        , Css.width <| Css.pct 100
+        ]
+    , Css.Global.class "er-textfield--span"
+        [ Css.position Css.relative
+        , Css.display Css.block
+        , Css.width <| Css.pct 100
+        , Css.before
+            [ Css.property "content" "''"
+            , Css.height <| Css.px 2
+            , Css.width <| Css.px 0
+            , Css.bottom <| Css.px 0
+            , Css.position Css.absolute
+            , Css.backgroundColor <| Css.hex "4CAF50"
+            , Css.property "transition" "all 0.2s ease"
+            , Css.left <| Css.pct 50
+            ]
+        , Css.after
+            [ Css.property "content" "''"
+            , Css.height <| Css.px 2
+            , Css.width <| Css.px 0
+            , Css.bottom <| Css.px 0
+            , Css.position Css.absolute
+            , Css.backgroundColor <| Css.hex "4CAF50"
+            , Css.property "transition" "all 0.2s ease"
+            , Css.right <| Css.pct 50
+            ]
         ]
     , Css.Global.typeSelector "input:focus"
         [ Css.Global.generalSiblings
@@ -220,38 +272,21 @@ view lift model builders attributes innerHtml responsive =
                 |> Maybe.Extra.values
     in
     styled div
-        [ Css.position Css.relative
-        , Css.fontFamilies [ "Helvetica" ]
-        , Responsive.deviceStyles responsive
-            (\device ->
-                [ Css.marginTop <| Responsive.rhythmPx 1 device
-                , Css.paddingBottom <| Responsive.rhythmPx 1 device
-                , Css.height <| Responsive.rhythmPx 1 device
-                ]
-            )
-        ]
         []
+        [ classList [ ( "er-textfield", True ) ] ]
         [ styled label
-            [ Css.position Css.absolute
-            , Css.color <| Css.hex "999"
-            , Css.left <| Css.px 0
-            , Css.top <| Css.px 0
-            , Css.property "transition" "all 0.2s ease"
-            , Css.pointerEvents Css.none
-            ]
+            []
             [ for id
-            , classList [ ( "er-textfield--focus-floating", model.focus ) ]
+            , classList
+                [ ( "er-textfield--label", True )
+                , ( "er-textfield--label-floating", model.focus )
+                ]
             ]
             innerHtml
         , styled Html.Styled.input
-            [ Css.border <| Css.px 0
-            , Css.borderBottom3 (Css.px 1) Css.solid (Css.hex "666")
-            , Css.display Css.block
-            , Css.focus [ Css.outline Css.none ]
-            , Css.backgroundColor Css.transparent
-            , Css.width <| Css.pct 100
-            ]
-            ([ Html.Styled.Attributes.id id
+            []
+            ([ classList [ ( "er-textfield--input", True ) ]
+             , Html.Styled.Attributes.id id
              , name id
              , onFocus <| lift Focus
              , onBlur <| lift Unfocus
@@ -261,31 +296,8 @@ view lift model builders attributes innerHtml responsive =
             )
             []
         , styled span
-            [ Css.position Css.relative
-            , Css.display Css.block
-            , Css.width <| Css.pct 100
-            , Css.before
-                [ Css.property "content" "''"
-                , Css.height <| Css.px 2
-                , Css.width <| Css.px 0
-                , Css.bottom <| Css.px 0
-                , Css.position Css.absolute
-                , Css.backgroundColor <| Css.hex "4CAF50"
-                , Css.property "transition" "all 0.2s ease"
-                , Css.left <| Css.pct 50
-                ]
-            , Css.after
-                [ Css.property "content" "''"
-                , Css.height <| Css.px 2
-                , Css.width <| Css.px 0
-                , Css.bottom <| Css.px 0
-                , Css.position Css.absolute
-                , Css.backgroundColor <| Css.hex "4CAF50"
-                , Css.property "transition" "all 0.2s ease"
-                , Css.right <| Css.pct 50
-                ]
-            ]
             []
+            [ classList [ ( "er-textfield--span", True ) ] ]
             []
         ]
 
