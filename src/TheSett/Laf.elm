@@ -1,6 +1,6 @@
 module TheSett.Laf exposing
     ( style, fonts, responsiveMeta, devices, wrapper
-    , Model, Msg, init
+    , Model, Msg, init, update
     )
 
 {-| The Sett Look and Feel
@@ -202,17 +202,14 @@ type alias Msg =
     Component.Msg Textfield.Msg
 
 
+update : (Msg -> m) -> Msg -> Model -> ( Model, Cmd m )
+update lift msg model =
+    update_ lift msg model
+        |> Tuple.mapFirst (Maybe.withDefault model)
 
--- update : Msg -> Model -> Model
--- update msg model =
---     case msg of
---         TextFieldMsg tfMsg ->
---             let
---                 id =
---                     TextField.getId tfMsg
---             in
---             Dict.get id model.textFields
---                 |> Maybe.map (TextField.update tfMsg)
---                 |> Maybe.map (\newModel -> Dict.insert id newModel model.textFields)
---                 |> Maybe.map (\textFields -> { model | textFields = textFields })
---                 |> Maybe.withDefault model
+
+update_ : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
+update_ lift msg store =
+    case msg of
+        Component.TextfieldMsg idx innerMsg ->
+            Textfield.react lift innerMsg idx store

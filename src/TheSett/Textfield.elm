@@ -1,4 +1,4 @@
-module TheSett.Textfield exposing (Model, Msg, global, render, textField, update)
+module TheSett.Textfield exposing (Model, Msg, global, react, render, textField, update)
 
 import Css
 import Css.Global
