@@ -31,9 +31,11 @@ module TheSett.Textfield exposing
 
 import Css
 import Css.Global
+import Html.Events
 import Html.Styled exposing (Attribute, Html, div, label, span, styled)
 import Html.Styled.Attributes exposing (classList, for, name)
-import Html.Styled.Events exposing (onBlur, onFocus)
+import Html.Styled.Events exposing (on, onBlur, onFocus, onInput)
+import Json.Decode as Decoder
 import Maybe.Extra
 import Responsive
     exposing
@@ -146,11 +148,15 @@ global responsive =
 
 
 type alias State =
-    { focus : Bool }
+    { focus : Bool
+    , dirty : Bool
+    }
 
 
 default =
-    { focus = False }
+    { focus = False
+    , dirty = False
+    }
 
 
 innerUpdate : (Msg -> msg) -> Msg -> State -> ( Maybe State, Cmd msg )
@@ -161,6 +167,17 @@ innerUpdate lift msg model =
 
         Unfocus ->
             ( Just { model | focus = False }, Cmd.none )
+
+        Input val ->
+            let
+                dirty =
+                    val /= ""
+            in
+            if dirty == model.dirty then
+                ( Nothing, Cmd.none )
+
+            else
+                ( Just { model | dirty = dirty }, Cmd.none )
 
 
 
@@ -273,13 +290,15 @@ view lift model builders attributes innerHtml responsive =
     in
     styled div
         []
-        [ classList [ ( "er-textfield", True ) ] ]
+        ([ classList [ ( "er-textfield", True ) ] ]
+            ++ attributes
+        )
         [ styled label
             []
             [ for id
             , classList
                 [ ( "er-textfield--label", True )
-                , ( "er-textfield--label-floating", model.focus )
+                , ( "er-textfield--label-floating", model.focus || model.dirty )
                 ]
             ]
             innerHtml
@@ -290,9 +309,10 @@ view lift model builders attributes innerHtml responsive =
              , name id
              , onFocus <| lift Focus
              , onBlur <| lift Unfocus
+             , on "input" <|
+                Decoder.map (Input >> lift) Html.Events.targetValue
              ]
                 ++ optionalAttributes
-                ++ attributes
             )
             []
         , styled span
@@ -309,6 +329,7 @@ view lift model builders attributes innerHtml responsive =
 type Msg
     = Focus
     | Unfocus
+    | Input String
 
 
 type alias Model s =
