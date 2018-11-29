@@ -18,6 +18,7 @@ import Responsive
 import ResponsiveDSL
     exposing
         ( Builder(..)
+        , ByDeviceBuilder
         , Compatible(..)
         , ConstDeviceBuilder
         , SimpleElementBuilder
@@ -82,13 +83,32 @@ update lift msg model =
             ( Just { model | focus = False }, Cmd.none )
 
 
-{-| The text field styling context.
+{-| The text field styling and configuraiton context.
 -}
+type alias Config =
+    { labelText : Maybe String
+    , labelFloat : Bool
+    , error : Maybe String
+    , value : Maybe String
+    , disabled : Bool
+    }
+
+
+defaultConfig : Config
+defaultConfig =
+    { labelText = Nothing
+    , labelFloat = False
+    , error = Nothing
+    , value = Nothing
+    , disabled = False
+    }
+
+
 type TextField
-    = TextField
+    = TextField Config
 
 
-textField : (Msg -> msg) -> Model -> SimpleElementBuilder { a | textField : Compatible } TextField msg
+textField : (Msg -> msg) -> Model -> SimpleElementBuilder { a | textfield : Compatible } TextField msg
 textField lift model builders attributes innerHtml responsive =
     let
         id =
@@ -165,6 +185,46 @@ textField lift model builders attributes innerHtml responsive =
         ]
 
 
+{-| Sets the text for the label.
+-}
+labelText : String -> ByDeviceBuilder { a | textfield : Compatible } TextField
+labelText val =
+    [ \(TextField config) -> ByDeviceProps (TextField { config | labelText = Just val }) (always <| always [])
+    ]
+
+
+{-| Makes the label float on focus or when the textfield contains some value.
+-}
+labelFloat : ByDeviceBuilder { a | textfield : Compatible } TextField
+labelFloat =
+    [ \(TextField config) -> ByDeviceProps (TextField { config | labelFloat = True }) (always <| always [])
+    ]
+
+
+{-| Sets the error text for the input.
+-}
+error : String -> ByDeviceBuilder { a | textfield : Compatible } TextField
+error val =
+    [ \(TextField config) -> ByDeviceProps (TextField { config | error = Just val }) (always <| always [])
+    ]
+
+
+{-| Sets the initial value for the input.
+-}
+value : String -> ByDeviceBuilder { a | textfield : Compatible } TextField
+value val =
+    [ \(TextField config) -> ByDeviceProps (TextField { config | value = Just val }) (always <| always [])
+    ]
+
+
+{-| Makes the input disabled.
+-}
+disabled : ByDeviceBuilder { a | textfield : Compatible } TextField
+disabled =
+    [ \(TextField config) -> ByDeviceProps (TextField { config | disabled = True }) (always <| always [])
+    ]
+
+
 
 -- COMPONENT
 
@@ -189,7 +249,7 @@ render :
     (Component.Msg Msg -> msg)
     -> Index
     -> Store s
-    -> SimpleElementBuilder { a | textField : Compatible } TextField msg
+    -> SimpleElementBuilder { a | textfield : Compatible } TextField msg
 render =
     let
         ( get, set ) =
