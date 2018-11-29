@@ -155,11 +155,11 @@ typography respStyle =
 {-| The global CSS.
 -}
 global : TypeScale -> ResponsiveStyle -> List Css.Global.Snippet
-global scale respStyle =
+global scale responsive =
     Reset.global
-        ++ Responsive.global respStyle
-        ++ typography respStyle
-        ++ Textfield.global
+        ++ Responsive.global responsive
+        ++ typography responsive
+        ++ Textfield.global responsive
 
 
 {-| The CSS as an HTML <style> element.

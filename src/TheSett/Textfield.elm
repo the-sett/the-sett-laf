@@ -30,10 +30,13 @@ import TheSett.Component as Component exposing (Index, Indexed, indexAsId)
 
 {-| The global snippet for text fields.
 -}
-global =
+global : ResponsiveStyle -> List Css.Global.Snippet
+global responsive =
     [ Css.Global.class "er-textfield--focus-floating"
-        [ Css.top <| Css.px -26
-        , Css.transform <| Css.scale 0.75
+        [ Responsive.deviceStyle responsive
+            (\device -> Css.top <| Css.px (-1 * Responsive.rhythm 1 device))
+        , Css.transform <| Css.scale 0.66
+        , Css.property "transform-origin" "left center"
         , Css.left <| Css.px 0
         , Css.color <| Css.hex "4CAF50"
         ]
