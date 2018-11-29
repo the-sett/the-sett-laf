@@ -1,9 +1,8 @@
 module TheSett.Textfield exposing
     ( global
-    , textField
+    , render
     , labelText, labelFloat, error, value, disabled
-    , react, render
-    , Model, Msg(..), update
+    , Model, Msg(..), react
     , Config, Store, TextField(..), default, defaultConfig
     )
 
@@ -17,7 +16,7 @@ module TheSett.Textfield exposing
 
 # Builders for building different kinds of textfields.
 
-@docs textField
+@docs render
 
 
 # Builders for configuring textfields.
@@ -25,14 +24,9 @@ module TheSett.Textfield exposing
 @docs labelText, labelFloat, error, value, disabled
 
 
-# Component model for the textfield (internal use).
-
-@docs react, render
-
-
 # TEA model for the textfield (internal use).
 
-@docs Model, Msg, update
+@docs Model, Msg, react
 
 -}
 
@@ -41,6 +35,7 @@ import Css.Global
 import Html.Styled exposing (Attribute, Html, div, label, span, styled)
 import Html.Styled.Attributes exposing (classList, for, name)
 import Html.Styled.Events exposing (onBlur, onFocus)
+import Maybe.Extra
 import Responsive
     exposing
         ( Device(..)
@@ -157,6 +152,13 @@ textField lift model builders attributes innerHtml responsive =
 
         ( flatBuilders, ctx ) =
             chainCtxAcrossBuilders initialCtx builders
+
+        (TextField config) =
+            ctx
+
+        optionalAttributes =
+            [ Maybe.map Html.Styled.Attributes.value config.value ]
+                |> Maybe.Extra.values
     in
     styled div
         [ Css.position Css.relative
@@ -195,6 +197,7 @@ textField lift model builders attributes innerHtml responsive =
              , onFocus <| lift Focus
              , onBlur <| lift Unfocus
              ]
+                ++ optionalAttributes
                 ++ attributes
             )
             []
