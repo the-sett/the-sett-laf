@@ -1,9 +1,8 @@
 module TheSett.Textfield exposing
     ( global
-    , render
+    , text
     , labelText, labelFloat, error, value, disabled
-    , Model, Msg(..), react
-    , Config, Store, TextField(..), default, defaultConfig
+    , Model, Msg(..), update
     )
 
 {-| For building text inputs.
@@ -16,7 +15,7 @@ module TheSett.Textfield exposing
 
 # Builders for building different kinds of textfields.
 
-@docs render
+@docs text
 
 
 # Builders for configuring textfields.
@@ -26,7 +25,7 @@ module TheSett.Textfield exposing
 
 # TEA model for the textfield (internal use).
 
-@docs Model, Msg, react
+@docs Model, Msg, update
 
 -}
 
@@ -61,7 +60,7 @@ import Styles
 import TheSett.Component as Component exposing (Index, Indexed, indexAsId)
 
 
-{-| The global snippet for text fields.
+{-| The global style snippet for text fields.
 -}
 global : ResponsiveStyle -> List Css.Global.Snippet
 global responsive =
@@ -90,14 +89,11 @@ global responsive =
     ]
 
 
-{-| Events and state needed by text fields.
--}
-type Msg
-    = Focus
-    | Unfocus
+
+-- State and state change logic.
 
 
-type alias Model =
+type alias State =
     { focus : Bool }
 
 
@@ -105,8 +101,8 @@ default =
     { focus = False }
 
 
-update : (Msg -> msg) -> Msg -> Model -> ( Maybe Model, Cmd msg )
-update lift msg model =
+innerUpdate : (Msg -> msg) -> Msg -> State -> ( Maybe State, Cmd msg )
+innerUpdate lift msg model =
     case msg of
         Focus ->
             ( Just { model | focus = True }, Cmd.none )
@@ -115,8 +111,10 @@ update lift msg model =
             ( Just { model | focus = False }, Cmd.none )
 
 
-{-| The text field styling and configuraiton context.
--}
+
+-- The styling and configuration context.
+
+
 type alias Config =
     { labelText : Maybe String
     , labelFloat : Bool
@@ -136,24 +134,85 @@ defaultConfig =
     }
 
 
-type TextField
-    = TextField Config
+type Textfield
+    = Textfield Config
 
 
-textField : (Msg -> msg) -> Model -> SimpleElementBuilder { a | textfield : Compatible } TextField msg
-textField lift model builders attributes innerHtml responsive =
+
+-- The textfield DSL builders.
+
+
+text :
+    (Component.Msg Msg -> msg)
+    -> Index
+    -> Model s
+    -> SimpleElementBuilder { a | textfield : Compatible } Textfield msg
+text =
+    let
+        ( get, set ) =
+            Component.indexed .textfield (\x c -> { c | textfield = x }) default
+    in
+    Component.render get view Component.TextfieldMsg
+
+
+{-| Sets the text for the label.
+-}
+labelText : String -> ByDeviceBuilder { a | textfield : Compatible } Textfield
+labelText val =
+    [ \(Textfield config) -> ByDeviceProps (Textfield { config | labelText = Just val }) (always <| always [])
+    ]
+
+
+{-| Makes the label float on focus or when the textfield contains some value.
+-}
+labelFloat : ByDeviceBuilder { a | textfield : Compatible } Textfield
+labelFloat =
+    [ \(Textfield config) -> ByDeviceProps (Textfield { config | labelFloat = True }) (always <| always [])
+    ]
+
+
+{-| Sets the error text for the input.
+-}
+error : String -> ByDeviceBuilder { a | textfield : Compatible } Textfield
+error val =
+    [ \(Textfield config) -> ByDeviceProps (Textfield { config | error = Just val }) (always <| always [])
+    ]
+
+
+{-| Sets the initial value for the input.
+-}
+value : String -> ByDeviceBuilder { a | textfield : Compatible } Textfield
+value val =
+    [ \(Textfield config) -> ByDeviceProps (Textfield { config | value = Just val }) (always <| always [])
+    ]
+
+
+{-| Makes the input disabled.
+-}
+disabled : ByDeviceBuilder { a | textfield : Compatible } Textfield
+disabled =
+    [ \(Textfield config) -> ByDeviceProps (Textfield { config | disabled = True }) (always <| always [])
+    ]
+
+
+
+-- View rendering.
+
+
+view : (Msg -> msg) -> State -> SimpleElementBuilder { a | textfield : Compatible } Textfield msg
+view lift model builders attributes innerHtml responsive =
     let
         id =
             -- indexAsId index
             "id"
 
         initialCtx =
-            TextField defaultConfig
+            Textfield defaultConfig
 
         ( flatBuilders, ctx ) =
             chainCtxAcrossBuilders initialCtx builders
 
-        (TextField config) =
+        (Textfield config) =
             ctx
 
         optionalAttributes =
@@ -231,56 +290,21 @@ textField lift model builders attributes innerHtml responsive =
         ]
 
 
-{-| Sets the text for the label.
--}
-labelText : String -> ByDeviceBuilder { a | textfield : Compatible } TextField
-labelText val =
-    [ \(TextField config) -> ByDeviceProps (TextField { config | labelText = Just val }) (always <| always [])
-    ]
+
+-- TEA model for the textfield.
 
 
-{-| Makes the label float on focus or when the textfield contains some value.
--}
-labelFloat : ByDeviceBuilder { a | textfield : Compatible } TextField
-labelFloat =
-    [ \(TextField config) -> ByDeviceProps (TextField { config | labelFloat = True }) (always <| always [])
-    ]
+type Msg
+    = Focus
+    | Unfocus
 
 
-{-| Sets the error text for the input.
--}
-error : String -> ByDeviceBuilder { a | textfield : Compatible } TextField
-error val =
-    [ \(TextField config) -> ByDeviceProps (TextField { config | error = Just val }) (always <| always [])
-    ]
+type alias Model s =
+    { s | textfield : Indexed State }
 
 
-{-| Sets the initial value for the input.
--}
-value : String -> ByDeviceBuilder { a | textfield : Compatible } TextField
-value val =
-    [ \(TextField config) -> ByDeviceProps (TextField { config | value = Just val }) (always <| always [])
-    ]
-
-
-{-| Makes the input disabled.
--}
-disabled : ByDeviceBuilder { a | textfield : Compatible } TextField
-disabled =
-    [ \(TextField config) -> ByDeviceProps (TextField { config | disabled = True }) (always <| always [])
-    ]
-
-
-
--- COMPONENT
-
-
-type alias Store s =
-    { s | textfield : Indexed Model }
-
-
-react : (Component.Msg Msg -> msg) -> Msg -> Index -> Store s -> ( Maybe (Store s), Cmd msg )
-react =
+update : (Component.Msg Msg -> msg) -> Msg -> Index -> Model s -> ( Maybe (Model s), Cmd msg )
+update =
     let
         ( get, set ) =
             Component.indexed .textfield (\x c -> { c | textfield = x }) default
@@ -288,17 +312,4 @@ react =
     Component.react get
         set
         Component.TextfieldMsg
-        update
-
-
-render :
-    (Component.Msg Msg -> msg)
-    -> Index
-    -> Store s
-    -> SimpleElementBuilder { a | textfield : Compatible } TextField msg
-render =
-    let
-        ( get, set ) =
-            Component.indexed .textfield (\x c -> { c | textfield = x }) default
-    in
-    Component.render get textField Component.TextfieldMsg
+        innerUpdate

@@ -188,8 +188,7 @@ wrapper responsive =
 
 
 type alias Model =
-    { textfield : Component.Indexed Textfield.Model
-    }
+    Textfield.Model {}
 
 
 init : Model
@@ -212,4 +211,4 @@ update_ : (Msg -> m) -> Msg -> Model -> ( Maybe Model, Cmd m )
 update_ lift msg store =
     case msg of
         Component.TextfieldMsg idx innerMsg ->
-            Textfield.react lift innerMsg idx store
+            Textfield.update lift innerMsg idx store
