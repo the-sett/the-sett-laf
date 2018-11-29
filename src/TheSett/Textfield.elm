@@ -3,7 +3,7 @@ module TheSett.Textfield exposing (Model, Msg, global, react, render, textField,
 import Css
 import Css.Global
 import Html.Styled exposing (Attribute, Html, div, label, span, styled)
-import Html.Styled.Attributes exposing (for, name)
+import Html.Styled.Attributes exposing (classList, for, name)
 import Html.Styled.Events exposing (onBlur, onFocus)
 import Responsive
     exposing
@@ -69,8 +69,8 @@ default =
     { focus = False }
 
 
-update : x -> Msg -> Model -> ( Maybe Model, Cmd msg )
-update _ msg model =
+update : (Msg -> msg) -> Msg -> Model -> ( Maybe Model, Cmd msg )
+update lift msg model =
     case msg of
         Focus ->
             ( Just { model | focus = True }, Cmd.none )
@@ -112,7 +112,9 @@ textField lift model builders attributes innerHtml responsive =
             , Css.property "transition" "all 0.2s ease"
             , Css.pointerEvents Css.none
             ]
-            [ for id ]
+            [ for id
+            , classList [ ( "er-textfield--focus-floating", model.focus ) ]
+            ]
             innerHtml
         , styled Html.Styled.input
             [ Css.border <| Css.px 0
