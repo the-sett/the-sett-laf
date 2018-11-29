@@ -287,6 +287,17 @@ view lift model builders attributes innerHtml responsive =
         optionalAttributes =
             [ Maybe.map Html.Styled.Attributes.value config.value ]
                 |> Maybe.Extra.values
+
+        dirty =
+            case config.value of
+                Just "" ->
+                    False
+
+                Just _ ->
+                    True
+
+                Nothing ->
+                    model.dirty
     in
     styled div
         []
@@ -298,7 +309,7 @@ view lift model builders attributes innerHtml responsive =
             [ for id
             , classList
                 [ ( "er-textfield--label", True )
-                , ( "er-textfield--label-floating", model.focus || model.dirty )
+                , ( "er-textfield--label-floating", model.focus || dirty )
                 ]
             ]
             innerHtml
