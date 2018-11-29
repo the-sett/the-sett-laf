@@ -86,6 +86,7 @@ import ResponsiveDSL
         , OuterBuilder
         , StyleBuilder
         , applyDevicesToBuilders
+        , chainCtxAcrossBuilders
         )
 import Styles exposing (lg, md, sm, xl)
 
@@ -120,35 +121,6 @@ columnProps gridCtx =
 
         Column props ->
             props
-
-
-{-| Takes an initial context and passes it down a list of contextual style builders, each of which may
-modify the context.
-
-The result is a pair containing the list of style builders, and the context output from the last
-contextual style builder in the list.
-
--}
-chainCtxAcrossBuilders : ctx -> List (List (ctx -> Builder a ctx)) -> ( List (Builder a ctx), ctx )
-chainCtxAcrossBuilders initialCtx builders =
-    List.concat builders
-        |> List.foldl
-            (\styleFn ( accum, inCtx ) ->
-                let
-                    responsiveBuilder =
-                        styleFn inCtx
-
-                    nextCtx =
-                        case responsiveBuilder of
-                            ConstForDevice _ newCtx _ ->
-                                newCtx
-
-                            ByDeviceProps newCtx _ ->
-                                newCtx
-                in
-                ( responsiveBuilder :: accum, nextCtx )
-            )
-            ( [], initialCtx )
 
 
 

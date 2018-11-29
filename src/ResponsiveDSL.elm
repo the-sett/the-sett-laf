@@ -3,6 +3,7 @@ module ResponsiveDSL exposing
     , Builder(..), ByDeviceBuilder, ContainerBuilder, ConstDeviceBuilder
     , ElementBuilder, StyleBuilder, OuterBuilder, SimpleElementBuilder
     , applyDevicesToBuilders
+    , chainCtxAcrossBuilders
     )
 
 {-|
@@ -22,6 +23,11 @@ module ResponsiveDSL exposing
 # For applying responsive devices.
 
 @docs applyDevicesToBuilders
+
+
+# For building up the configuration context with builders.
+
+@docs chainCtxAcrossBuilders
 
 -}
 
@@ -140,3 +146,32 @@ applyDevicesToBuilders buildersList responsive =
                 buildersList
                 |> List.concat
         )
+
+
+{-| Takes an initial context and passes it down a list of contextual style builders, each of which may
+modify the context.
+
+The result is a pair containing the list of style builders, and the context output from the last
+contextual style builder in the list.
+
+-}
+chainCtxAcrossBuilders : ctx -> List (List (ctx -> Builder a ctx)) -> ( List (Builder a ctx), ctx )
+chainCtxAcrossBuilders initialCtx builders =
+    List.concat builders
+        |> List.foldl
+            (\styleFn ( accum, inCtx ) ->
+                let
+                    responsiveBuilder =
+                        styleFn inCtx
+
+                    nextCtx =
+                        case responsiveBuilder of
+                            ConstForDevice _ newCtx _ ->
+                                newCtx
+
+                            ByDeviceProps newCtx _ ->
+                                newCtx
+                in
+                ( responsiveBuilder :: accum, nextCtx )
+            )
+            ( [], initialCtx )
