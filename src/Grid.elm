@@ -69,8 +69,8 @@ import Html.Styled exposing (Attribute, Html, div, styled, text)
 import Responsive
     exposing
         ( Device(..)
-        , DeviceSpec
         , DeviceProps
+        , DeviceSpec
         , ResponsiveStyle
         , deviceStyle
         , deviceStyles
@@ -203,12 +203,11 @@ row builders attributes innerHtml parentCtx responsive =
 col : ElementBuilder { a | col : Compatible } Grid msg
 col builders attributes innerHtml parentCtx responsive =
     let
-        ctx =
+        initialCtx =
             Column <| columnProps parentCtx
 
-        flatBuilders =
-            List.concat builders
-                |> List.map (\gridFn -> gridFn ctx)
+        ( flatBuilders, ctx ) =
+            chainCtxAcrossBuilders initialCtx builders
     in
     styled div
         [ boxSizing borderBox
