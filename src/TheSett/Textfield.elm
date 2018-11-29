@@ -1,4 +1,40 @@
-module TheSett.Textfield exposing (Model, Msg, global, react, render, textField, update)
+module TheSett.Textfield exposing
+    ( global
+    , textField
+    , labelText, labelFloat, error, value, disabled
+    , react, render
+    , Model, Msg(..), update
+    , Config, Store, TextField(..), default, defaultConfig
+    )
+
+{-| For building text inputs.
+
+
+# Global Snippet to add to the stylesheet.
+
+@docs global
+
+
+# Builders for building different kinds of textfields.
+
+@docs textField
+
+
+# Builders for configuring textfields.
+
+@docs labelText, labelFloat, error, value, disabled
+
+
+# Component model for the textfield (internal use).
+
+@docs react, render
+
+
+# TEA model for the textfield (internal use).
+
+@docs Model, Msg, update
+
+-}
 
 import Css
 import Css.Global
@@ -24,6 +60,7 @@ import ResponsiveDSL
         , SimpleElementBuilder
         , StyleBuilder
         , applyDevicesToBuilders
+        , chainCtxAcrossBuilders
         )
 import Styles
 import TheSett.Component as Component exposing (Index, Indexed, indexAsId)
@@ -114,6 +151,12 @@ textField lift model builders attributes innerHtml responsive =
         id =
             -- indexAsId index
             "id"
+
+        initialCtx =
+            TextField defaultConfig
+
+        ( flatBuilders, ctx ) =
+            chainCtxAcrossBuilders initialCtx builders
     in
     styled div
         [ Css.position Css.relative
