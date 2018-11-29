@@ -1,4 +1,7 @@
-module TheSett.Laf exposing (style, fonts, responsiveMeta, devices, wrapper)
+module TheSett.Laf exposing
+    ( style, fonts, responsiveMeta, devices, wrapper
+    , Model, Msg, init
+    )
 
 {-| The Sett Look and Feel
 
@@ -10,13 +13,15 @@ module TheSett.Laf exposing (style, fonts, responsiveMeta, devices, wrapper)
 
 import Css
 import Css.Global
+import Dict exposing (Dict)
 import Grid
 import Html.Styled exposing (Html, node)
 import Html.Styled.Attributes exposing (attribute, href, name, rel)
 import Responsive exposing (Device(..), DeviceProps, ResponsiveStyle, fontMediaStyles)
 import TheSett.Buttons as Buttons
+import TheSett.Component as Component
 import TheSett.Reset as Reset
-import TheSett.TextField as TextField
+import TheSett.Textfield as Textfield
 import TypeScale exposing (TypeScale, base, h1, h2, h3, h4, majorThird)
 
 
@@ -154,7 +159,7 @@ global scale respStyle =
     Reset.global
         ++ Responsive.global respStyle
         ++ typography respStyle
-        ++ TextField.global
+        ++ Textfield.global
 
 
 {-| The CSS as an HTML <style> element.
@@ -176,6 +181,25 @@ wrapper responsive =
             Css.maxWidth (Css.px device.deviceProps.wrapperWidth)
     ]
         |> Css.batch
+
+
+
+-- Stateful components
+
+
+type alias Model =
+    { textfield : Component.Indexed Textfield.Model
+    }
+
+
+init : Model
+init =
+    { textfield = Dict.empty
+    }
+
+
+type alias Msg =
+    Component.Msg Textfield.Msg
 
 
 

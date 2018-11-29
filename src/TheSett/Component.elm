@@ -16,7 +16,7 @@ import Dict exposing (Dict)
 
 
 type Msg textfield
-    = TextFieldMsg Index textfield
+    = TextfieldMsg Index textfield
 
 
 type alias Index =

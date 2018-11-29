@@ -1,8 +1,8 @@
-module TheSett.TextField exposing (Model, Msg, global, init, textField, update)
+module TheSett.Textfield exposing (Model, Msg, global, render, textField, update)
 
 import Css
 import Css.Global
-import Html.Styled exposing (div, label, span, styled)
+import Html.Styled exposing (Attribute, Html, div, label, span, styled)
 import Html.Styled.Attributes exposing (for, name)
 import Html.Styled.Events exposing (onBlur, onFocus)
 import Responsive
@@ -25,7 +25,7 @@ import ResponsiveDSL
         , applyDevicesToBuilders
         )
 import Styles
-import TheSett.Component exposing (Index, indexAsId)
+import TheSett.Component as Component exposing (Index, Indexed, indexAsId)
 
 
 {-| The global snippet for text fields.
@@ -65,18 +65,18 @@ type alias Model =
     { focus : Bool }
 
 
-init =
+default =
     { focus = False }
 
 
-update : Msg -> Model -> Model
-update msg model =
+update : x -> Msg -> Model -> ( Maybe Model, Cmd msg )
+update _ msg model =
     case msg of
         Focus ->
-            { model | focus = True }
+            ( Just { model | focus = True }, Cmd.none )
 
         Unfocus ->
-            { model | focus = False }
+            ( Just { model | focus = False }, Cmd.none )
 
 
 {-| The text field styling context.
@@ -85,11 +85,12 @@ type TextField
     = TextField
 
 
-textField : Index -> SimpleElementBuilder { a | textField : Compatible } TextField msg
-textField index builders attributes innerHtml responsive =
+textField : (Msg -> msg) -> Model -> SimpleElementBuilder { a | textField : Compatible } TextField msg
+textField lift model builders attributes innerHtml responsive =
     let
         id =
-            indexAsId index
+            -- indexAsId index
+            "id"
     in
     styled div
         [ Css.position Css.relative
@@ -123,9 +124,8 @@ textField index builders attributes innerHtml responsive =
             ]
             ([ Html.Styled.Attributes.id id
              , name id
-
-             --  , onFocus Focus
-             --  , onBlur Unfocus
+             , onFocus <| lift Focus
+             , onBlur <| lift Unfocus
              ]
                 ++ attributes
             )
@@ -158,3 +158,36 @@ textField index builders attributes innerHtml responsive =
             []
             []
         ]
+
+
+
+-- COMPONENT
+
+
+type alias Store s =
+    { s | textfield : Indexed Model }
+
+
+react : (Component.Msg Msg -> msg) -> Msg -> Index -> Store s -> ( Maybe (Store s), Cmd msg )
+react =
+    let
+        ( get, set ) =
+            Component.indexed .textfield (\x c -> { c | textfield = x }) default
+    in
+    Component.react get
+        set
+        Component.TextfieldMsg
+        update
+
+
+render :
+    (Component.Msg Msg -> msg)
+    -> Index
+    -> Store s
+    -> SimpleElementBuilder { a | textField : Compatible } TextField msg
+render =
+    let
+        ( get, set ) =
+            Component.indexed .textfield (\x c -> { c | textfield = x }) default
+    in
+    Component.render get textField Component.TextfieldMsg
