@@ -211,6 +211,8 @@ type Textfield
 -- The textfield DSL builders.
 
 
+{-| Creates a plain text field.
+-}
 text :
     (Component.Msg Msg -> msg)
     -> Index
