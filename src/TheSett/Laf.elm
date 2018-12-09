@@ -7,6 +7,11 @@ module TheSett.Laf exposing
 
 @docs style, fonts, responsiveMeta, devices, wrapper
 
+
+# TEA pattern for managing UI elements with internal state.
+
+@docs Model, Msg, init, update
+
 -}
 
 --exposing (Device(..), DeviceProps, ResponsiveStyle, fontMediaStyles, fontSizeMixin, mapMixins, mediaMixins)
@@ -187,20 +192,28 @@ wrapper responsive =
 -- Stateful components
 
 
+{-| A model that holds the states for all stateful components by their indexes.
+-}
 type alias Model =
     Textfield.Model {}
 
 
+{-| Initial empty state for all stateful components.
+-}
 init : Model
 init =
     { textfield = Dict.empty
     }
 
 
+{-| Brings together all of the internal messages that stateful components can use.
+-}
 type alias Msg =
     Component.Msg Textfield.Msg
 
 
+{-| Processes internal messages for all stateful component types.
+-}
 update : (Msg -> m) -> Msg -> Model -> ( Model, Cmd m )
 update lift msg model =
     update_ lift msg model
