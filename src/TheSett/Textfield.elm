@@ -337,16 +337,26 @@ view lift model builders attributes innerHtml responsive =
 -- TEA model for the textfield.
 
 
+{-| The events that text fields produce and consume to maintain their internal state.
+-}
 type Msg
     = Focus
     | Unfocus
     | Input String
 
 
+{-| Holds a mapping from ids to textfield state.
+-}
 type alias Model s =
     { s | textfield : Indexed State }
 
 
+{-| Deals with text field messages, by locating a text field by its id, or creating a
+new default state for that text field is one does not exist yet.
+
+The internal message is then processed against that text fields state.
+
+-}
 update : (Component.Msg Msg -> msg) -> Msg -> Index -> Model s -> ( Maybe (Model s), Cmd msg )
 update =
     let
