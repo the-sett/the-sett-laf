@@ -216,7 +216,7 @@ type alias Msg =
 -}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    update_ msg model
+    update_ identity msg model
         |> Tuple.mapFirst (Maybe.withDefault model)
 
 
