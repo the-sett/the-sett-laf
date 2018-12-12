@@ -1,6 +1,6 @@
 module TheSett.Textfield exposing
     ( global
-    , text
+    , text, password
     , labelText, labelFloat, error, value, disabled
     , Model, Msg(..), update
     )
@@ -15,7 +15,7 @@ module TheSett.Textfield exposing
 
 # Builders for building different kinds of textfields.
 
-@docs text
+@docs text, password
 
 
 # Builders for configuring textfields.
@@ -33,7 +33,7 @@ import Css
 import Css.Global
 import Html.Events
 import Html.Styled exposing (Attribute, Html, div, label, span, styled)
-import Html.Styled.Attributes exposing (classList, for, name)
+import Html.Styled.Attributes exposing (classList, for, name, type_)
 import Html.Styled.Events exposing (on, onBlur, onFocus, onInput)
 import Json.Decode as Decoder
 import Maybe.Extra
@@ -184,8 +184,14 @@ innerUpdate lift msg model =
 -- The styling and configuration context.
 
 
+type InputType
+    = Text
+    | Password
+
+
 type alias Config =
-    { labelText : Maybe String
+    { inputType : InputType
+    , labelText : Maybe String
     , labelFloat : Bool
     , error : Maybe String
     , value : Maybe String
@@ -195,7 +201,8 @@ type alias Config =
 
 defaultConfig : Config
 defaultConfig =
-    { labelText = Nothing
+    { inputType = Text
+    , labelText = Nothing
     , labelFloat = False
     , error = Nothing
     , value = Nothing
@@ -223,7 +230,22 @@ text =
         ( get, set ) =
             Component.indexed .textfield (\x c -> { c | textfield = x }) default
     in
-    Component.render get view Component.TextfieldMsg
+    Component.render get (view defaultConfig) Component.TextfieldMsg
+
+
+{-| Creates a password text field.
+-}
+password :
+    (Component.Msg Msg -> msg)
+    -> Index
+    -> Model s
+    -> SimpleElementBuilder { a | textfield : Compatible } Textfield msg
+password =
+    let
+        ( get, set ) =
+            Component.indexed .textfield (\x c -> { c | textfield = x }) default
+    in
+    Component.render get (view { defaultConfig | inputType = Password }) Component.TextfieldMsg
 
 
 {-| Sets the text for the label.
@@ -270,15 +292,15 @@ disabled =
 -- View rendering.
 
 
-view : (Msg -> msg) -> State -> SimpleElementBuilder { a | textfield : Compatible } Textfield msg
-view lift model builders attributes innerHtml responsive =
+view : Config -> (Msg -> msg) -> State -> SimpleElementBuilder { a | textfield : Compatible } Textfield msg
+view initialConfig lift model builders attributes innerHtml responsive =
     let
         id =
             -- indexAsId index
             "id"
 
         initialCtx =
-            Textfield defaultConfig
+            Textfield initialConfig
 
         ( flatBuilders, ctx ) =
             chainCtxAcrossBuilders initialCtx builders
@@ -320,6 +342,13 @@ view lift model builders attributes innerHtml responsive =
             ([ classList [ ( "er-textfield--input", True ) ]
              , Html.Styled.Attributes.id id
              , name id
+             , case config.inputType of
+                Text ->
+                    type_ "text"
+
+                Password ->
+                    type_ "password"
+             , Html.Styled.Attributes.disabled config.disabled
              , onFocus <| lift Focus
              , onBlur <| lift Unfocus
              , on "input" <|
