@@ -1,11 +1,13 @@
 module State exposing (Model, Msg(..), Page(..))
 
+import TheSett.Laf as Laf
+
+
 {-| Keeping the update structure flat for this simple application.
 -}
-
-
 type Msg
-    = Toggle Bool
+    = LafMsg Laf.Msg
+    | Toggle Bool
     | SwitchTo Page
     | NoOp
 
@@ -13,12 +15,14 @@ type Msg
 type Page
     = Typography
     | Buttons
+    | Textfield
     | Grid
     | Cards
     | Markdown
 
 
 type alias Model =
-    { debug : Bool
+    { laf : Laf.Model
+    , debug : Bool
     , page : Page
     }

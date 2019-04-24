@@ -214,9 +214,9 @@ type alias Msg =
 
 {-| Processes internal messages for all stateful component types.
 -}
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    update_ identity msg model
+update : (Msg -> m) -> Msg -> Model -> ( Model, Cmd m )
+update lift msg model =
+    update_ lift msg model
         |> Tuple.mapFirst (Maybe.withDefault model)
 
 

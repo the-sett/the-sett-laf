@@ -8,6 +8,7 @@ import Demo.Buttons
 import Demo.Cards
 import Demo.Grid
 import Demo.MkDown
+import Demo.Textfield
 import Demo.Typography
 import Html.Styled exposing (div, input, text, toUnstyled)
 import Html.Styled.Attributes exposing (checked, type_)
@@ -31,7 +32,7 @@ main =
 
 
 init () =
-    ( { debug = False, page = Typography }, Cmd.none )
+    ( { laf = Laf.init, debug = False, page = Typography }, Cmd.none )
 
 
 subscriptions _ =
@@ -41,6 +42,10 @@ subscriptions _ =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case Debug.log "update" msg of
+        LafMsg lafMsg ->
+            Laf.update LafMsg lafMsg model.laf
+                |> Tuple.mapFirst (\laf -> { model | laf = laf })
+
         Toggle state ->
             ( { model | debug = state }, Cmd.none )
 
@@ -100,6 +105,9 @@ viewForPage page =
 
         Buttons ->
             Demo.Buttons.view
+
+        Textfield ->
+            Demo.Textfield.view
 
         Grid ->
             Demo.Grid.view

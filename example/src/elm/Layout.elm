@@ -96,6 +96,10 @@ topHeader responsive model =
                         , styled li
                             [ Css.display Css.inline ]
                             []
+                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Textfield ] [ text "Textfield" ] ]
+                        , styled li
+                            [ Css.display Css.inline ]
+                            []
                             [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Grid ] [ text "Grids" ] ]
                         , styled li
                             [ Css.display Css.inline ]
