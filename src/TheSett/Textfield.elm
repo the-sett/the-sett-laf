@@ -1,7 +1,7 @@
 module TheSett.Textfield exposing
     ( global
     , text, password
-    , labelText, labelFloat, error, value, disabled
+    , labelText, labelFloat, error, value, disabled, autocomplete
     , Model, Msg(..), update
     )
 
@@ -20,7 +20,7 @@ module TheSett.Textfield exposing
 
 # Builders for configuring textfields.
 
-@docs labelText, labelFloat, error, value, disabled
+@docs labelText, labelFloat, error, value, disabled, autocomplete
 
 
 # TEA model for the textfield (internal use).
@@ -196,6 +196,7 @@ type alias Config =
     , error : Maybe String
     , value : Maybe String
     , disabled : Bool
+    , autocomplete : Bool
     }
 
 
@@ -207,6 +208,7 @@ defaultConfig =
     , error = Nothing
     , value = Nothing
     , disabled = False
+    , autocomplete = True
     }
 
 
@@ -288,6 +290,14 @@ disabled =
     ]
 
 
+{-| Sets autocomplete=off on the input.
+-}
+autocomplete : Bool -> ByDeviceBuilder { a | textfield : Compatible } Textfield
+autocomplete state =
+    [ \(Textfield config) -> ByDeviceProps (Textfield { config | autocomplete = state }) (always <| always [])
+    ]
+
+
 
 -- View rendering.
 
@@ -309,7 +319,8 @@ view initialConfig lift model builders attributes innerHtml responsive =
             ctx
 
         optionalAttributes =
-            [ Maybe.map Html.Styled.Attributes.value config.value ]
+            [ Maybe.map Html.Styled.Attributes.value config.value
+            ]
                 |> Maybe.Extra.values
 
         dirty =
@@ -349,6 +360,7 @@ view initialConfig lift model builders attributes innerHtml responsive =
                 Password ->
                     type_ "password"
              , Html.Styled.Attributes.disabled config.disabled
+             , Html.Styled.Attributes.autocomplete config.autocomplete
              , onFocus <| lift Focus
              , onBlur <| lift Unfocus
              , on "input" <|
