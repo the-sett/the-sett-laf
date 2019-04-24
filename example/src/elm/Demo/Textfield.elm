@@ -23,7 +23,9 @@ view =
                 LafMsg
                 [ 1 ]
                 model.laf
-                [ Textfield.value "default" ]
+                [ Textfield.value "default"
+                , Textfield.autocomplete False
+                ]
                 []
                 [ text "Search" ]
                 devices
