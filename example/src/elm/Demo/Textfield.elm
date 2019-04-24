@@ -3,6 +3,7 @@ module Demo.Textfield exposing (view)
 import Css
 import Html.Styled exposing (div, h1, h2, h3, h4, li, ol, p, styled, text, ul)
 import Html.Styled.Attributes exposing (id)
+import Html.Styled.Events exposing (onInput)
 import Html.Styled.Lazy exposing (lazy2)
 import State exposing (Model, Msg(..))
 import Structure exposing (Template(..))
@@ -23,10 +24,10 @@ view =
                 LafMsg
                 [ 1 ]
                 model.laf
-                [ Textfield.value "default"
+                [ Textfield.value model.textfield
                 , Textfield.autocomplete False
                 ]
-                []
+                [ onInput UpdateTextField ]
                 [ text "Search" ]
                 devices
             ]

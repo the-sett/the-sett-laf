@@ -32,7 +32,13 @@ main =
 
 
 init () =
-    ( { laf = Laf.init, debug = False, page = Typography }, Cmd.none )
+    ( { laf = Laf.init
+      , debug = False
+      , page = Typography
+      , textfield = "default"
+      }
+    , Cmd.none
+    )
 
 
 subscriptions _ =
@@ -51,6 +57,9 @@ update msg model =
 
         SwitchTo page ->
             ( { model | page = page }, Cmd.none )
+
+        UpdateTextField val ->
+            ( { model | textfield = val }, Cmd.none )
 
         NoOp ->
             ( model, Cmd.none )

@@ -10,6 +10,7 @@ type Msg
     | Toggle Bool
     | SwitchTo Page
     | NoOp
+    | UpdateTextField String
 
 
 type Page
@@ -25,4 +26,5 @@ type alias Model =
     { laf : Laf.Model
     , debug : Bool
     , page : Page
+    , textfield : String
     }
