@@ -38,7 +38,7 @@ global responsive =
         , Css.Global.footer
         ]
         [ Css.backgroundPosition2 (Css.px 0) (Css.px 0)
-        , Css.property "background-image" (box "rgba(0, 0, 255, .3)")
+        , Css.property "background-image" (box "rgba(0, 0, 255, 1)")
         ]
     , Css.Global.each
         [ Css.Global.table
@@ -52,12 +52,12 @@ global responsive =
         , Css.Global.typeSelector "object"
         , Css.Global.span
         ]
-        [ Css.property "background-image" (box "rgba(255, 0, 0, .3)")
+        [ Css.property "background-image" (box "rgba(255, 0, 0, 1)")
         ]
     , Css.Global.each
         [ Css.Global.li
         ]
-        [ Css.property "background-image" (box "rgba(0, 255, 0, .3)")
+        [ Css.property "background-image" (box "rgba(0, 255, 0, 1)")
         ]
     , Css.Global.each
         [ Css.Global.li
@@ -66,16 +66,6 @@ global responsive =
         , Css.Global.header
         ]
         [ Css.backgroundColor Css.transparent |> Css.important
-        ]
-    , Css.Global.each
-        [ Css.Global.typeSelector "dialog"
-        , Css.Global.body
-        ]
-        [ Css.property "background-image" (lines "hsla(200, 100%, 50%, .2)")
-        , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
-        , Css.backgroundRepeat Css.repeat
-        , Responsive.deviceStyle responsive <|
-            \device -> Css.backgroundSize2 (rhythmPx 1 device) (rhythmPx 1 device)
         ]
     ]
 
@@ -92,5 +82,21 @@ box color =
         ++ " 0px, transparent 1px)"
 
 
+{-| This code can be used to display rhythm lines. It usually fails to pixel align
+with the rendered page though, as web rendering can never be pixel perfect. Its
+a nice idea, but rarely works out.
+
+    Css.Global.each
+        [ Css.Global.typeSelector "dialog"
+        , Css.Global.body
+        ]
+        [ Css.property "background-image" (lines "hsla(200, 100%, 50%, .2)")
+        , Css.backgroundPosition2 (Css.px 0) (Css.px -1)
+        , Css.backgroundRepeat Css.repeat
+        , Responsive.deviceStyle responsive <|
+            \device -> Css.backgroundSize2 (rhythmPx 1 device) (rhythmPx 1 device)
+        ]
+
+-}
 lines color =
     "linear-gradient(to bottom, " ++ color ++ " 1px, transparent 1px)"
