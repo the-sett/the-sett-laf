@@ -12,6 +12,7 @@ import Styles exposing (md, sm)
 import Svg.Styled
 import TheSett.Laf as Laf exposing (wrapper)
 import TheSett.Logo as Logo
+import TheSett.TopHeader as TopHeader
 
 
 layout : Layout Msg Model
@@ -25,7 +26,7 @@ pageBody template =
         div
             []
             [ debugToggle devices model
-            , topHeader devices model
+            , TopHeader.topHeader devices
             , case template of
                 Dynamic fn ->
                     fn devices model
@@ -38,83 +39,84 @@ pageBody template =
         |> Dynamic
 
 
-topHeader : ResponsiveStyle -> Model -> Html Msg
-topHeader responsive model =
-    styled div
-        [ Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 6) (Css.px 0) (Css.rgba 0 0 0 0.75)
-        ]
-        []
-        [ Grid.grid
-            [ sm
-                [ Grid.columns 12
-                , Styles.styles
-                    [ wrapper responsive
-                    , Responsive.deviceStyle responsive <|
-                        \device -> Css.height (Responsive.rhythmPx 3 device)
-                    ]
-                ]
-            ]
-            []
-            [ Grid.row
-                [ sm [ Grid.middle ] ]
-                []
-                [ Grid.col
-                    [ sm
-                        [ Grid.columns 1
-                        , Styles.styles
-                            [ Responsive.deviceStyles responsive <|
-                                \device ->
-                                    [ Css.height (Responsive.rhythmPx 3 device)
-                                    , Css.width (Responsive.rhythmPx 3 device)
-                                    ]
-                            ]
-                        ]
-                    ]
-                    []
-                    [ styled div
-                        [ Responsive.deviceStyles responsive (Responsive.rhythmSplit 0.1 3)
-                        ]
-                        []
-                        [ Svg.Styled.fromUnstyled Logo.logo ]
-                    ]
-                , Grid.col
-                    [ sm [ Styles.hidden ]
-                    , md [ Styles.visible, Grid.columns 10, Grid.center, Styles.styles [ Css.textAlign Css.center ] ]
-                    ]
-                    []
-                    [ styled ul
-                        [ Css.display Css.inline ]
-                        []
-                        [ styled li
-                            [ Css.display Css.inline ]
-                            []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Typography ] [ text "Typography" ] ]
-                        , styled li
-                            [ Css.display Css.inline ]
-                            []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Buttons ] [ text "Buttons" ] ]
-                        , styled li
-                            [ Css.display Css.inline ]
-                            []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Textfield ] [ text "Textfield" ] ]
-                        , styled li
-                            [ Css.display Css.inline ]
-                            []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Grid ] [ text "Grids" ] ]
-                        , styled li
-                            [ Css.display Css.inline ]
-                            []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Cards ] [ text "Cards" ] ]
-                        , styled li
-                            [ Css.display Css.inline ]
-                            []
-                            [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Markdown ] [ text "Markdown" ] ]
-                        ]
-                    ]
-                ]
-            ]
-            responsive
-        ]
+
+-- topHeader : ResponsiveStyle -> Model -> Html Msg
+-- topHeader responsive model =
+--     styled div
+--         [ Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 6) (Css.px 0) (Css.rgba 0 0 0 0.75)
+--         ]
+--         []
+--         [ Grid.grid
+--             [ sm
+--                 [ Grid.columns 12
+--                 , Styles.styles
+--                     [ wrapper responsive
+--                     , Responsive.deviceStyle responsive <|
+--                         \device -> Css.height (Responsive.rhythmPx 3 device)
+--                     ]
+--                 ]
+--             ]
+--             []
+--             [ Grid.row
+--                 [ sm [ Grid.middle ] ]
+--                 []
+--                 [ Grid.col
+--                     [ sm
+--                         [ Grid.columns 1
+--                         , Styles.styles
+--                             [ Responsive.deviceStyles responsive <|
+--                                 \device ->
+--                                     [ Css.height (Responsive.rhythmPx 3 device)
+--                                     , Css.width (Responsive.rhythmPx 3 device)
+--                                     ]
+--                             ]
+--                         ]
+--                     ]
+--                     []
+--                     [ styled div
+--                         [ Responsive.deviceStyles responsive (Responsive.rhythmSplit 0.1 3)
+--                         ]
+--                         []
+--                         [ Svg.Styled.fromUnstyled Logo.logo ]
+--                     ]
+--                 , Grid.col
+--                     [ sm [ Styles.hidden ]
+--                     , md [ Styles.visible, Grid.columns 10, Grid.center, Styles.styles [ Css.textAlign Css.center ] ]
+--                     ]
+--                     []
+--                     [ styled ul
+--                         [ Css.display Css.inline ]
+--                         []
+--                         [ styled li
+--                             [ Css.display Css.inline ]
+--                             []
+--                             [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Typography ] [ text "Typography" ] ]
+--                         , styled li
+--                             [ Css.display Css.inline ]
+--                             []
+--                             [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Buttons ] [ text "Buttons" ] ]
+--                         , styled li
+--                             [ Css.display Css.inline ]
+--                             []
+--                             [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Textfield ] [ text "Textfield" ] ]
+--                         , styled li
+--                             [ Css.display Css.inline ]
+--                             []
+--                             [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Grid ] [ text "Grids" ] ]
+--                         , styled li
+--                             [ Css.display Css.inline ]
+--                             []
+--                             [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Cards ] [ text "Cards" ] ]
+--                         , styled li
+--                             [ Css.display Css.inline ]
+--                             []
+--                             [ styled a [ Css.padding (Css.px 10) ] [ onClick <| SwitchTo Markdown ] [ text "Markdown" ] ]
+--                         ]
+--                     ]
+--                 ]
+--             ]
+--             responsive
+--         ]
 
 
 debugToggle responsive model =

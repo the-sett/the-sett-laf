@@ -21,8 +21,8 @@ import TheSett.Logo as Logo
 
 {-| Standard top header.
 -}
-topHeader : ResponsiveStyle -> Html msg
-topHeader responsive =
+fullWidthHeader : ResponsiveStyle -> Html msg
+fullWidthHeader responsive =
     styled div
         [ Css.backgroundColor Colors.paperWhite
         , Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 1) (Css.px 0) (Css.rgba 0 0 0 0.25)
@@ -69,50 +69,49 @@ topHeader responsive =
         ]
 
 
-
--- topHeader : ResponsiveStyle -> Html msg
--- topHeader responsive =
---     styled div
---         [ Css.backgroundColor Colors.paperWhite
---         , Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 1) (Css.px 0) (Css.rgba 0 0 0 0.25)
---         ]
---         []
---         [ Grid.grid
---             [ sm
---                 [ Grid.columns 12
---                 , Styles.styles
---                     [ wrapper responsive
---                     , Responsive.deviceStyle responsive <|
---                         \device -> Css.height (Responsive.rhythmPx 4 device)
---                     ]
---                 ]
---             ]
---             []
---             [ Grid.row
---                 [ sm [ Grid.middle ] ]
---                 [ [ Css.property "-webkit-user-select" "none"
---                   , Css.property "-moz-user-select" "none"
---                   , Css.property "-ms-user-select" "none"
---                   , Css.property "user-select" "none"
---                   ]
---                     |> Html.Styled.Attributes.css
---                 ]
---                 [ Grid.col
---                     [ sm
---                         [ Grid.columns 1
---                         , Styles.styles
---                             [ Responsive.deviceStyles responsive <|
---                                 \device ->
---                                     [ Css.marginTop (Responsive.rhythmPx 0.5 device)
---                                     , Css.height (Responsive.rhythmPx 3 device)
---                                     , Css.width (Responsive.rhythmPx 3 device)
---                                     ]
---                             ]
---                         ]
---                     ]
---                     []
---                     [ Svg.Styled.fromUnstyled Logo.logo ]
---                 ]
---             ]
---             responsive
---         ]
+topHeader : ResponsiveStyle -> Html msg
+topHeader responsive =
+    styled div
+        [ Css.backgroundColor Colors.paperWhite
+        , Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 1) (Css.px 0) (Css.rgba 0 0 0 0.25)
+        ]
+        []
+        [ Grid.grid
+            [ sm
+                [ Grid.columns 12
+                , Styles.styles
+                    [ wrapper responsive
+                    , Responsive.deviceStyle responsive <|
+                        \device -> Css.height (Responsive.rhythmPx 4 device)
+                    ]
+                ]
+            ]
+            []
+            [ Grid.row
+                [ sm [ Grid.middle ] ]
+                [ [ Css.property "-webkit-user-select" "none"
+                  , Css.property "-moz-user-select" "none"
+                  , Css.property "-ms-user-select" "none"
+                  , Css.property "user-select" "none"
+                  ]
+                    |> Html.Styled.Attributes.css
+                ]
+                [ Grid.col
+                    [ sm
+                        [ Grid.columns 1
+                        , Styles.styles
+                            [ Responsive.deviceStyles responsive <|
+                                \device ->
+                                    [ Css.marginTop (Responsive.rhythmPx 0.5 device)
+                                    , Css.height (Responsive.rhythmPx 3 device)
+                                    , Css.width (Responsive.rhythmPx 3 device)
+                                    ]
+                            ]
+                        ]
+                    ]
+                    []
+                    [ Svg.Styled.fromUnstyled Logo.logo ]
+                ]
+            ]
+            responsive
+        ]
