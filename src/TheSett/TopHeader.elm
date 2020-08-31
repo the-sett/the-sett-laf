@@ -1,5 +1,11 @@
 module TheSett.TopHeader exposing (topHeader)
 
+{-| Standardizing the top banner and its variations.
+
+@docs topHeader
+
+-}
+
 import Css
 import Grid
 import Html.Styled exposing (Html, a, button, div, input, li, nav, node, styled, text, ul)
@@ -13,6 +19,8 @@ import TheSett.Laf as Laf exposing (wrapper)
 import TheSett.Logo as Logo
 
 
+{-| Standard top header.
+-}
 topHeader : ResponsiveStyle -> Html msg
 topHeader responsive =
     styled div
