@@ -11,11 +11,13 @@
         "TypeScale",
         "TheSett.Buttons",
         "TheSett.Cards",
+        "TheSett.Colors",
         "TheSett.Debug",
         "TheSett.Laf",
         "TheSett.Logo",
         "TheSett.Reset",
-        "TheSett.Textfield"
+        "TheSett.Textfield",
+        "TheSett.TopHeader"
     ],
     "elm-version": "0.19.0 <= v < 0.20.0",
     "dependencies": {
