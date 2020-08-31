@@ -24,22 +24,11 @@ import Html.Styled exposing (Html, node)
 import Html.Styled.Attributes exposing (attribute, href, name, rel)
 import Responsive exposing (Device(..), DeviceProps, ResponsiveStyle, fontMediaStyles)
 import TheSett.Buttons as Buttons
+import TheSett.Colors as Colors
 import TheSett.Component as Component
 import TheSett.Reset as Reset
 import TheSett.Textfield as Textfield
 import TypeScale exposing (TypeScale, base, h1, h2, h3, h4, majorThird)
-
-
-
--- Colors
-
-
-greyDark =
-    Css.hex "646464"
-
-
-printBlack =
-    Css.hex "242424"
 
 
 
@@ -134,7 +123,7 @@ typography respStyle =
         [ Css.fontFamilies [ "Source Sans Pro", "Helvetica" ]
         , Css.fontWeight <| Css.int 400
         , Css.textRendering Css.optimizeLegibility
-        , Css.color printBlack |> Css.important
+        , Css.color Colors.printBlack |> Css.important
         ]
 
     -- Headings are grey and bold.
@@ -144,7 +133,7 @@ typography respStyle =
         , Css.Global.h3
         , Css.Global.h4
         ]
-        [ Css.color greyDark |> Css.important
+        [ Css.color Colors.darkGrey |> Css.important
         , Css.fontWeight Css.bold
         ]
 

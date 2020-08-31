@@ -1,8 +1,14 @@
-module TheSett.Colors exposing (highlight, midGrey, paperWhite, softGrey)
+module TheSett.Colors exposing
+    ( paperWhite, printBlack
+    , softGrey, midGrey, darkGrey
+    , highlight
+    )
 
 {-| Defines some standard colors.
 
-@docs highlight, midGrey, paperWhite, softGrey
+@docs paperWhite, printBlack
+@docs softGrey, midGrey, darkGrey
+@docs highlight
 
 -}
 
@@ -16,6 +22,13 @@ paperWhite =
     Css.rgb 248 248 248
 
 
+{-| A print black, that is not 100% black.
+-}
+printBlack : Css.Color
+printBlack =
+    Css.hex "242424"
+
+
 {-| A soft grey.
 -}
 softGrey : Css.Color
@@ -23,11 +36,20 @@ softGrey =
     Css.rgb 225 212 214
 
 
-{-| A mig grey.
+{-| A mid grey.
 -}
 midGrey : Css.Color
 midGrey =
     Css.rgb 168 159 160
+
+
+
+{- A dark grey. -}
+
+
+darkGrey : Css.Color
+darkGrey =
+    Css.hex "646464"
 
 
 {-| The primary highlight color

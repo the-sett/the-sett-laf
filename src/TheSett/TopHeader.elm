@@ -1,8 +1,8 @@
-module TheSett.TopHeader exposing (topHeader)
+module TheSett.TopHeader exposing (topHeader, fullWidthHeader)
 
 {-| Standardizing the top banner and its variations.
 
-@docs topHeader
+@docs topHeader, fullWidthHeader
 
 -}
 
