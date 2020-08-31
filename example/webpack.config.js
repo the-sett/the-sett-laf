@@ -86,7 +86,7 @@ if (isDev) {
 
     devServer: {
       historyApiFallback: true,
-      contentBase: './src',
+      contentBase: './assets',
       inline: true,
       stats: 'errors-only',
       port: 9090,
