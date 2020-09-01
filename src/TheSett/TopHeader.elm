@@ -30,8 +30,7 @@ fullWidthHeader responsive =
             [ sm
                 [ Grid.columns 12
                 , Styles.styles
-                    [ wrapper responsive
-                    , Responsive.deviceStyle responsive <|
+                    [ Responsive.deviceStyle responsive <|
                         \device -> Css.height (Responsive.rhythmPx 2 device)
                     ]
                 ]
