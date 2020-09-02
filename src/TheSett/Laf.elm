@@ -1,11 +1,11 @@
 module TheSett.Laf exposing
-    ( style, fonts, responsiveMeta, devices, wrapper
+    ( style, fonts, monoFonts, responsiveMeta, devices, wrapper
     , Model, Msg, init, update
     )
 
 {-| The Sett Look and Feel
 
-@docs style, fonts, responsiveMeta, devices, wrapper
+@docs style, fonts, monoFonts, responsiveMeta, devices, wrapper
 
 
 # TEA pattern for managing UI elements with internal state.
@@ -105,9 +105,17 @@ fonts : Html msg
 fonts =
     node "link"
         [ href "https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700"
+        , rel "stylesheet"
+        ]
+        []
 
-        --href "https://fonts.googleapis.com/css?family=Open+Sans:400,600,700"
-        --, href "https://fonts.googleapis.com/css?family=Nobile:300,400,500,700"
+
+{-| Links for loading mono fonts.
+-}
+monoFonts : Html msg
+monoFonts =
+    node "link"
+        [ href "https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap"
         , rel "stylesheet"
         ]
         []
@@ -135,6 +143,15 @@ typography respStyle =
         ]
         [ Css.color Colors.darkGrey |> Css.important
         , Css.fontWeight Css.bold
+        ]
+
+    -- Mono fonts.
+    , Css.Global.each
+        [ Css.Global.pre ]
+        [ Css.fontFamilies [ "Source Code Pro", "monospace" ]
+        , Css.fontWeight <| Css.int 400
+        , Css.textRendering Css.optimizeLegibility
+        , Css.color Colors.printBlack |> Css.important
         ]
 
     -- Media queries to set all font sizes accross all devices.
