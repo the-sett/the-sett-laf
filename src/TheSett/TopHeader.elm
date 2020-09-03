@@ -31,7 +31,7 @@ fullWidthHeader responsive =
                 [ Grid.columns 12
                 , Styles.styles
                     [ Responsive.deviceStyle responsive <|
-                        \device -> Css.height (Responsive.rhythmPx 2 device)
+                        \device -> Css.height (Responsive.rhythmPx 1.5 device)
                     ]
                 ]
             ]
@@ -52,8 +52,8 @@ fullWidthHeader responsive =
                             [ Responsive.deviceStyles responsive <|
                                 \device ->
                                     [ Css.marginTop (Responsive.rhythmPx 0 device)
-                                    , Css.height (Responsive.rhythmPx 2 device)
-                                    , Css.width (Responsive.rhythmPx 2 device)
+                                    , Css.height (Responsive.rhythmPx 1.5 device)
+                                    , Css.width (Responsive.rhythmPx 1.5 device)
                                     ]
                             ]
                         ]
