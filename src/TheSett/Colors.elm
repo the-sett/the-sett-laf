@@ -1,14 +1,14 @@
 module TheSett.Colors exposing
     ( paperWhite, printBlack
     , softGrey, midGrey, darkGrey
-    , highlight
+    , highlight, error
     )
 
 {-| Defines some standard colors.
 
 @docs paperWhite, printBlack
 @docs softGrey, midGrey, darkGrey
-@docs highlight
+@docs highlight, error
 
 -}
 
@@ -56,4 +56,11 @@ darkGrey =
 -}
 highlight : Css.Color
 highlight =
-    Css.rgb 65 219 119
+    Css.rgb 70 230 100
+
+
+{-| The primary error color
+-}
+error : Css.Color
+error =
+    Css.rgb 245 80 70

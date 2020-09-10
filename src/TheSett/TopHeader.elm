@@ -25,7 +25,7 @@ fullWidthHeader responsive =
         [ Css.backgroundColor Colors.paperWhite
         , Css.boxShadow5 (Css.px 0) (Css.px 0) (Css.px 1) (Css.px 0) (Css.rgba 0 0 0 0.25)
         ]
-        []
+        [ id "top-header" ]
         [ Grid.grid
             [ sm
                 [ Grid.columns 12
