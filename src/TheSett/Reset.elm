@@ -246,7 +246,7 @@ global =
         , Css.Global.typeSelector "sup"
         ]
         [ Css.fontSize (Css.pct 75)
-        , Css.lineHeight Css.zero
+        , Css.lineHeight (Css.px 0)
         , Css.position Css.relative
         , Css.verticalAlign Css.baseline
         ]
