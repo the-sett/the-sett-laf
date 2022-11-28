@@ -43,10 +43,8 @@ midGrey =
     Css.rgb 168 159 160
 
 
-
-{- A dark grey. -}
-
-
+{-| A dark grey.
+-}
 darkGrey : Css.Color
 darkGrey =
     Css.hex "646464"

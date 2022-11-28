@@ -19,6 +19,8 @@ import TheSett.Laf as Laf exposing (wrapper)
 import TheSett.Logo as Logo
 
 
+{-| Standard top header in full width.
+-}
 fullWidthHeader : ResponsiveStyle -> Html msg
 fullWidthHeader responsive =
     styled div
